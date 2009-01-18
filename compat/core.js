@@ -2,16 +2,17 @@
 var misago = {};
 
 // browser sniffing (might come handy)
-misago.browser     = new (
+misago.browser = {};
+(function()
+{
 	var ua = navigator.userAgent.toLowerCase();
-	
-	this.ie    = (window.VBArray);
-	this.ie6   = (this.ie && document.implementation);
-	this.ie7   = (this.ie && window.XMLHttpRequest);
-	this.opera = (window.opera);
-	this.gecko = (window.netscape && !this.opera);
-	this.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1);
-)();
+	misago.browser.ie    = (window.VBArray) ? true : false;
+	misago.browser.ie6   = (misago.browser.ie && document.implementation) ? true : false;
+	misago.browser.ie7   = (misago.browser.ie && window.XMLHttpRequest) ? true : false;
+	misago.browser.opera = (window.opera) ? true : false;
+	misago.browser.gecko = (window.netscape && !misago.browser.opera) ? true : false;
+	misago.browser.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1) ? true : false;
+})();
 
 if (!Element)
 {	
@@ -123,7 +124,7 @@ else
 	}
 }
 
-/// Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
+// Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
 misago.$ = function(element)
 {
 	if (typeof element == 'string') {
@@ -132,7 +133,7 @@ misago.$ = function(element)
 	return misago.extendElement(element);
 }
 
-/// Shortcut: $ => misago.$
+// Shortcut: $ => misago.$
 if (!window.$) {
 	window.$ = misago.$;
 }
