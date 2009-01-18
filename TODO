@@ -1,0 +1,52 @@
+
+Implement (when missing, and must return extended elements):
+	
+	new misago.prototypeEmulator()
+	new misago.nodeListEmulator()
+	misago.extendElement()
+	misago.$
+	misago.extendElements()
+	
+	Element.prototype.getElementsByClassName()
+		by using XPATH when available
+		by parsing the DOM
+		must return a NodeList-like object
+		unit tests:
+			document.getElementsByClassName('test')
+			document.getElementsByClassName('test test2')
+	
+	Element.prototype.querySelectorAll()
+		unit tests:
+			document.querySelectorAll('input[type=text]')
+			document.querySelectorAll('input, select, textarea')
+			etc.
+
+
+Override (to return extended elements):
+	Element.prototype.getElementsById()			[done]
+	
+	Element.prototype.getElementsByTagName()	[done]
+		must return a NodeList-like object		[done]
+	
+	Element.prototype.createElement()			[done]
+
+
+Problems:
+	
+	Do not extend an already extended Obj. [done]
+	
+	Extending DOM attributes that are in fact elements? Like elm.firstChild or elm.parentNode?
+		Standards compatible solutions:
+			Extend them automatically on request (eg: elm.parentNode)
+				=> problem: IE 6 & 7 don't support getters
+			Extend them automatically when extending element
+				=> problem: it would cause the whole HTML tree to be extended
+		Non standard solutions:
+			Extend them throught custom getters? for instance elm.get('parentNode')?
+				=> adds some burden to the developer
+				=> workable, but requires to be available on standards compliant browsers
+				=> could be used to return real elements (skipping text node and whitespaces)
+			Extend them when manually with $(elm.parentNode)
+				=> simple, be adds some burden to the developer
+	...
+
