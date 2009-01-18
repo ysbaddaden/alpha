@@ -1,6 +1,18 @@
 
 var misago = {};
 
+// browser sniffing (might come handy)
+misago.browser     = new (
+	var ua = navigator.userAgent.toLowerCase();
+	
+	this.ie    = (window.VBArray);
+	this.ie6   = (this.ie && document.implementation);
+	this.ie7   = (this.ie && window.XMLHttpRequest);
+	this.opera = (window.opera);
+	this.gecko = (window.netscape && !this.opera);
+	this.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1);
+)();
+
 if (!Element)
 {	
 	// Garbage Collector, to prevent memory leaks in MSIE
@@ -111,9 +123,7 @@ else
 	}
 }
 
-/**
- * Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
- */
+/// Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
 misago.$ = function(element)
 {
 	if (typeof element == 'string') {
@@ -122,9 +132,7 @@ misago.$ = function(element)
 	return misago.extendElement(element);
 }
 
-/**
- * Shortcut: $ => misago.$
- */
+/// Shortcut: $ => misago.$
 if (!window.$) {
 	window.$ = misago.$;
 }
