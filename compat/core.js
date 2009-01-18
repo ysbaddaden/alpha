@@ -1,95 +1,131 @@
-/**
- * (Tries to) emulate DOM Prototypes in Internet Explorer.
- *
- * requires: compat/array.js
- */
 
-var compat = {};
+var misago = {};
 
-if (Element)
-{
-  // compliant browsers
-
-  // shortcut to getElementById
-  compat.$ = function(element)
-  {
-    if (typeof element == 'string') {
-      return document.getElementById(element);
-    }
-    return element;
-  }
+if (!Element)
+{	
+	// Garbage Collector, to prevent memory leaks in MSIE
+	misago.garbage = [window, document.body];
+	misago.garbageCollector = function()
+	{
+		for (var i=0, len=misago.garbage.length; i<len; i++)
+		{
+			var element = this.garbage[i];
+			
+			if (element.clearAttributes) {
+				element.clearAttributes();
+			}
+			if (element.clearEvents) {
+				element.clearEvents();
+			}
+			delete element;
+			delete this.garbage[i];
+		}
+		delete misago.garbage;
+	}
+	window.attachEvent('onunload', misago.garbageCollector);
+	
+	// Emulates an Object Prototype
+	misago.prototypeEmulator = function()
+	{
+		var Obj       = {};
+		Obj.prototype = {};
+		
+		Obj.$extend = function(o)
+		{
+			if (!o.$extended)
+			{
+				misago.garbage.push(o);
+				
+				for (var method in Obj.prototype) {
+					o[method] = Obj.prototype[method];
+				}
+				o.$extended = true;
+			}
+			return o;
+		}
+		return Obj;
+	};
+	
+	// Emulates the Element DOM prototype
+	var Element = new misago.prototypeEmulator();
+	
+	// Manually extends an element
+	misago.extendElement = function(elm) {
+		return Element.$extend(elm);
+	}
+	
+	// Manually extends many elements
+	misago.extendElements = function(elms)
+	{
+		var rs = [];
+		for (var i=0, len=elms.length; i<len; i++) {
+			rs[i] = Element.$extend(elms[i]);
+		}
+		return misago.nodeListEmulator(rs);
+	}
+	
+	// Emulates a NodeList
+	misago.nodeListEmulator = function(nodes)
+	{
+		this.length = nodes.length;
+		this.item = function(i) {
+			return nodes[i];
+		}
+	}
+	
+	// Makes document.createElement to extend the newly created element
+	misago._MSIE_createElement = document.createElement;
+	document.createElement = function(tagName)
+	{
+		var elm = misago._MSIE_createElement(tagName);
+		return misago.extendElement(elm);
+	}
+	
+	// Makes document.getElementById to return an extended element
+	misago._MSIE_getElementById = document.getElementById;
+	document.getElementById = function(id)
+	{
+		var elm = misago._MSIE_getElementById(id);
+		return elm ? misago.extendElement(elm) : elm;
+	}
+	
+	// Makes document.getElementsByTagName to return extended elements
+	misago._MSIE_getElementsByTagName = document.getElementsByTagName;
+	document.getElementsByTagName = function(id)
+	{
+		var elms = misago._MSIE_getElementsByTagName.call(this, id);
+		if (elms.length) {
+			return misago.extendElements(elms);
+		}
+		return elms;
+	}
+	
+	// Makes elm.getElementsByTagName to return extended elements
+	Element.prototype.getElementsByTagName = document.getElementsByTagName;
 }
 else
 {
-  // browsers without support for DOM prototypes (ie. MSIE 6 & 7)
-  var Element = function() {};
-
-  // backups some core methods
-  compat._MSIE_getElementById       = document.getElementById;
-  compat._MSIE_getElementsByTagName = document.getElementsByTagName;
-
-  // garbage collector, in order to prevent memory leaks
-  compat.garbage = [window, document.body];
-  compat.garbageCollector = function()
-  {
-    for (var i=0, len=compat.garbage.length; i<len; i++)
-    {
-      var element = this.garbage[i];
-
-      if (element.clearAttributes) {
-        element.clearAttributes();
-      }
-
-      if (element.clearEvents) {
-        element.clearEvents();
-      }
-
-      delete element;
-      delete this.garbage[i];
-    }
-
-    delete compat.garbage;
-  }
-
-  // extends DOM elements
-  compat.$ = function(element)
-  {
-    if (typeof element == 'string') {
-      element = compat._MSIE_getElementById(element);
-    }
-
-    if (element.$extended) {
-      return element;
-    }
-
-    for (var method in Element.prototype)
-    {
-      if (!element[method]) {
-        element[method] = Element.prototype[method];
-      }
-    }
-
-    element.$extended = true;
-    return element;
-  }
-
-  // fixes core methods to auto-extend elements
-  document.getElementById       = compat.$;
-  document.getElementsByTagName = function(tagName)
-  {
-    var search   = compat._MSIE_getElementsByTagName.call(this, tagName);
-    var elements = new NodeList();
-    Array.prototype.forEach.call(search, function(element)
-    {
-      element = compat.$(element);
-      Array.prototype.push.call(elements, element);
-    });
-    return elements;
-  }
-
-  Element.prototype.getElementsByTagName = document.getElementsByTagName;
+	// Compatibility layer for Standards Compliant Browsers
+	misago.extendElement = function(elm) {
+		return elm;
+	}
 }
 
+/**
+ * Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
+ */
+misago.$ = function(element)
+{
+	if (typeof element == 'string') {
+		element = document.getElementById(element)
+	}
+	return misago.extendElement(element);
+}
+
+/**
+ * Shortcut: $ => misago.$
+ */
 if (!window.$) {
-  window.$ = compat.$;
+	window.$ = misago.$;
 }
+
