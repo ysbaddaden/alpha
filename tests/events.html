@@ -1,0 +1,125 @@
+<html>
+<head>
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="../compat/core.js"></script>
+  <script type="text/javascript" src="../compat/events.js"></script>
+</head>
+<body>
+
+  <script type="text/javascript">
+
+function new_input()
+{
+  var input = document.createElement('input');
+  document.body.appendChild(input);
+
+  input.destroy = function() {
+    this.parentNode.removeChild(this);
+  }
+
+  return input;
+}
+
+
+jsUnit.add("Event must be prototyped", function() {
+  jsUnit.assertObject(Event.prototype);
+});
+
+jsUnit.add("Capturing phase is supported in non IE browsers only", function()
+{
+  var toto = document.createElement('div');
+
+  try
+  {
+    toto.addEventListener('focus', function() {}, true);
+    jsUnit.assertTrue(misago.browser.ie ? false : true);
+  }
+  catch (e) {
+    jsUnit.assertTrue(misago.browser.ie ? true : false);
+  }
+});
+
+jsUnit.add("elm.addEventListener with one listener", function()
+{
+  var elm  = new_input();
+  var test = null;
+
+  elm.addEventListener('focus', function(evt) {
+    test = true;
+  }, false);
+
+  elm.focus();
+  jsUnit.assertTrue(test);
+
+  elm.destroy();
+});
+
+jsUnit.add("elm.addEventListener with many listeners", function()
+{
+  var elm  = new_input();
+  var test = null;
+
+  elm.addEventListener('focus', function(evt) {
+    test = true;
+  }, false);
+
+  elm.addEventListener('focus', function(evt) {
+    test = false;
+  }, false);
+
+  elm.focus();
+  jsUnit.assertFalse(test);
+
+  elm.destroy();
+});
+
+jsUnit.add("elm.removeEventListener", function()
+{
+  var elm  = new_input();
+  var test = null;
+
+  var fn   = function() {
+    test = true;
+  };
+
+  elm.addEventListener('focus', fn, false);
+  elm.removeEventListener('focus', fn, false);
+
+  elm.focus();
+  jsUnit.assertNull(test);
+
+  elm.destroy();
+});
+
+if (Element.prototype.clearEvents)
+{
+  jsUnit.add("elm.clearEvents", function()
+  {
+    var elm  = new_input();
+    var test = null;
+
+    elm.addEventListener('focus', function() {
+      test = true;
+    }, false);
+    elm.addEventListener('focus', function() {
+      test = false;
+    }, false);
+    elm.clearEvents();
+
+    elm.focus();
+    jsUnit.assertNull(test);
+
+    elm.destroy();
+  });
+}
+
+// TODO Test event.target
+// TODO Test event.currentTarget
+// TODO Test event.relatedTarget
+
+jsUnit.run();
+
+  </script>
+
+</body>
+</html>
