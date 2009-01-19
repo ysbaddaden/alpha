@@ -2,6 +2,8 @@
  * EMulates DOM Event Handling in Internet Explorer.
  *
  * requires: misago/core.js
+ *
+ * FIXME Conflicts between Event DOM prototype an IE8?
  */
 
 if (!Element.prototype.addEventListener)
@@ -134,7 +136,7 @@ if (!Element.prototype.addEventListener)
         {
 //        this.detachEvent(type, this.$events[type][i]);
           delete this.$events[type][i];
-        });
+        }
       }
       delete this.$events;
     }

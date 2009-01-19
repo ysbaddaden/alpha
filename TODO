@@ -25,6 +25,10 @@ Implement (when missing, must return extended elements):
 			document.querySelectorAll('input, select, textarea')
 			etc.
 
+  Element.prototype.addEventListener()
+  Element.prototype.removeEventListener()
+  Element.prototype.clearEvents()
+
 
 Override (to return extended elements):
 	Element.prototype.getElementsById()       [done]
