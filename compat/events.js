@@ -1,13 +1,14 @@
 /**
  * EMulates DOM Event Handling in Internet Explorer.
  *
- * requires: compat/core.js
+ * requires: misago/core.js
  */
 
 if (!Element.prototype.addEventListener)
 {
   // fixes the Event DOM prototype
-  var Event = function() {}
+  var Event = new misago.prototypeEmulator();
+
   Event.prototype.preventDefault = function() {
     this.returnValue = false;
   }
@@ -15,28 +16,24 @@ if (!Element.prototype.addEventListener)
     this.cancelBubble = true;
   }
 
-  // TODO Fix & extend target, relatedTarget, currentTarget, etc.
-  // TODO Fix client width/height, buttons, keys, etc.
-  compat.event = function(event, currentTarget)
+  // TODO Fix buttons, keys, etc.
+  misago.event = function(event, currentTarget)
   {
     // adds missing methods
-    for (var method in Event.prototype)
-    {
-      if (!event[method]) {
-        event[method] = Event.prototype[method];
-      }
+    for (var method in Event.prototype) {
+      event[method] = Event.prototype[method];
     }
 
     // target: the element the event happened on
     if (this.target)
     {
 	    this.target = new Element(this.target);
-	    compat.garbage.push(this.target);
+	    misago.garbage.push(this.target);
     }
     else if (this.srcElement)
     {
 	    this.target = new Element(this.srcElement);
-	    compat.garbage.push(this.target);
+	    misago.garbage.push(this.target);
     }
 
     // currentTarget: the element that handles the event
@@ -50,12 +47,12 @@ if (!Element.prototype.addEventListener)
     if (this.type == 'mouseover')
     {
 	    this.relatedTarget = new Element(this.fromElement);
-	    compat.garbage.push(this.relatedTarget);
+	    misago.garbage.push(this.relatedTarget);
     }
     else if (this.type == 'mouseout')
     {
 	    this.relatedTarget = new Element(this.toElement);
-	    compat.garbage.push(this.relatedTarget);
+	    misago.garbage.push(this.relatedTarget);
     }
 
     // fixes values
@@ -68,7 +65,7 @@ if (!Element.prototype.addEventListener)
   Element.prototype.addEventListener = function(type, listener, useCapture)
   {
     if (phase) {
-      return new Error("Capture mode isn't supported in MSIE.'");
+      throw new Error("Capture mode isn't supported in MSIE.'");
     }
 
     // array of type/listeners to call
@@ -78,22 +75,24 @@ if (!Element.prototype.addEventListener)
 
     if (!this.$events[type])
     {
-      this.$events[type] = [];
-
-      // we bind our own caller (once)
-      // TODO Add compat._MSIE_listener_bounds instead of anonymous function, in order to be able to remove our caller
       var self = this;
-      this.attachEvent('on' + type, function()
+
+      this.$events[type] = {};
+      this.$events[type].listeners = [];
+      this.$events[type].caller    = function()
       {
-        var evt = compat.event(window.event, self);
-        this.$events[type].forEach(function(listener) {
+        var evt = misago.event(window.event, self);
+        this.$events[type].listeners.forEach(function(listener) {
           listener.call(self, window.event);
         });
-      });
+      }
+
+      // we bind our own caller (once)
+      this.attachEvent('on' + type, this.$events[type].caller);
     }
 
     // adds the listener to our list
-    this.$events[type].push(listener);
+    this.$events[type].listeners.push(listener);
   }
 
   Element.prototype.removeEventListener = function(type, listener, useCapture)

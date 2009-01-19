@@ -1,12 +1,16 @@
 
-Implement (when missing, and must return extended elements):
-	
-	new misago.prototypeEmulator()
-	new misago.nodeListEmulator()
-	misago.extendElement()
-	misago.$
-	misago.extendElements()
-	
+Write unit tests
+
+Implement (when missing, must return extended elements):
+
+	new misago.prototypeEmulator() [done]
+	new misago.nodeListEmulator()  [done]
+	misago.extendElement()         [done]
+	  only available for IE (use misago.$ instead) [done]
+	misago.extendElements()        [done]
+	  only available for IE        [done]
+	misago.$                       [done]
+
 	Element.prototype.getElementsByClassName()
 		by using XPATH when available
 		by parsing the DOM
@@ -14,7 +18,7 @@ Implement (when missing, and must return extended elements):
 		unit tests:
 			document.getElementsByClassName('test')
 			document.getElementsByClassName('test test2')
-	
+
 	Element.prototype.querySelectorAll()
 		unit tests:
 			document.querySelectorAll('input[type=text]')
@@ -23,18 +27,23 @@ Implement (when missing, and must return extended elements):
 
 
 Override (to return extended elements):
-	Element.prototype.getElementsById()			[done]
-	
-	Element.prototype.getElementsByTagName()	[done]
-		must return a NodeList-like object		[done]
-	
-	Element.prototype.createElement()			[done]
+	Element.prototype.getElementsById()       [done]
+
+	Element.prototype.getElementsByTagName()  [done]
+		must return a NodeList-like object      [done]
+
+	Element.prototype.createElement()         [done]
 
 
-Problems:
-	
+Problems and questions:
+
+	Is it possible to use NodeList directly? For instance:
+    var nodes = new NodeList();
+    var elm   = document.createElement('div');
+    Array.prototype.push.call(nodes, elm);
+
 	Do not extend an already extended Obj. [done]
-	
+
 	Extending DOM attributes that are in fact elements? Like elm.firstChild or elm.parentNode?
 		Standards compatible solutions:
 			Extend them automatically on request (eg: elm.parentNode)
@@ -49,4 +58,3 @@ Problems:
 			Extend them when manually with $(elm.parentNode)
 				=> simple, be adds some burden to the developer
 	...
-
