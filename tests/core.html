@@ -5,25 +5,68 @@
 </head>
 <body>
 
-<div id="test"></div>
-<div id="toto"></div>
+  <div id="test"></div>
+  <div id="toto">
+    <div id="tata">
+    </div>
+  </div>
 
   <script type="text/javascript">
 
-Element.prototype.test = function(evt) {
+Element.prototype.get_id = function(evt) {
   return this.id;
 }
 
-jsUnit.add('test_element_prototype_test_true', function()
+jsUnit.add("$ must return an element by it's id", function()
 {
-  var element = $('test');
-  jsUnit.assertTrue(element.test() === 'test');
+  var elm = $('test');
+  jsUnit.assertEquals(elm.id, 'test');
 });
 
-jsUnit.add('test_element_prototype_test_false', function()
+jsUnit.add("$ must return an extended element", function()
 {
-  var element = $('toto');
-  jsUnit.assertFalse(element.test() === 'test');
+  var elm = $('test');
+  jsUnit.assertFunction(elm.get_id);
+});
+
+jsUnit.add("document.getElementById must return an extended element", function()
+{
+  var elm = $('test');
+  jsUnit.assertFunction(elm.get_id);
+});
+
+jsUnit.add("document.getElementsByTagName must return extended elements", function()
+{
+  var elms = document.getElementsByTagName('div')
+  jsUnit.assertFunction(elms[0].get_id);
+});
+
+jsUnit.add("document.getElementsByTagName must return a NodeList", function()
+{
+  var elms = document.getElementsByTagName('div');
+  jsUnit.assertFunction(elms.item);
+  jsUnit.assertFunction(elms.item(0).get_id);
+});
+
+jsUnit.add("Element.getElementsByTagName must return it's descendants only", function()
+{
+  var elm  = $('toto');
+  var elms = elm.getElementsByTagName('div');
+  jsUnit.assertEquals(elms.length, 1);
+});
+
+jsUnit.add("elm.getElementsByTagName must return an extended element", function()
+{
+  var elm  = $('toto');
+  var elms = elm.getElementsByTagName('div');
+  jsUnit.assertEquals(elms.length, 1);
+  jsUnit.assertFunction(elms[0].get_id);
+});
+
+jsUnit.add("document.createElement must return an extended element", function()
+{
+  var elm = document.createElement('div')
+  jsUnit.assertFunction(elm.get_id);
 });
 
 jsUnit.run();
