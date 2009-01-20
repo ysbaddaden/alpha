@@ -1,19 +1,22 @@
 <html>
 <head>
-  <script type="text/javascript" src="jsunit.js"></script>
-  <script type="text/javascript" src="../compat/core.js"></script>
 </head>
 <body>
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="../compat/array.js"></script>
+  <script type="text/javascript" src="../compat/core.js"></script>
 
   <div id="test"></div>
   <div id="toto">
     <div id="tata">
     </div>
   </div>
+  
+  <input type="text" name="titi" style="display:none"/>
 
   <script type="text/javascript">
 
-Element.prototype.get_id = function(evt) {
+Element.prototype.get_id = function() {
   return this.id;
 }
 
@@ -44,29 +47,43 @@ jsUnit.add("document.getElementsByTagName must return extended elements", functi
 jsUnit.add("document.getElementsByTagName must return a NodeList", function()
 {
   var elms = document.getElementsByTagName('div');
-  jsUnit.assertFunction(elms.item);
   jsUnit.assertFunction(elms.item(0).get_id);
-});
-
-jsUnit.add("Element.getElementsByTagName must return it's descendants only", function()
-{
-  var elm  = $('toto');
-  var elms = elm.getElementsByTagName('div');
-  jsUnit.assertEquals(elms.length, 1);
 });
 
 jsUnit.add("elm.getElementsByTagName must return an extended element", function()
 {
-  var elm  = $('toto');
-  var elms = elm.getElementsByTagName('div');
-  jsUnit.assertEquals(elms.length, 1);
+  var elms = $('toto').getElementsByTagName('div');
   jsUnit.assertFunction(elms[0].get_id);
+});
+
+jsUnit.add("elm.getElementsByTagName must return a NodeList", function()
+{
+  var elms = $('toto').getElementsByTagName('div');
+  jsUnit.assertFunction(elms.item(0).get_id);
+});
+
+jsUnit.add("elm.getElementsByTagName must only return it's descendants", function()
+{
+  var elms = $('toto').getElementsByTagName('div');
+  jsUnit.assertEquals(elms.item(0).get_id(), 'tata');
 });
 
 jsUnit.add("document.createElement must return an extended element", function()
 {
-  var elm = document.createElement('div')
+  var elm = document.createElement('div');
   jsUnit.assertFunction(elm.get_id);
+});
+
+jsUnit.add("document.getElementsByName must return extended elements", function()
+{
+  var elms = document.getElementsByName('titi');
+  jsUnit.assertFunction(elms[0].get_id);
+});
+
+jsUnit.add("document.getElementsByName must return a NodeList", function()
+{
+  var elms = document.getElementsByName('titi');
+  jsUnit.assertObject(elms.item(0));
 });
 
 jsUnit.run();

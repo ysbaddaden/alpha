@@ -1,6 +1,8 @@
 
 var misago = {};
 
+//document.write(document.getElementsByName);
+
 // browser sniffing (might come handy)
 misago.browser = {};
 (function()
@@ -16,28 +18,30 @@ misago.browser = {};
 
 if (typeof Element == "undefined")
 {
-	// Garbage Collector, to prevent memory leaks in MSIE
-	misago.garbage = [window, document.body];
+  // Garbage Collector, to prevent memory leaks in MSIE
+  misago.garbage = [ window, document.body ];
   misago.garbageCollector = function()
   {
     for (var i=0, len=misago.garbage.length; i<len; i++)
     {
-      var element = this.garbage[i];
-
-      if (element.clearAttributes) {
-        element.clearAttributes();
+      var element = misago.garbage[i];
+      if (element)
+      {
+        if (element.clearAttributes) {
+          element.clearAttributes();
+        }
+        if (element.clearEvents) {
+          element.clearEvents();
+        }
+        delete element;
       }
-      if (element.clearEvents) {
-        element.clearEvents();
-      }
-      delete element;
-      delete this.garbage[i];
+      delete misago.garbage[i];
     }
     delete misago.garbage;
   }
   window.attachEvent('onunload', misago.garbageCollector);
 
-	// Emulates an Object Prototype
+  // Emulates an Object Prototype
   misago.prototypeEmulator = function()
   {
     var Obj       = {};
@@ -49,7 +53,11 @@ if (typeof Element == "undefined")
       {
         misago.garbage.push(o);
 
-        for (var method in Obj.prototype) {
+        for (var method in Obj.prototype)
+        {
+          if (o[method]) {
+            o['_super_' + method] = o[method];
+          }
           o[method] = Obj.prototype[method];
         }
         o.$extended = true;
@@ -57,33 +65,27 @@ if (typeof Element == "undefined")
       return o;
     }
     return Obj;
-  };
+  }
 
-	// Emulates the Element DOM prototype
-	var Element = new misago.prototypeEmulator();
+  // Emulates the Element DOM prototype
+  var Element = new misago.prototypeEmulator();
 
-	// Manually extends an element
-	misago.extendElement = function(elm) {
-		return Element.$extend(elm);
-	}
+  // Manually extends an element
+  misago.extendElement = function(elm) {
+    return Element.$extend(elm);
+  }
 
-	// Manually extends many elements
+  // Manually extends many elements
   misago.extendElements = function(elms)
   {
     var rs = [];
     for (var i=0, len=elms.length; i<len; i++) {
-      rs[i] = Element.$extend(elms[i]);
+      rs.push(misago.extendElement(elms[i]));
     }
-    return misago.nodeListEmulator(rs);
-  }
-
-  // Emulates a NodeList
-  misago.nodeListEmulator = function(nodes)
-  {
-    this.length = nodes.length;
-    this.item = function(i) {
-      return nodes[i];
+    rs.item = function(i) {
+      return this[i];
     }
+    return rs;
   }
 
 	// Makes document.createElement to extend the newly created element
@@ -94,7 +96,7 @@ if (typeof Element == "undefined")
     return misago.extendElement(elm);
   }
 
-	// Makes document.getElementById to return an extended element
+  // Makes document.getElementById to return an extended element
   misago._MSIE_getElementById = document.getElementById;
   document.getElementById = function(id)
   {
@@ -102,19 +104,28 @@ if (typeof Element == "undefined")
     return elm ? misago.extendElement(elm) : elm;
   }
 
-	// Makes document.getElementsByTagName to return extended elements
+  // Makes document.getElementsByTagName to return extended elements
   misago._MSIE_getElementsByTagName = document.getElementsByTagName;
   document.getElementsByTagName = function(id)
   {
-    var elms = misago._MSIE_getElementsByTagName.call(this, id);
-    if (elms.length) {
-      return misago.extendElements(elms);
-    }
-    return elms;
+    var elms = misago._MSIE_getElementsByTagName(id);
+    return elms.length ? misago.extendElements(elms) : elms;
+  }
+
+  // document.getElementsByName must return extended elements
+  misago._MSIE_getElementsByName = document.getElementsByName;
+  document.getElementsByName = function(id)
+  {
+    var elms = misago._MSIE_getElementsByName(id);
+    return elms.length ? misago.extendElements(elms) : elms;
   }
 
   // Makes elm.getElementsByTagName to return extended elements
-  Element.prototype.getElementsByTagName = document.getElementsByTagName;
+  Element.prototype.getElementsByTagName = function(id)
+  {
+    var elms = this._super_getElementsByTagName(id);
+    return elms.length ? misago.extendElements(elms) : elms;
+  }
 }
 
 // Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
