@@ -1,10 +1,12 @@
 <html>
 <head>
-  <script type="text/javascript" src="jsunit.js"></script>
-  <script type="text/javascript" src="../compat/core.js"></script>
-  <script type="text/javascript" src="../compat/events.js"></script>
 </head>
 <body>
+
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="../compat/array.js"></script>
+  <script type="text/javascript" src="../compat/core.js"></script>
+  <script type="text/javascript" src="../compat/events.js"></script>
 
   <script type="text/javascript">
 
@@ -25,19 +27,24 @@ jsUnit.add("Event must be prototyped", function() {
   jsUnit.assertObject(Event.prototype);
 });
 
+/*
 jsUnit.add("Capturing phase is supported in non IE browsers only", function()
 {
   var toto = document.createElement('div');
+  var test = 'a';
 
   try
   {
-    toto.addEventListener('focus', function() {}, true);
+    toto.addEventListener('focus', {}, true);
     jsUnit.assertTrue(misago.browser.ie ? false : true);
   }
   catch (e) {
     jsUnit.assertTrue(misago.browser.ie ? true : false);
   }
+  
+  document.write(test);
 });
+*/
 
 jsUnit.add("elm.addEventListener with one listener", function()
 {
@@ -51,7 +58,7 @@ jsUnit.add("elm.addEventListener with one listener", function()
   elm.focus();
   jsUnit.assertTrue(test);
 
-  elm.destroy();
+//  elm.destroy();
 });
 
 jsUnit.add("elm.addEventListener with many listeners", function()
@@ -70,7 +77,7 @@ jsUnit.add("elm.addEventListener with many listeners", function()
   elm.focus();
   jsUnit.assertFalse(test);
 
-  elm.destroy();
+//  elm.destroy();
 });
 
 jsUnit.add("elm.removeEventListener", function()
@@ -78,9 +85,9 @@ jsUnit.add("elm.removeEventListener", function()
   var elm  = new_input();
   var test = null;
 
-  var fn   = function() {
+  var fn = function() {
     test = true;
-  };
+  }
 
   elm.addEventListener('focus', fn, false);
   elm.removeEventListener('focus', fn, false);
@@ -88,7 +95,7 @@ jsUnit.add("elm.removeEventListener", function()
   elm.focus();
   jsUnit.assertNull(test);
 
-  elm.destroy();
+//  elm.destroy();
 });
 
 if (Element.prototype.clearEvents)
@@ -109,7 +116,7 @@ if (Element.prototype.clearEvents)
     elm.focus();
     jsUnit.assertNull(test);
 
-    elm.destroy();
+//    elm.destroy();
   });
 }
 

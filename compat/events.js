@@ -66,7 +66,7 @@ if (!Element.prototype.addEventListener)
 
   Element.prototype.addEventListener = function(type, listener, useCapture)
   {
-    if (phase) {
+    if (useCapture) {
       throw new Error("Capture mode isn't supported in MSIE.'");
     }
 
@@ -78,16 +78,16 @@ if (!Element.prototype.addEventListener)
     if (!this.$events[type])
     {
       var self = this;
-
-      this.$events[type] = {};
-      this.$events[type].listeners = [];
-      this.$events[type].caller    = function()
-      {
-        var evt = misago.event(window.event, self);
-        this.$events[type].listeners.forEach(function(listener) {
-          listener.call(self, window.event);
-        });
-      }
+      this.$events[type] = {
+        listeners: [],
+        caller: function()
+        {
+          var evt = misago.event(window.event, self);
+          self.$events[type].listeners.forEach(function(listener) {
+            listener.call(self, window.event);
+          });
+        }
+      };
 
       // we bind our own caller (once)
       this.attachEvent('on' + type, this.$events[type].caller);
@@ -99,30 +99,33 @@ if (!Element.prototype.addEventListener)
 
   Element.prototype.removeEventListener = function(type, listener, useCapture)
   {
-    if (phase) {
+    if (useCapture) {
       return new Error("Capture mode isn't supported in MSIE.'");
     }
-
-    // removes listener from our list
-    if (this.$events && this.$events[type])
+    
+    if (this.$events)
     {
-      var idx = this.$events[action].indexOf(fn);
-      if (idx > -1)
+      if (this.$events[type])
       {
-	      delete this.$events[type][idx];
-	      this.$events[type].splice(idx, 1);
+        // removes listener
+        var idx = this.$events[type].listeners.indexOf(listener);
+        if (idx > -1)
+        {
+          delete this.$events[type].listeners[idx];
+          this.$events[type].listeners.splice(idx, 1);
+        }
+        
+        if (this.$events[type].listeners.length == 0)
+        {
+          // nothing to call anymore? we unbind our caller
+          this.detachEvent('on' + type, listener);
+          delete this.$events[type];
+        }
       }
-    }
-
-    if (this.$events[type].length == 0)
-    {
-      // nothing to call anymore, let's unbind our caller
-      this.detachEvent('on' + type, listener);
-      delete this.$events[type];
-    }
-
-    if (this.$events.length == 0) {
-      delete this.$events;
+      
+      if (this.$events.length == 0) {
+        delete this.$events;
+      }
     }
   }
 
@@ -132,13 +135,13 @@ if (!Element.prototype.addEventListener)
     {
       for (var type in this.$events)
       {
-        for (var i=0, len=this.$events[type].length; i<len; i++)
+        for (var i=0, len=this.$events[type].listeners.length; i<len; i++)
         {
-//        this.detachEvent(type, this.$events[type][i]);
-          delete this.$events[type][i];
+          delete this.$events[type].listeners[i];
+          this.detachEvent(type, this.$events[type].caller);
         }
       }
-      delete this.$events;
+      //delete this.$events;
     }
   }
 
