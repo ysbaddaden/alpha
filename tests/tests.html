@@ -1,0 +1,54 @@
+<html>
+<head>
+</head>
+<body>
+
+  <p id="container">
+    <button id="btn" name="btn">click me (or mouse me over)</button>
+  </p>
+
+<script type="text/javascript" src="../compat/array.js"></script>
+<script type="text/javascript" src="../compat/core.js"></script>
+<script type="text/javascript" src="../compat/events.js"></script>
+
+<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+
+<p id="console"></p>
+
+  <script type="text/javascript">
+
+function console_write(str)
+{
+  var elm = document.getElementById('console');
+  elm.appendChild(document.createTextNode(str));
+  elm.appendChild(document.createElement('br'));
+}
+
+function run_on_event(evt)
+{
+  /*
+  console_write(evt.type + ' '
+    + (typeof evt.stopPropagation) + ' '
+    + (typeof evt.target) + ' '
+    + evt.target.id + ' '
+    + (typeof evt.relatedTarget)
+  );
+  console.log(evt.relatedTarget);
+  */
+  console.log(evt.type, evt.target.tagName, evt.currentTarget.tagName, evt.relatedTarget ? evt.relatedTarget.tagName : null);
+}
+
+var btn = document.getElementById('btn');
+btn.addEventListener('click', run_on_event, false);
+
+var btn = document.getElementsByName('btn')[0];
+btn.addEventListener('mouseover', run_on_event, false);
+
+var btn = document.getElementsByTagName('button')[0];
+btn.addEventListener('mouseout', run_on_event, false);
+
+  </script>
+</p>
+
+</body>
+</html>
