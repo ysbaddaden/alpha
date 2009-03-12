@@ -3,7 +3,7 @@
  *
  * requires: misago/core.js
  *
- * FIXME Conflicts between Event DOM prototype an IE8?
+ * FIXME Conflicts with Event DOM prototype on IE8?
  */
 
 if (!Element.prototype.addEventListener)
@@ -14,11 +14,11 @@ if (!Element.prototype.addEventListener)
   Event.prototype.preventDefault = function() {
     this.returnValue = false;
   }
+  
   Event.prototype.stopPropagation = function() {
     this.cancelBubble = true;
   }
 
-  // TODO Fix buttons, keys, etc.
   misago.event = function(event, currentTarget)
   {
     // adds missing methods
@@ -29,32 +29,32 @@ if (!Element.prototype.addEventListener)
     // target: the element the event happened on
     if (this.target)
     {
-	    this.target = new Element(this.target);
-	    misago.garbage.push(this.target);
+      this.target = new Element(this.target);
+      misago.garbage.push(this.target);
     }
     else if (this.srcElement)
     {
-	    this.target = new Element(this.srcElement);
-	    misago.garbage.push(this.target);
+      this.target = new Element(this.srcElement);
+      misago.garbage.push(this.target);
     }
 
     // currentTarget: the element that handles the event
     if (!this.currentTarget && currentTarget) {
-	    this.currentTarget = currentTarget;
+      this.currentTarget = currentTarget;
     }
 
     // relatedTarget:
-    // on mouseover: the element the mouse came from
-    // on mouseout:  the element the mouse left to
     if (this.type == 'mouseover')
     {
-	    this.relatedTarget = new Element(this.fromElement);
-	    misago.garbage.push(this.relatedTarget);
+      // the element the mouse came from
+      this.relatedTarget = new Element(this.fromElement);
+      misago.garbage.push(this.relatedTarget);
     }
     else if (this.type == 'mouseout')
     {
-	    this.relatedTarget = new Element(this.toElement);
-	    misago.garbage.push(this.relatedTarget);
+      // the element the mouse left to
+      this.relatedTarget = new Element(this.toElement);
+      misago.garbage.push(this.relatedTarget);
     }
 
     // fixes values
@@ -67,81 +67,83 @@ if (!Element.prototype.addEventListener)
   Element.prototype.addEventListener = function(type, listener, useCapture)
   {
     if (useCapture) {
-      throw new Error("Capture mode isn't supported in MSIE.'");
+      throw new Error("Capture mode isn't supported by MSIE (and isn't emulated).");
     }
 
-    // array of type/listeners to call
-    if (!this.$events) {
-      this.$events = {};
+    // creates the list of listeners to call (per type)
+    if (!this._misago_events) {
+      this._misago_events = {};
     }
 
-    if (!this.$events[type])
+    // creates the real listener for event type
+    if (!this._misago_events[type])
     {
       var self = this;
-      this.$events[type] = {
+      this._misago_events[type] = {
         listeners: [],
-        caller: function()
+        real_listener: function()
         {
+          // runs the list of listeners for event type
           var evt = misago.event(window.event, self);
-          self.$events[type].listeners.forEach(function(listener) {
-            listener.call(self, window.event);
-          });
+          for(var i = 0, len = self._misago_events[type].listeners.length; i < len; i++) {
+            self._misago_events[type][i].call(self, evt);
+          }
         }
       };
 
-      // we bind our own caller (once)
-      this.attachEvent('on' + type, this.$events[type].caller);
+      // we attach the real listener (once)
+      this.attachEvent('on' + type, this._misago_events[type].real_listener);
     }
 
-    // adds the listener to our list
-    this.$events[type].listeners.push(listener);
+    // adds the listener to internal list
+    this._misago_events[type].listeners.push(listener);
   }
 
   Element.prototype.removeEventListener = function(type, listener, useCapture)
   {
     if (useCapture) {
-      return new Error("Capture mode isn't supported in MSIE.'");
+      return new Error("Capture mode isn't supported by MSIE (and isn't emulated).");
     }
     
-    if (this.$events)
+    if (this._misago_events)
     {
-      if (this.$events[type])
+      if (this._misago_events[type])
       {
         // removes listener
-        var idx = this.$events[type].listeners.indexOf(listener);
+        var idx = this._misago_events[type].listeners.indexOf(listener);
         if (idx > -1)
         {
-          delete this.$events[type].listeners[idx];
-          this.$events[type].listeners.splice(idx, 1);
+          delete this._misago_events[type].listeners[idx];
+          this._misago_events[type].listeners.splice(idx, 1);
         }
         
-        if (this.$events[type].listeners.length == 0)
+        // no more listeners: let's detach the real listener and clean up
+        if (this._misago_events[type].listeners.length == 0)
         {
-          // nothing to call anymore? we unbind our caller
-          this.detachEvent('on' + type, listener);
-          delete this.$events[type];
+          this.detachEvent('on' + type, this._misago_events[type].real_listener);
+          delete this._misago_events[type];
         }
       }
       
-      if (this.$events.length == 0) {
-        delete this.$events;
+      // no more listeners: let's clean up
+      if (this._misago_events.length == 0) {
+        delete this._misago_events;
       }
     }
   }
 
   Element.prototype.clearEvents = function()
   {
-    if (this.$events)
+    if (this._misago_events)
     {
-      for (var type in this.$events)
+      for (var type in this._misago_events)
       {
-        for (var i=0, len=this.$events[type].listeners.length; i<len; i++)
+        for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++)
         {
-          delete this.$events[type].listeners[i];
-          this.detachEvent(type, this.$events[type].caller);
+          delete this._misago_events[type].listeners[i];
+          this.detachEvent(type, this._misago_events[type].caller);
         }
       }
-      //delete this.$events;
     }
   }
 

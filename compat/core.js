@@ -1,7 +1,11 @@
+/**
+ * Core JavaScript backward compatibility.
+ * Mostly emulates DOM prototypes in MSIE, when missing.
+ *
+ * TODO: What about memory leaks in IE8?
+ */
 
 var misago = {};
-
-//document.write(document.getElementsByName);
 
 // browser sniffing (might come handy)
 misago.browser = {};
@@ -11,6 +15,7 @@ misago.browser = {};
   misago.browser.ie    = (window.VBArray) ? true : false;
   misago.browser.ie6   = (misago.browser.ie && document.implementation) ? true : false;
   misago.browser.ie7   = (misago.browser.ie && window.XMLHttpRequest) ? true : false;
+  misago.browser.ie7   = (misago.browser.ie && Element && Element.prototype) ? true : false;
   misago.browser.opera = (window.opera) ? true : false;
   misago.browser.gecko = (window.netscape && !misago.browser.opera) ? true : false;
   misago.browser.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1) ? true : false;
@@ -33,46 +38,48 @@ if (typeof Element == "undefined")
         if (element.clearEvents) {
           element.clearEvents();
         }
-        delete element;
       }
       delete misago.garbage[i];
     }
-    delete misago.garbage;
+    delete misago;
   }
   window.attachEvent('onunload', misago.garbageCollector);
 
-  // Emulates an Object Prototype
+  // Generic Object prototype emulator
   misago.prototypeEmulator = function()
   {
     var Obj       = {};
     Obj.prototype = {};
 
-    Obj.$extend = function(o)
+    Obj._misago_extend = function(o)
     {
-      if (!o.$extended)
+      if (!o._misago_extended)
       {
         misago.garbage.push(o);
 
         for (var method in Obj.prototype)
         {
-          if (o[method]) {
-            o['_super_' + method] = o[method];
+          // saves the original method
+          if (o[method] && !o['_misago_' + method]) {
+            o['_misago_' + method] = o[method];
           }
+          
+          // creates (or overwrites) the method
           o[method] = Obj.prototype[method];
         }
-        o.$extended = true;
+        o._misago_extended = true;
       }
       return o;
     }
     return Obj;
   }
 
-  // Emulates the Element DOM prototype
+  // Emulates the DOM Element prototype
   var Element = new misago.prototypeEmulator();
 
   // Manually extends an element
   misago.extendElement = function(elm) {
-    return Element.$extend(elm);
+    return Element._misago_extend(elm);
   }
 
   // Manually extends many elements
@@ -88,56 +95,81 @@ if (typeof Element == "undefined")
     return rs;
   }
 
-	// Makes document.createElement to extend the newly created element
-  misago._MSIE_createElement = document.createElement;
+  // document.createElement should return an already extended element
+  misago._msie_createElement = document.createElement;
   document.createElement = function(tagName)
   {
-    var elm = misago._MSIE_createElement(tagName);
+    var elm = misago._msie_createElement(tagName);
     return misago.extendElement(elm);
   }
 
-  // Makes document.getElementById to return an extended element
-  misago._MSIE_getElementById = document.getElementById;
+  // document.getElementById should return an extended element
+  misago._msie_getElementById = document.getElementById;
   document.getElementById = function(id)
   {
-    var elm = misago._MSIE_getElementById(id);
+    var elm = misago._msie_getElementById(id);
     return elm ? misago.extendElement(elm) : elm;
   }
 
-  // Makes document.getElementsByTagName to return extended elements
-  misago._MSIE_getElementsByTagName = document.getElementsByTagName;
-  document.getElementsByTagName = function(id)
-  {
-    var elms = misago._MSIE_getElementsByTagName(id);
-    return elms.length ? misago.extendElements(elms) : elms;
-  }
-
-  // document.getElementsByName must return extended elements
-  misago._MSIE_getElementsByName = document.getElementsByName;
+  // document.getElementsByName should return extended elements
+  misago._msie_getElementsByName = document.getElementsByName;
   document.getElementsByName = function(id)
   {
-    var elms = misago._MSIE_getElementsByName(id);
+    var elms = misago._msie_getElementsByName(id);
     return elms.length ? misago.extendElements(elms) : elms;
   }
 
-  // Makes elm.getElementsByTagName to return extended elements
+  // document.getElementsByTagName should return extended elements
+  misago._msie_getElementsByTagName = document.getElementsByTagName;
+  document.getElementsByTagName = function(id)
+  {
+    var elms = misago._msie_getElementsByTagName(id);
+    return elms.length ? misago.extendElements(elms) : elms;
+  }
+
+  // elm.getElementsByTagName should return extended elements
   Element.prototype.getElementsByTagName = function(id)
   {
-    var elms = this._super_getElementsByTagName(id);
+    var elms = this._misago_getElementsByTagName(id);
     return elms.length ? misago.extendElements(elms) : elms;
+  }
+
+  // fixes pseudo-leaks in MSIE
+  Element.prototype.removeChild = function(child)
+  {
+    var garbage = document.getElementById('_misago_msie_leak_garbage');
+    if (!garbage)
+    {
+        garbage = document.createElement('div');
+        garbage.id = '_misago_msie_leak_garbage';
+        garbage.style.display    = 'none';
+        garbage.style.visibility = 'hidden';
+        document.body.appendChild(garbage);
+    }
+    
+    // removes the child
+    this._misago_removeChild(child);
+    
+    // destroys the reference
+    garbage.appendChild(child);
+    garbage.innerHTML = '';
   }
 }
 
-// Shortcut for document.getElementsById, and will auto-extend the element in MSIE < 8.
+// Shortcut for document.getElementsById and element extender for MSIE < 8.
 misago.$ = function(element)
 {
   if (typeof element == "string") {
     element = document.getElementById(element)
   }
-  return (!misago.extendElement) ? element : misago.extendElement(element);
+  else if (misago.extendElement) {
+    element = misago.extendElement(element);
+  }
+  return element;
 }
 
 // Shortcut: $ => misago.$
 if (typeof window.$ == "undefined") {
   window.$ = misago.$;
 }
+
