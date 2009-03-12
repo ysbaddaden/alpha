@@ -27,39 +27,36 @@ if (!Element.prototype.addEventListener)
     }
 
     // target: the element the event happened on
-    if (this.target)
-    {
-      this.target = new Element(this.target);
-      misago.garbage.push(this.target);
+    if (event.target) {
+      event.target = misago.extendElement(event.target);
     }
-    else if (this.srcElement)
-    {
-      this.target = new Element(this.srcElement);
-      misago.garbage.push(this.target);
+    else if (event.srcElement) {
+      event.target = misago.extendElement(event.srcElement);
     }
 
     // currentTarget: the element that handles the event
-    if (!this.currentTarget && currentTarget) {
-      this.currentTarget = currentTarget;
+    if (!event.currentTarget && currentTarget) {
+      event.currentTarget = misago.extendElement(currentTarget);
     }
 
     // relatedTarget:
-    if (this.type == 'mouseover')
+    if (event.type == 'mouseover')
     {
       // the element the mouse came from
-      this.relatedTarget = new Element(this.fromElement);
-      misago.garbage.push(this.relatedTarget);
+      event.relatedTarget = misago.extendElement(event.fromElement);
     }
-    else if (this.type == 'mouseout')
+    else if (event.type == 'mouseout')
     {
       // the element the mouse left to
-      this.relatedTarget = new Element(this.toElement);
-      misago.garbage.push(this.relatedTarget);
+      event.relatedTarget = misago.extendElement(event.toElement);
+    }
+    else {
+      event.relatedTarget = null;
     }
 
     // fixes values
-    this.pageX = this.clientX + document.scrollLeft;
-    this.pageY = this.clientY + document.scrollTop;
+    event.pageX = event.clientX + document.scrollLeft;
+    event.pageY = event.clientY + document.scrollTop;
 
     return event;
   }
@@ -86,7 +83,7 @@ if (!Element.prototype.addEventListener)
           // runs the list of listeners for event type
           var evt = misago.event(window.event, self);
           for(var i = 0, len = self._misago_events[type].listeners.length; i < len; i++) {
-            self._misago_events[type][i].call(self, evt);
+            self._misago_events[type].listeners[i].call(self, evt);
           }
         }
       };

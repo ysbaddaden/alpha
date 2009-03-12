@@ -25,25 +25,26 @@ if (typeof Element == "undefined")
 {
   // Garbage Collector, to prevent memory leaks in MSIE
   misago.garbage = [ window, document.body ];
-  misago.garbageCollector = function()
+  window.attachEvent('onunload', function()
   {
     for (var i=0, len=misago.garbage.length; i<len; i++)
     {
       var element = misago.garbage[i];
       if (element)
       {
+        /*
+        // FIXME: Crashes IE7 on XP SP3?
         if (element.clearAttributes) {
           element.clearAttributes();
         }
+        */
         if (element.clearEvents) {
           element.clearEvents();
         }
       }
       delete misago.garbage[i];
     }
-    delete misago;
-  }
-  window.attachEvent('onunload', misago.garbageCollector);
+  });
 
   // Generic Object prototype emulator
   misago.prototypeEmulator = function()
