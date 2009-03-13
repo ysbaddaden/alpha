@@ -17,3 +17,16 @@ String.prototype.camelize = function(index)
   return str;
 }
 
+String.prototype.hyphenize = function()
+{
+  var parts = this.split(/([A-Z].+)/);
+  var str = '';
+  for (var i=0; i<parts.length; i++)
+  {
+    if (parts[i] != '') {
+      str += parts[i].toLowerCase() + '-';
+    }
+  }
+  return str.replace(/[-]+$/, '');
+}
+

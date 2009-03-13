@@ -15,7 +15,7 @@ Element.prototype.setStyle = function(property, value)
         'filter:alpha(opacity=' + (value * 100) + ');zoom:1';
     }
     else {
-      this.style.cssText += ';' + property + ':' + value;
+      this.style.cssText += ';' + property.hyphenize() + ':' + value;
     }
   }
 }
