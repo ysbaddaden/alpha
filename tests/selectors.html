@@ -1,0 +1,40 @@
+<html>
+<head>
+</head>
+<body>
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="../compat/array.js"></script>
+  <script type="text/javascript" src="../compat/core.js"></script>
+  <script type="text/javascript" src="../compat/selectors.js"></script>
+
+  <script type="text/javascript" src="../addons/element.js"></script>
+
+  <div id="test" class="test">test</div>
+  <div id="toto" class="toto">
+    <div id="tata" class="tata">tata</div>
+  </div>
+  
+  <input type="text" name="titi" style="display:none"/>
+
+<script type="text/javascript">
+
+jsUnit.add("document.getElementsByClassName", function()
+{
+  var tata = document.getElementsByClassName('tata')[0];
+  jsUnit.assertEquals(tata.id, 'tata');
+});
+
+jsUnit.add("Element.prototype.getElementsByClassName", function()
+{
+  var test = document.getElementById('test');
+  var toto = test.get('nextElementSibling');
+  var tata = toto.getElementsByClassName('tata')[0];
+  jsUnit.assertEquals(tata.id, 'tata');
+});
+
+jsUnit.run();
+
+</script>
+
+</body>
+</html>

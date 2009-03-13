@@ -1,6 +1,6 @@
 /**
  * Core JavaScript backward compatibility.
- * Mostly emulates DOM prototypes in MSIE, when missing.
+ * Mostly emulates DOM prototypes in MSIE < 8.
  *
  * TODO: What about memory leaks in IE8?
  */
@@ -21,10 +21,11 @@ misago.browser = {};
   misago.browser.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1) ? true : false;
 })();
 
+// The following tries to fix MSIE < 8.
 if (typeof Element == "undefined")
 {
-  // Garbage Collector, to prevent memory leaks in MSIE
-  misago.garbage = [ window, document.body ];
+  // Garbage Collector, to prevent memory leaks
+  misago.garbage = [];
   window.attachEvent('onunload', function()
   {
     for (var i=0, len=misago.garbage.length; i<len; i++)
@@ -33,7 +34,7 @@ if (typeof Element == "undefined")
       if (element)
       {
         /*
-        // FIXME: Crashes IE7 on XP SP3?
+        // FIXME: Calling elm.clearAttributes() on unload crashes IE7?!
         if (element.clearAttributes) {
           element.clearAttributes();
         }
@@ -135,7 +136,7 @@ if (typeof Element == "undefined")
     return elms.length ? misago.extendElements(elms) : elms;
   }
 
-  // fixes pseudo-leaks in MSIE
+  // fixes a pseudo-leak in MSIE
   Element.prototype.removeChild = function(child)
   {
     var garbage = document.getElementById('_misago_msie_leak_garbage');
@@ -157,13 +158,13 @@ if (typeof Element == "undefined")
   }
 }
 
-// Shortcut for document.getElementsById and element extender for MSIE < 8.
+// Shortcut for document.getElementById and element extender for MSIE < 8.
 misago.$ = function(element)
 {
   if (typeof element == "string") {
     element = document.getElementById(element)
   }
-  else if (misago.extendElement) {
+  if (misago.extendElement) {
     element = misago.extendElement(element);
   }
   return element;

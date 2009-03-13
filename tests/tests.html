@@ -1,5 +1,6 @@
 <html>
 <head>
+  <title>Some manual event tests</title>
 </head>
 <body>
 
@@ -7,35 +8,21 @@
     <button id="btn" name="btn">click me (or mouse me over)</button>
   </p>
 
-<script type="text/javascript" src="../compat/array.js"></script>
 <script type="text/javascript" src="../compat/core.js"></script>
 <script type="text/javascript" src="../compat/events.js"></script>
 
 <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
-
-<p id="console"></p>
-
-  <script type="text/javascript">
-
-function console_write(str)
-{
-  var elm = document.getElementById('console');
-  elm.appendChild(document.createTextNode(str));
-  elm.appendChild(document.createElement('br'));
-}
+<script type="text/javascript">
 
 function run_on_event(evt)
 {
-  /*
-  console_write(evt.type + ' '
-    + (typeof evt.stopPropagation) + ' '
-    + (typeof evt.target) + ' '
-    + evt.target.id + ' '
-    + (typeof evt.relatedTarget)
+  console.log(
+    this.id,
+    evt.type,
+    evt.target.tagName,
+    evt.currentTarget.tagName,
+    evt.relatedTarget ? evt.relatedTarget.tagName : null
   );
-  console.log(evt.relatedTarget);
-  */
-  console.log(evt.type, evt.target.tagName, evt.currentTarget.tagName, evt.relatedTarget ? evt.relatedTarget.tagName : null);
 }
 
 var btn = document.getElementById('btn');
@@ -47,8 +34,10 @@ btn.addEventListener('mouseover', run_on_event, false);
 var btn = document.getElementsByTagName('button')[0];
 btn.addEventListener('mouseout', run_on_event, false);
 
-  </script>
-</p>
+var p = document.getElementById('container');
+p.addEventListener('click', run_on_event, false);
+
+</script>
 
 </body>
 </html>

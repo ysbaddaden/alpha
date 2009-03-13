@@ -8,7 +8,9 @@
   <script type="text/javascript" src="../compat/core.js"></script>
   <script type="text/javascript" src="../compat/events.js"></script>
 
-  <script type="text/javascript">
+  <script type="text/javascript" src="../addons/element.js"></script>
+
+<script type="text/javascript">
 
 function new_input()
 {
@@ -22,43 +24,30 @@ function new_input()
   return input;
 }
 
+var _event_type = misago.browser.ie ? 'click' : 'focus';
+
+
+// TODO: Test event.target
+// TODO: Test event.currentTarget
+// TODO: Test event.relatedTarget
 
 jsUnit.add("Event must be prototyped", function() {
   jsUnit.assertObject(Event.prototype);
 });
-
-/*
-jsUnit.add("Capturing phase is supported in non IE browsers only", function()
-{
-  var toto = document.createElement('div');
-  var test = 'a';
-
-  try
-  {
-    toto.addEventListener('focus', {}, true);
-    jsUnit.assertTrue(misago.browser.ie ? false : true);
-  }
-  catch (e) {
-    jsUnit.assertTrue(misago.browser.ie ? true : false);
-  }
-  
-  document.write(test);
-});
-*/
 
 jsUnit.add("elm.addEventListener with one listener", function()
 {
   var elm  = new_input();
   var test = null;
 
-  elm.addEventListener('focus', function(evt) {
+  elm.addEventListener(_event_type, function(evt) {
     test = true;
   }, false);
 
-  elm.focus();
+  elm[_event_type]();
   jsUnit.assertTrue(test);
-
-//  elm.destroy();
+  
+  elm.removeNode();
 });
 
 jsUnit.add("elm.addEventListener with many listeners", function()
@@ -66,18 +55,18 @@ jsUnit.add("elm.addEventListener with many listeners", function()
   var elm  = new_input();
   var test = null;
 
-  elm.addEventListener('focus', function(evt) {
+  elm.addEventListener(_event_type, function(evt) {
     test = true;
   }, false);
 
-  elm.addEventListener('focus', function(evt) {
+  elm.addEventListener(_event_type, function(evt) {
     test = false;
   }, false);
 
-  elm.focus();
+  elm[_event_type]();
   jsUnit.assertFalse(test);
 
-//  elm.destroy();
+  elm.removeNode();
 });
 
 jsUnit.add("elm.removeEventListener", function()
@@ -89,13 +78,13 @@ jsUnit.add("elm.removeEventListener", function()
     test = true;
   }
 
-  elm.addEventListener('focus', fn, false);
-  elm.removeEventListener('focus', fn, false);
+  elm.addEventListener(_event_type, fn, false);
+  elm.removeEventListener(_event_type, fn, false);
 
-  elm.focus();
+  elm[_event_type]();
   jsUnit.assertNull(test);
 
-//  elm.destroy();
+  elm.removeNode();
 });
 
 if (Element.prototype.clearEvents)
@@ -105,28 +94,25 @@ if (Element.prototype.clearEvents)
     var elm  = new_input();
     var test = null;
 
-    elm.addEventListener('focus', function() {
+    elm.addEventListener(_event_type, function() {
       test = true;
     }, false);
-    elm.addEventListener('focus', function() {
+    elm.addEventListener(_event_type, function() {
       test = false;
     }, false);
+    
     elm.clearEvents();
 
-    elm.focus();
+    elm[_event_type]();
     jsUnit.assertNull(test);
-
-//    elm.destroy();
+    
+    elm.removeNode();
   });
 }
 
-// TODO Test event.target
-// TODO Test event.currentTarget
-// TODO Test event.relatedTarget
-
 jsUnit.run();
 
-  </script>
+</script>
 
 </body>
 </html>

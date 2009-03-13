@@ -3,7 +3,7 @@
  *
  * requires: misago/core.js
  *
- * FIXME Conflicts with Event DOM prototype on IE8?
+ * FIXME: Conflicts with Event DOM prototype on IE8?
  */
 
 if (!Element.prototype.addEventListener)
@@ -80,10 +80,12 @@ if (!Element.prototype.addEventListener)
         listeners: [],
         real_listener: function()
         {
+          // the event object
+          var event = misago.event(window.event, self);
+
           // runs the list of listeners for event type
-          var evt = misago.event(window.event, self);
           for(var i = 0, len = self._misago_events[type].listeners.length; i < len; i++) {
-            self._misago_events[type].listeners[i].call(self, evt);
+            self._misago_events[type].listeners[i].call(self, event);
           }
         }
       };
@@ -106,7 +108,7 @@ if (!Element.prototype.addEventListener)
     {
       if (this._misago_events[type])
       {
-        // removes listener
+        // removes the listener
         var idx = this._misago_events[type].listeners.indexOf(listener);
         if (idx > -1)
         {
@@ -114,7 +116,7 @@ if (!Element.prototype.addEventListener)
           this._misago_events[type].listeners.splice(idx, 1);
         }
         
-        // no more listeners: let's detach the real listener and clean up
+        // no more listeners: let's detach the real one and clean up
         if (this._misago_events[type].listeners.length == 0)
         {
           this.detachEvent('on' + type, this._misago_events[type].real_listener);
@@ -135,11 +137,10 @@ if (!Element.prototype.addEventListener)
     {
       for (var type in this._misago_events)
       {
-        for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++)
-        {
+        for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++) {
           delete this._misago_events[type].listeners[i];
-          this.detachEvent(type, this._misago_events[type].caller);
         }
+        this.detachEvent(type, this._misago_events[type].real_listener);
       }
     }
   }

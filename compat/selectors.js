@@ -2,9 +2,8 @@
  * Developed by Robert Nyman, http://www.robertnyman.com
  * Code/licensing: http://code.google.com/p/getelementsbyclassname/
  * 
- * TODO: Use querySelectorAll() if available (ie. for MSIE 8).
+ * TODO: Use querySelectorAll() if available (ie. MSIE 8).
  * TODO: Emulate querySelectorAll() when missing.
- * TODO: Write some tests.
  */
 
 if (!document.getElementsByClassName)
