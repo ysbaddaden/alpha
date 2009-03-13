@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>Some manual event tests</title>
+  <style type="text/css">
+  
+  #container { background-color: #FEA; text-align: center; }
+  
+  </style>
+</head>
+<body>
+
+  <p id="container">
+    <button id="btn" name="btn">click me</button>
+  </p>
+
+<script type="text/javascript" src="../compat/core.js"></script>
+<script type="text/javascript" src="../compat/events.js"></script>
+
+<script type="text/javascript" src="../addons/string.js"></script>
+<script type="text/javascript" src="../addons/style.js"></script>
+
+<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+
+<script type="text/javascript">
+
+document.getElementById('btn').addEventListener('click', function()
+{
+  var p = document.getElementById('container');
+  var align = p.getStyle('text-align');
+  align = (align == 'center') ? 'left' : ((align == 'left') ? 'right' : 'center');
+  p.setStyle('text-align', align);
+  p.setStyle({
+    color: '#00F',
+    'background-color': '#AEF'
+  });
+}, false);
+
+</script>
+
+</body>
+</html>

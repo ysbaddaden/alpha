@@ -3,21 +3,21 @@ Write unit tests
 
 Implement (when missing, must return extended elements):
 
-	new misago.prototypeEmulator() [done]
-	new misago.nodeListEmulator()  [done]
-	misago.extendElement()         [done]
+	new misago.prototypeEmulator()                 [done]
+	new misago.nodeListEmulator()                  [done]
+	misago.extendElement()                         [done]
 	  only available for IE (use misago.$ instead) [done]
-	misago.extendElements()        [done]
-	  only available for IE        [done]
-	misago.$                       [done]
+	misago.extendElements()                        [done]
+	  only available for IE                        [done]
+	misago.$                                       [done]
 
 	Element.prototype.getElementsByClassName()
-		by using XPATH when available
-		by parsing the DOM
-		must return a NodeList-like object
+		by using XPATH when available                [done]
+		by parsing the DOM                           [done]
+		must return a NodeList-like object       
 		unit tests:
-			document.getElementsByClassName('test')
-			document.getElementsByClassName('test test2')
+			document.getElementsByClassName('test')        [done]
+			document.getElementsByClassName('test test2')  [done]
 
 	Element.prototype.querySelectorAll()
 		unit tests:
@@ -25,9 +25,9 @@ Implement (when missing, must return extended elements):
 			document.querySelectorAll('input, select, textarea')
 			etc.
 
-  Element.prototype.addEventListener()
-  Element.prototype.removeEventListener()
-  Element.prototype.clearEvents()
+  Element.prototype.addEventListener()      [done]
+  Element.prototype.removeEventListener()   [done]
+  Element.prototype.clearEvents()           [done]
 
 
 Override (to return extended elements):
@@ -51,14 +51,15 @@ Problems and questions:
 	Extending DOM attributes that are in fact elements? Like elm.firstChild or elm.parentNode?
 		Standards compatible solutions:
 			Extend them automatically on request (eg: elm.parentNode)
-				=> problem: IE 6 & 7 don't support getters
-			Extend them automatically when extending element
+				=> problem: IE6 & IE7 don't support getters :(
+			Extend them automatically when extending element [impossible]
 				=> problem: it would cause the whole HTML tree to be extended
+				=> problem: what if we manipulate the dom?
 		Non standard solutions:
 			Extend them throught custom getters? for instance elm.get('parentNode')?
 				=> adds some burden to the developer
 				=> workable, but requires to be available on standards compliant browsers
-				=> could be used to return real elements (skipping text node and whitespaces)
-			Extend them when manually with $(elm.parentNode)
+			Extend them manually with $(elm.parentNode)
 				=> simple, be adds some burden to the developer
 	...
+
