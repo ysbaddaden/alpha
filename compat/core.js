@@ -3,11 +3,12 @@
  * Mostly emulates DOM prototypes in MSIE < 8.
  *
  * TODO: What about memory leaks in IE8?
+ * TODO: Write a misago.NodeList class.
  */
 
 var misago = {};
 
-// browser sniffing (might come handy)
+// Browser sniffing (might come handy)
 misago.browser = {};
 (function()
 {
@@ -15,11 +16,23 @@ misago.browser = {};
   misago.browser.ie    = (window.VBArray) ? true : false;
   misago.browser.ie6   = (misago.browser.ie && document.implementation) ? true : false;
   misago.browser.ie7   = (misago.browser.ie && window.XMLHttpRequest) ? true : false;
-  misago.browser.ie7   = (misago.browser.ie && Element && Element.prototype) ? true : false;
+  misago.browser.ie8   = (misago.browser.ie && Element && Element.prototype) ? true : false;
   misago.browser.opera = (window.opera) ? true : false;
   misago.browser.gecko = (window.netscape && !misago.browser.opera) ? true : false;
   misago.browser.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1) ? true : false;
 })();
+
+// NodeList emulator
+misago.NodeList = function(nodes)
+{
+  for(var i=0, len=nodes.length; i<len; i++) {
+    this[i] = nodes[i];
+  }
+  this.length = nodes.length;
+}
+misago.NodeList.prototype.item = function(i) {
+  return this[i];
+}
 
 // The following tries to fix MSIE < 8.
 if (typeof Element == "undefined")
@@ -91,9 +104,6 @@ if (typeof Element == "undefined")
     for (var i=0, len=elms.length; i<len; i++) {
       rs.push(misago.extendElement(elms[i]));
     }
-    rs.item = function(i) {
-      return this[i];
-    }
     return rs;
   }
 
@@ -118,7 +128,7 @@ if (typeof Element == "undefined")
   document.getElementsByName = function(id)
   {
     var elms = misago._msie_getElementsByName(id);
-    return elms.length ? misago.extendElements(elms) : elms;
+    return elms.length ? new misago.NodeList(misago.extendElements(elms)) : elms;
   }
 
   // document.getElementsByTagName should return extended elements
@@ -126,14 +136,14 @@ if (typeof Element == "undefined")
   document.getElementsByTagName = function(id)
   {
     var elms = misago._msie_getElementsByTagName(id);
-    return elms.length ? misago.extendElements(elms) : elms;
+    return elms.length ? new misago.NodeList(misago.extendElements(elms)) : elms;
   }
 
   // elm.getElementsByTagName should return extended elements
   Element.prototype.getElementsByTagName = function(id)
   {
     var elms = this._misago_getElementsByTagName(id);
-    return elms.length ? misago.extendElements(elms) : elms;
+    return elms.length ? new misago.NodeList(misago.extendElements(elms)) : elms;
   }
 
   // fixes a pseudo-leak in MSIE
@@ -164,7 +174,7 @@ misago.$ = function(element)
   if (typeof element == "string") {
     element = document.getElementById(element)
   }
-  if (misago.extendElement) {
+  else if (misago.extendElement) {
     element = misago.extendElement(element);
   }
   return element;

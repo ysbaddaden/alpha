@@ -5,6 +5,7 @@
   <script type="text/javascript" src="jsunit.js"></script>
   <script type="text/javascript" src="../compat/array.js"></script>
   <script type="text/javascript" src="../compat/core.js"></script>
+  <script type="text/javascript" src="../compat/element.js"></script>
   <script type="text/javascript" src="../addons/element.js"></script>
 
   <div id="test">test</div>
@@ -14,7 +15,7 @@
   
   <input type="text" name="titi" style="display:none"/>
 
-  <script type="text/javascript">
+<script type="text/javascript">
 
 jsUnit.add("Element.prototype.insertAfter()", function()
 {
@@ -64,25 +65,73 @@ jsUnit.add("Element.prototype.get('lastElementChild')", function()
 
 jsUnit.add("Element.prototype.get('nextElementSibling')", function()
 {
-  var sibling = document.getElementById('next1').get('nextElementSibling');
-  jsUnit.assertEquals(sibling, null);
-  
   var sibling = document.getElementById('tata').get('nextElementSibling');
   jsUnit.assertEquals(sibling.id, 'next2');
+  
+  var sibling = document.getElementById('next1').get('nextElementSibling');
+  jsUnit.assertEquals(sibling, null);
 });
 
 jsUnit.add("Element.prototype.get('previousElementSibling')", function()
 {
-  var sibling = document.getElementById('tata').get('previousElementSibling');
-  jsUnit.assertEquals(sibling, null);
-  
   var sibling = document.getElementById('next1').get('previousElementSibling');
   jsUnit.assertEquals(sibling.id, 'next2');
+  
+  var sibling = document.getElementById('tata').get('previousElementSibling');
+  jsUnit.assertEquals(sibling, null);
 });
+
+
+if (Element.prototype.__defineGetter__)
+{
+  jsUnit.add("Element.prototype.childElementCount", function()
+  {
+    var count = document.getElementById('toto').childElementCount;
+    jsUnit.assertEquals(count, 3);
+  });
+
+  jsUnit.add("Element.prototype.children", function()
+  {
+    var children = document.getElementById('toto').children;
+    jsUnit.assertEquals(children[0].id, 'tata');
+    jsUnit.assertEquals(children[1].id, 'next2');
+    jsUnit.assertEquals(children[2].id, 'next1');
+  });
+
+  jsUnit.add("Element.prototype.firstElementChild", function()
+  {
+    var child = document.getElementById('toto').firstElementChild;
+    jsUnit.assertEquals(child.id, 'tata');
+  });
+
+  jsUnit.add("Element.prototype.lastElementChild", function()
+  {
+    var child = document.getElementById('toto').lastElementChild;
+    jsUnit.assertEquals(child.id, 'next1');
+  });
+
+  jsUnit.add("Element.prototype.nextElementSibling", function()
+  {
+    var sibling = document.getElementById('tata').nextElementSibling;
+    jsUnit.assertEquals(sibling.id, 'next2');
+    
+    var sibling = document.getElementById('next1').nextElementSibling;
+    jsUnit.assertEquals(sibling, null);
+  });
+
+  jsUnit.add("Element.prototype.previousElementSibling", function()
+  {
+    var sibling = document.getElementById('next1').previousElementSibling;
+    jsUnit.assertEquals(sibling.id, 'next2');
+    
+    var sibling = document.getElementById('tata').previousElementSibling;
+    jsUnit.assertEquals(sibling, null);
+  });
+}
 
 jsUnit.run();
 
-  </script>
+</script>
 
 </body>
 </html>

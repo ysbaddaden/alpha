@@ -1,0 +1,117 @@
+<html>
+<head>
+</head>
+<body>
+
+  <div class="block" id="main">
+    <div>
+      <p>
+        <a href=""></a>
+      </p>
+      <p class="block">
+        <a href="" id="link" class="edit"></a>
+      </p>
+    </div>
+    
+    <article>
+      <p></p>
+    </article>
+  </div>
+  
+  <p>
+    <a href=""></a>
+  </p>
+
+
+<script type="text/javascript" src="../compat/array.js"></script>
+<script type="text/javascript" src="../compat/core.js"></script>
+<script type="text/javascript" src="../compat/element.js"></script>
+<script type="text/javascript" src="../compat/selectors.js"></script>
+
+<script type="text/javascript" src="jsunit.js"></script>
+<script type="text/javascript">
+
+jsUnit.add('document.querySelectorAll', function() {
+  jsUnit.assertEquals(typeof document.querySelectorAll, 'function');
+});
+
+jsUnit.add('Element.prototype.querySelectorAll', function()
+{
+  var elm = document.createElement('div');
+  jsUnit.assertEquals(typeof elm.querySelectorAll, 'function');
+});
+
+// id
+jsUnit.add('#main', function() {
+  jsUnit.assertEquals(document.querySelectorAll('#main').length, 1);
+});
+jsUnit.add('#link', function() {
+  jsUnit.assertEquals(document.querySelectorAll('#link').length, 1);
+});
+
+// tag name
+jsUnit.add('div', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div').length, 2);
+});
+jsUnit.add('p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('p').length, 4);
+});
+
+// classname
+jsUnit.add('.block', function() {
+  jsUnit.assertEquals(document.querySelectorAll('.block').length, 2);
+});
+jsUnit.add('.edit', function() {
+  jsUnit.assertEquals(document.querySelectorAll('.edit').length, 1);
+});
+
+// mixes
+jsUnit.add('a.edit', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a.edit').length, 1);
+});
+jsUnit.add('a.nothing', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a.nothing').length, 0);
+});
+
+jsUnit.add('a#link', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a#link').length, 1);
+});
+jsUnit.add('a#link.edit', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a#link.edit').length, 1);
+});
+
+// descendant child
+jsUnit.add('div p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div p').length, 3);
+});
+jsUnit.add('p div', function() {
+  jsUnit.assertEquals(document.querySelectorAll('p div').length, 0);
+});
+jsUnit.add('div p a', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div p a').length, 2);
+});
+
+jsUnit.add('div .edit', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div .edit').length, 1);
+});
+jsUnit.add('div a.edit', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div a.edit').length, 1);
+});
+jsUnit.add('div a#link', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div a.edit').length, 1);
+});
+jsUnit.add('div a#nothing .more', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div a#nothing .more').length, 0);
+});
+
+jsUnit.add('div > p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div > p').length, 2);
+});
+
+
+jsUnit.run();
+
+</script>
+
+</body>
+</html>
