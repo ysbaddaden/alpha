@@ -5,12 +5,19 @@
 
   <div class="block" id="main">
     <div>
+      <section></section>
+      
       <p>
         <a href=""></a>
       </p>
       <p class="block">
         <a href="" id="link" class="edit"></a>
+        <a href="" class="edit"></a>
       </p>
+      
+      <section></section>
+      <section class="toc"></section>
+      <section></section>
     </div>
     
     <article>
@@ -62,12 +69,12 @@ jsUnit.add('.block', function() {
   jsUnit.assertEquals(document.querySelectorAll('.block').length, 2);
 });
 jsUnit.add('.edit', function() {
-  jsUnit.assertEquals(document.querySelectorAll('.edit').length, 1);
+  jsUnit.assertEquals(document.querySelectorAll('.edit').length, 2);
 });
 
 // mixes
 jsUnit.add('a.edit', function() {
-  jsUnit.assertEquals(document.querySelectorAll('a.edit').length, 1);
+  jsUnit.assertEquals(document.querySelectorAll('a.edit').length, 2);
 });
 jsUnit.add('a.nothing', function() {
   jsUnit.assertEquals(document.querySelectorAll('a.nothing').length, 0);
@@ -88,26 +95,46 @@ jsUnit.add('p div', function() {
   jsUnit.assertEquals(document.querySelectorAll('p div').length, 0);
 });
 jsUnit.add('div p a', function() {
-  jsUnit.assertEquals(document.querySelectorAll('div p a').length, 2);
+  jsUnit.assertEquals(document.querySelectorAll('div p a').length, 3);
 });
 
 jsUnit.add('div .edit', function() {
-  jsUnit.assertEquals(document.querySelectorAll('div .edit').length, 1);
+  jsUnit.assertEquals(document.querySelectorAll('div .edit').length, 2);
 });
 jsUnit.add('div a.edit', function() {
-  jsUnit.assertEquals(document.querySelectorAll('div a.edit').length, 1);
+  jsUnit.assertEquals(document.querySelectorAll('div a.edit').length, 2);
 });
 jsUnit.add('div a#link', function() {
-  jsUnit.assertEquals(document.querySelectorAll('div a.edit').length, 1);
+  jsUnit.assertEquals(document.querySelectorAll('div a#link').length, 1);
 });
 jsUnit.add('div a#nothing .more', function() {
   jsUnit.assertEquals(document.querySelectorAll('div a#nothing .more').length, 0);
 });
 
+// operators
 jsUnit.add('div > p', function() {
   jsUnit.assertEquals(document.querySelectorAll('div > p').length, 2);
 });
+jsUnit.add('article > p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('article > p').length, 1);
+});
 
+jsUnit.add('p + p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('p + p').length, 1);
+});
+jsUnit.add('div + p', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div + p').length, 1);
+});
+jsUnit.add('section + section', function() {
+  jsUnit.assertEquals(document.querySelectorAll('section + section').length, 2);
+});
+jsUnit.add('section + section.toc', function() {
+  jsUnit.assertEquals(document.querySelectorAll('section + section.toc').length, 1);
+});
+
+jsUnit.add('section ~ section', function() {
+  jsUnit.assertEquals(document.querySelectorAll('section ~ section').length, 3);
+});
 
 jsUnit.run();
 

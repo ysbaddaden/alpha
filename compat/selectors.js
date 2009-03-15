@@ -99,6 +99,7 @@ if (!document.getElementsByClassName)
 	}
 }
 
+
 if (!Element.prototype.querySelectorAll)
 {
   /**
@@ -122,25 +123,12 @@ if (!Element.prototype.querySelectorAll)
       
       // breaks the cssPart in smaller parts (eg: tag#id.className.className)
       var cssPart    = cssParts[i];
-      var innerParts = parseCssPart(cssPart);
+      var cssFilters = parseCssPart(cssPart.name);
       
       // for each parent: finds childs that match the current cssPart
       foundElements.forEach(function(element)
       {
-        var currentElements = [element];
-        
-        // remember: the css part itself is separated in smaller parts (which act as filters)
-        for (var j=0, jlen=innerParts.length; j<jlen; j++)
-        {
-          var innerPart = innerParts[j];
-          currentElements = misago.querySelectorAll.selectors[innerPart.selector].call(element, innerPart.name);
-          
-          // found nothing: skip next filters
-          if (currentElements.length === 0) {
-            break;
-          }
-        }
-        
+        var currentElements = searchElements(element, cssFilters, cssPart.operator);
         mergeArrays(newElements, currentElements);
       });
       
@@ -152,18 +140,52 @@ if (!Element.prototype.querySelectorAll)
       }
     }
     
-		foundElements = misago.extendElements ? misago.extendElements(foundElements) : foundElements;
-		return new misago.NodeList(foundElements);
-		
-		
-		function parseCssRule(cssRule)
-		{
-      var cssParts = cssRule.split(/\s+/);
-		  return cssParts;
-		}
-		
-		function parseCssPart(cssPart)
-		{
+    foundElements = misago.extendElements ? misago.extendElements(foundElements) : foundElements;
+    return new misago.NodeList(foundElements);
+    
+    
+    function searchElements(parent, cssFilters, operator)
+    {
+      var elements = [];
+      
+      for (var j=0, jlen=cssFilters.length; j<jlen; j++)
+      {
+        var cssFilter = cssFilters[j];
+        elements = misago.querySelectorAll.operators[operator](parent, cssFilter);
+        
+        // found nothing: skip next cssFilters
+        if (elements.length === 0) {
+          return [];
+        }
+      }
+      return elements;
+    }
+    
+    // FIXME: harden cssRule splitter (currently 'A+B' isn't recognized)
+    function parseCssRule(cssRule)
+    {
+      var parts = cssRule.split(/\s+/);
+      var cssParts = [];
+      
+      for (var i=0, ilen=parts.length; i<ilen; i++)
+      {
+        var cssPart = {};
+        
+        switch(parts[i])
+        {
+          case '': continue;
+          case '>': cssPart.operator = 'child';      cssPart.name = parts[++i]; break;
+          case '+': cssPart.operator = 'adjacent';   cssPart.name = parts[++i]; break;
+          case '~': cssPart.operator = 'sibling';    cssPart.name = parts[++i]; break;
+          default:  cssPart.operator = 'descendant'; cssPart.name = parts[i];
+        }
+        cssParts.push(cssPart);
+      }
+      return cssParts;
+    }
+    
+    function parseCssPart(cssPart)
+    {
       var parts = cssPart.split(/(\#|\.)/);
       var innerParts = [];
       
@@ -181,7 +203,7 @@ if (!Element.prototype.querySelectorAll)
         innerParts.push(innerPart);
       }
       return innerParts;
-		}
+    }
 		
     function mergeArrays(ary, newAry)
     {
@@ -194,7 +216,6 @@ if (!Element.prototype.querySelectorAll)
       return ary;
     }
   }
-  
   
   misago.querySelectorAll.selectors = {};
   misago.querySelectorAll.selectors.id = function(id)
@@ -209,11 +230,81 @@ if (!Element.prototype.querySelectorAll)
     return this.getElementsByClassName(className);
   }
   
-  
   misago.querySelectorAll.operators = {};
-  misago.querySelectorAll.operators.descendant = function(cssPart)
+  misago.querySelectorAll.operators['descendant'] = function(parent, cssFilter) {
+    return misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+  }
+  misago.querySelectorAll.operators['child'] = function(parent, cssFilter)
   {
+    var elements = misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+    return Array.prototype.filter.call(elements, function(element) {
+      return element.parentNode == parent;
+    });
+  }
+  misago.querySelectorAll.operators['adjacent'] = function(previousElement, cssFilter)
+  {
+    var nextElement = previousElement.get('nextElementSibling');
+    if (nextElement)
+    {
+      switch(cssFilter.selector)
+      {
+        case 'id':
+          if (nextElement.id == cssFilter.name) {
+            return [nextElement];
+          }
+        break;
+        
+        case 'tagName':
+          if (nextElement.tagName.toUpperCase() == cssFilter.name.toUpperCase()) {
+            return [nextElement];
+          }
+        break;
+        
+        case 'className':
+          if (nextElement.className == cssFilter.name) {
+            return [nextElement];
+          }
+        break;
+      }
+    }
+    return [];
+  }
+  
+  misago.querySelectorAll.operators['sibling'] = function(previousElement, cssFilter)
+  {
+    var nextElement = previousElement;
+    var elements    = [];
     
+    while (nextElement && (nextElement = nextElement.nextSibling))
+    {
+      if (!nextElement.tagName) {
+        continue;
+      }
+      
+      switch(cssFilter.selector)
+      {
+        case 'id':
+          if (nextElement.id == cssFilter.name) {
+            elements.push(nextElement);
+          }
+        break;
+        
+        case 'tagName':
+          if (nextElement.tagName.toUpperCase() == cssFilter.name.toUpperCase()) {
+            elements.push(nextElement);
+          }
+        break;
+        
+        case 'className':
+          if (nextElement.className == cssFilter.name) {
+            elements.push(nextElement);
+          }
+        break;
+        
+        default: nextElement = null;
+      }
+    }
+    return elements;
   }
   
   
