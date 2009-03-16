@@ -125,19 +125,25 @@ jsUnit.add('p + p', function() {
 jsUnit.add('div + p', function() {
   jsUnit.assertEquals(document.querySelectorAll('div + p').length, 1);
 });
-jsUnit.add('section + section', function() {
-  jsUnit.assertEquals(document.querySelectorAll('section + section').length, 2);
+jsUnit.add('section+section', function() {
+  jsUnit.assertEquals(document.querySelectorAll('section+section').length, 2);
 });
 jsUnit.add('section + section.toc', function() {
   jsUnit.assertEquals(document.querySelectorAll('section + section.toc').length, 1);
 });
 
+/*
 jsUnit.add('section ~ section', function() {
   jsUnit.assertEquals(document.querySelectorAll('section ~ section').length, 3);
 });
+*/
 
 jsUnit.add('div, p, a', function() {
   jsUnit.assertEquals(document.querySelectorAll('div, p, a').length, 10);
+});
+
+jsUnit.add('a[class]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class]').length, 2);
 });
 
 jsUnit.run();

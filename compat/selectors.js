@@ -1,8 +1,6 @@
 /**
- * Originaly developed by Robert Nyman, http://www.robertnyman.com
+ * Original code of getElementsByClassName developed by Robert Nyman, http://www.robertnyman.com
  * Code/licensing: http://code.google.com/p/getelementsbyclassname/
- * 
- * TODO: Implement querySelectorAll() when missing.
  */
 
 if (!document.getElementsByClassName)
@@ -103,7 +101,8 @@ if (!document.getElementsByClassName)
 if (!Element.prototype.querySelectorAll)
 {
   /**
-   * NOTE: querySelectorAll is currently limited to the descendant operator.
+   * TODO: Handle element attributes' selectors.
+   * TODO: Handle pseudo selectors.
    */
   misago.querySelectorAll = function(cssRules)
   {
@@ -175,10 +174,9 @@ if (!Element.prototype.querySelectorAll)
       });
     }
     
-    // FIXME: harden cssRule spliter (currently 'A+B' isn't recognized)
     function parseCssRule(cssRule)
     {
-      var parts = cssRule.split(/\s+/);
+      var parts = cssRule.split(/\s+|\s*(\>|\+|\~)\s*/);
       var cssParts = [];
       
       for (var i=0, ilen=parts.length; i<ilen; i++)
@@ -190,7 +188,7 @@ if (!Element.prototype.querySelectorAll)
           case '': continue;
           case '>': cssPart.operator = 'child';      cssPart.name = parts[++i]; break;
           case '+': cssPart.operator = 'adjacent';   cssPart.name = parts[++i]; break;
-          case '~': cssPart.operator = 'sibling';    cssPart.name = parts[++i]; break;
+//          case '~': cssPart.operator = 'sibling';    cssPart.name = parts[++i]; break;
           default:  cssPart.operator = 'descendant'; cssPart.name = parts[i];
         }
         cssParts.push(cssPart);
