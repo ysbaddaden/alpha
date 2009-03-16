@@ -176,7 +176,7 @@ if (!Element.prototype.querySelectorAll)
     
     function parseCssRule(cssRule)
     {
-      var parts = cssRule.split(/\s+|\s*(\>|\+|\~)\s*/);
+      var parts = cssRule.split(/\s+|\s*(\>|\+|\~(?![=]))\s*/);
       var cssParts = [];
       
       for (var i=0, ilen=parts.length; i<ilen; i++)
@@ -209,14 +209,20 @@ if (!Element.prototype.querySelectorAll)
           case '#': innerParts.unshift({selector: 'id',     name: parts[++i]}); continue;
           case '.': innerParts.push({selector: 'className', name: parts[++i]}); continue;
           default:
-            var matches = parts[i].match(/^([a-zA-Z\-_]+)(?:\[(.+?)\])*$/);
-            innerParts.push({selector: 'tagName', name: matches[1]});
-            
-            for (var a=2, alen=matches.length; a<alen; a++)
+            if (parts[i].indexOf('[') > -1)
             {
-              if (matches[a]) {
-                innerParts.push({selector: 'attribute', name: matches[a]});
+              var matches = parts[i].match(/^([a-zA-Z\-_]+)(?:\[(.+?)\])*$/);
+              innerParts.push({selector: 'tagName', name: matches[1]});
+              
+              for (var a=2, alen=matches.length; a<alen; a++)
+              {
+                if (matches[a]) {
+                  innerParts.push({selector: 'attribute', name: matches[a]});
+                }
               }
+            }
+            else {
+              innerParts.push({selector: 'tagName', name: parts[i]});
             }
           continue;
         }

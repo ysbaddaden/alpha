@@ -146,6 +146,10 @@ jsUnit.add('a[class]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[class]').length, 2);
 });
 
+jsUnit.add('a[class~=azerty]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class~=azerty]').length, 2);
+});
+
 jsUnit.run();
 
 </script>
