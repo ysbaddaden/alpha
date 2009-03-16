@@ -12,7 +12,7 @@
       </p>
       <p class="block">
         <a href="" id="link" class="edit"></a>
-        <a href="" class="edit"></a>
+        <a href="" class="edit" lang="tr"></a>
       </p>
       
       <section></section>
@@ -146,9 +146,22 @@ jsUnit.add('a[class]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[class]').length, 2);
 });
 
-jsUnit.add('a[class~=azerty]', function() {
-  jsUnit.assertEquals(document.querySelectorAll('a[class~=azerty]').length, 2);
+jsUnit.add('a[href]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[href]').length, 4);
 });
+
+jsUnit.add('a[class][href]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class][href]').length, 2);
+});
+
+jsUnit.add('a[href][lang][class]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[href][lang][class]').length, 1);
+});
+
+jsUnit.add('a[class~=azerty]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class~=azerty]').length, 0);
+});
+
 
 jsUnit.run();
 

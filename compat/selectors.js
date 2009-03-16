@@ -198,9 +198,9 @@ if (!Element.prototype.querySelectorAll)
     
     function parseCssPart(cssPart)
     {
-      var parts = cssPart.split(/(\#|\.)/);
+      var parts = cssPart.replace(/]/g, '').split(/(\#|\.|\[)/);
       var innerParts = [];
-
+      
       for (var i=0, ilen=parts.length; i<ilen; i++)
       {
         switch(parts[i])
@@ -208,23 +208,11 @@ if (!Element.prototype.querySelectorAll)
           case '': continue;
           case '#': innerParts.unshift({selector: 'id',     name: parts[++i]}); continue;
           case '.': innerParts.push({selector: 'className', name: parts[++i]}); continue;
-          default:
-            if (parts[i].indexOf('[') > -1)
-            {
-              var matches = parts[i].match(/^([a-zA-Z\-_]+)(?:\[(.+?)\])*$/);
-              innerParts.push({selector: 'tagName', name: matches[1]});
-              
-              for (var a=2, alen=matches.length; a<alen; a++)
-              {
-                if (matches[a]) {
-                  innerParts.push({selector: 'attribute', name: matches[a]});
-                }
-              }
-            }
-            else {
-              innerParts.push({selector: 'tagName', name: parts[i]});
-            }
-          continue;
+          case '[':
+            // TODO: parse attribute for attribute & operator & value.
+            innerParts.push({selector: 'attribute', name: parts[++i]});
+            continue;
+          default:  innerParts.push({selector: 'tagName',   name: parts[i]});   continue;
         }
       }
       return innerParts;
