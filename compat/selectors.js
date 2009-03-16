@@ -101,7 +101,7 @@ if (!document.getElementsByClassName)
 if (!Element.prototype.querySelectorAll)
 {
   /**
-   * TODO: Handle element attributes' selectors.
+   * TODO: Handle attributes selectors with tests.
    * TODO: Handle pseudo selectors.
    */
   misago.querySelectorAll = function(cssRules)
@@ -200,19 +200,26 @@ if (!Element.prototype.querySelectorAll)
     {
       var parts = cssPart.split(/(\#|\.)/);
       var innerParts = [];
-      
+
       for (var i=0, ilen=parts.length; i<ilen; i++)
       {
-        var innerPart = {};
-        
         switch(parts[i])
         {
           case '': continue;
-          case '#': innerPart.selector = 'id';        innerPart.name = parts[++i]; break;
-          case '.': innerPart.selector = 'className'; innerPart.name = parts[++i]; break;
-          default:  innerPart.selector = 'tagName';   innerPart.name = parts[i];
+          case '#': innerParts.unshift({selector: 'id',     name: parts[++i]}); continue;
+          case '.': innerParts.push({selector: 'className', name: parts[++i]}); continue;
+          default:
+            var matches = parts[i].match(/^([a-zA-Z\-_]+)(?:\[(.+?)\])*$/);
+            innerParts.push({selector: 'tagName', name: matches[1]});
+            
+            for (var a=2, alen=matches.length; a<alen; a++)
+            {
+              if (matches[a]) {
+                innerParts.push({selector: 'attribute', name: matches[a]});
+              }
+            }
+          continue;
         }
-        innerParts.push(innerPart);
       }
       return innerParts;
     }
@@ -249,6 +256,10 @@ if (!Element.prototype.querySelectorAll)
         var re = new RegExp("(^|\\s)" + cssFilter.name + "(\\s|$)", 'i');
         return re.test(element.className);
       break;
+      
+      case 'attribute':
+        return element.hasAttribute(cssFilter.name);
+      break;
     }
     return true;
   }
@@ -267,7 +278,7 @@ if (!Element.prototype.querySelectorAll)
     
     className: function(className) {
       return this.getElementsByClassName(className);
-    }    
+    }
   };
   
   misago.querySelectorAll.operators =
