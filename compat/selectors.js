@@ -103,6 +103,7 @@ if (!Element.prototype.querySelectorAll)
   /**
    * TODO: Handle attributes selectors with tests.
    * TODO: Handle pseudo selectors.
+   * OPTIMIZE: Fully parse the selectors at once (ie. merge parseSelectors, parseCssRule and parseCssPart).
    */
   misago.querySelectorAll = function(cssRules)
   {
@@ -189,6 +190,7 @@ if (!Element.prototype.querySelectorAll)
           case '>': cssPart.operator = 'child';      cssPart.name = parts[++i]; break;
           case '+': cssPart.operator = 'adjacent';   cssPart.name = parts[++i]; break;
 //          case '~': cssPart.operator = 'sibling';    cssPart.name = parts[++i]; break;
+          case '~': throw new Error('The ~ operator has been disabled for performance reasons.'); break;
           default:  cssPart.operator = 'descendant'; cssPart.name = parts[i];
         }
         cssParts.push(cssPart);
@@ -206,13 +208,33 @@ if (!Element.prototype.querySelectorAll)
         switch(parts[i])
         {
           case '': continue;
-          case '#': innerParts.unshift({selector: 'id',     name: parts[++i]}); continue;
-          case '.': innerParts.push({selector: 'className', name: parts[++i]}); continue;
-          case '[':
-            // TODO: parse attribute for attribute & operator & value.
-            innerParts.push({selector: 'attribute', name: parts[++i]});
+          
+          case '#':
+            innerParts.unshift({selector: 'id', name: parts[++i]});
             continue;
-          default:  innerParts.push({selector: 'tagName',   name: parts[i]});   continue;
+          
+          case '.':
+            innerParts.push({selector: 'className', name: parts[++i]});
+            continue;
+          
+          case '[':
+            var part = {
+              selector: 'attribute',
+              name: parts[++i]
+            };
+            var match = part.name.match(/^([^~|]+)((?:~|\||)=)(.+)$/);
+            if (match)
+            {
+              part.name     = match[1];
+              part.operator = match[2];
+              part.value    = match[3];
+            }
+            innerParts.push(part);
+            continue;
+          
+          default:
+            innerParts.push({selector: 'tagName', name: parts[i]});
+            continue;
         }
       }
       return innerParts;
@@ -249,11 +271,28 @@ if (!Element.prototype.querySelectorAll)
       case 'className':
         var re = new RegExp("(^|\\s)" + cssFilter.name + "(\\s|$)", 'i');
         return re.test(element.className);
-      break;
       
       case 'attribute':
-        return element.hasAttribute(cssFilter.name);
-      break;
+        if (!element.hasAttribute(cssFilter.name)) {
+          return false;
+        }
+        switch (cssFilter.operator)
+        {
+          case '=':
+            return (element.getAttribute(cssFilter.name) == cssFilter.value);
+          break;
+          
+          case '~=':
+            var re = new RegExp("(^|\\s)" + cssFilter.value + "(\\s|$)", 'i');
+            return re.test(element.getAttribute(cssFilter.name));
+          break;
+          
+          case '|=':
+            var re = new RegExp("(^|-)" + cssFilter.value + "(-|$)", 'i');
+            return re.test(element.getAttribute(cssFilter.name));
+          break;
+        }
+        return true;
     }
     return true;
   }

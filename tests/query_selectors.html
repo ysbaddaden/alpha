@@ -12,7 +12,7 @@
       </p>
       <p class="block">
         <a href="" id="link" class="edit"></a>
-        <a href="" class="edit" lang="tr"></a>
+        <a href="" class="edit test" lang="tr"></a>
       </p>
       
       <section></section>
@@ -20,13 +20,13 @@
       <section></section>
     </div>
     
-    <article>
+    <article class="dtd-example">
       <p></p>
     </article>
   </div>
   
   <p>
-    <a href=""></a>
+    <a href="" class="more"></a>
   </p>
 
 
@@ -143,25 +143,27 @@ jsUnit.add('div, p, a', function() {
 });
 
 jsUnit.add('a[class]', function() {
-  jsUnit.assertEquals(document.querySelectorAll('a[class]').length, 2);
+  jsUnit.assertEquals(document.querySelectorAll('a[class]').length, 3);
 });
-
 jsUnit.add('a[href]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[href]').length, 4);
 });
-
 jsUnit.add('a[class][href]', function() {
-  jsUnit.assertEquals(document.querySelectorAll('a[class][href]').length, 2);
+  jsUnit.assertEquals(document.querySelectorAll('a[class][href]').length, 3);
 });
-
 jsUnit.add('a[href][lang][class]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[href][lang][class]').length, 1);
 });
 
-jsUnit.add('a[class~=azerty]', function() {
-  jsUnit.assertEquals(document.querySelectorAll('a[class~=azerty]').length, 0);
+jsUnit.add('a[class=edit]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class=edit]').length, 1);
 });
-
+jsUnit.add('a[class~=test]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[class~=test]').length, 1);
+});
+jsUnit.add('article[class|=dtd]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('article[class|=dtd]').length, 1);
+});
 
 jsUnit.run();
 
