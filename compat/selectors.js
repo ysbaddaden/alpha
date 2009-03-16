@@ -105,44 +105,60 @@ if (!Element.prototype.querySelectorAll)
   /**
    * NOTE: querySelectorAll is currently limited to the descendant operator.
    */
-  misago.querySelectorAll = function(cssRule)
+  misago.querySelectorAll = function(cssRules)
   {
-    if (typeof cssRule == 'undefined' || !cssRule || cssRule.length == 0) {
+    if (typeof cssRules == 'undefined' || !cssRules || cssRules.length == 0) {
       throw new Error("Missing parameter cssRule in querySelectorAll().");
     }
     
-    // search starts at the root of document:
-    var foundElements = [document];
-    
-    // breaks the cssRule in parts (each one separated by an operator)
-    var cssParts = parseCssRule(cssRule);
-    
-    for (var i=0, ilen=cssParts.length; i<ilen; i++)
+    var foundElements = [];
+    cssRules = cssRules.split(',');
+    cssRules.forEach(function(cssRule)
     {
-      var newElements = [];
-      
-      // breaks the cssPart in smaller parts (eg: tag#id.className.className)
-      var cssPart    = cssParts[i];
-      var cssFilters = parseCssPart(cssPart.name);
-      
-      // for each parent: finds childs that match the current cssPart
-      foundElements.forEach(function(element)
-      {
-        var currentElements = searchElements(element, cssFilters, cssPart.operator);
-        mergeArrays(newElements, currentElements);
-      });
-      
-      foundElements = newElements;
-      
-      // found nothing: skip deeper parts
-      if (foundElements.length === 0) {
-        break;
-      }
-    }
+      cssRule = cssRule.replace(/^\s+|\s+$/, '');
+      var newElements = execute(cssRule);
+      foundElements   = mergeArrays(foundElements, newElements);
+    });
     
     foundElements = misago.extendElements ? misago.extendElements(foundElements) : foundElements;
     return new misago.NodeList(foundElements);
     
+    
+    function execute(cssRule)
+    {
+      // search starts at the root of document:
+      var foundElements = [document];
+      
+      // breaks the cssRule in parts (each one separated by an operator)
+      var cssParts = parseCssRule(cssRule);
+      
+      for (var i=0, ilen=cssParts.length; i<ilen; i++)
+      {
+        var newElements = [];
+        
+        // breaks the cssPart in smaller parts (eg: tag#id.className.className)
+        var cssPart    = cssParts[i];
+        var cssFilters = parseCssPart(cssPart.name);
+        
+        // for each parent: finds childs that match the current cssPart
+        foundElements.forEach(function(element)
+        {
+          var currentElements = searchElements(element, cssFilters, cssPart.operator);
+          if (currentElements) {
+            mergeArrays(newElements, currentElements);
+          }
+        });
+        
+        foundElements = newElements;
+        
+        // found nothing: skip deeper parts
+        if (foundElements.length === 0) {
+          break;
+        }
+      }
+      
+      return foundElements;
+    }
     
     function searchElements(parent, cssFilters, operator)
     {
@@ -219,10 +235,22 @@ if (!Element.prototype.querySelectorAll)
   {
     switch(cssFilter.selector)
     {
-      case 'id':        if (element.id != cssFilter.name) return false; break;
-      case 'tagName':   if (element.tagName.toUpperCase() != cssFilter.name.toUpperCase()) return false; break;
-      case 'className': if (element.className != cssFilter.name) return false; break;
-      default: return false;
+      case 'id':
+        if (element.id != cssFilter.name) {
+          return false;
+        }
+      break;
+      
+      case 'tagName':
+        if (element.tagName.toUpperCase() != cssFilter.name.toUpperCase()) {
+          return false;
+        }
+      break;
+      
+      case 'className':
+        var re = new RegExp("(^|\\s)" + cssFilter.name + "(\\s|$)", 'i');
+        return re.test(element.className);
+      break;
     }
     return true;
   }
@@ -264,7 +292,7 @@ if (!Element.prototype.querySelectorAll)
       if (nextElement && misago.querySelectorAll.filterElement(nextElement, cssFilter)) {
         return [nextElement];
       }
-      return [];
+      return false;
     },
     
     sibling: function(previousElement, cssFilter)
@@ -278,7 +306,7 @@ if (!Element.prototype.querySelectorAll)
           elements.push(nextElement);
         }
       }
-      return elements;
+      return elements.length ? elements : false;
     }
   };
   

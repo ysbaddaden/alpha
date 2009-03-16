@@ -136,6 +136,10 @@ jsUnit.add('section ~ section', function() {
   jsUnit.assertEquals(document.querySelectorAll('section ~ section').length, 3);
 });
 
+jsUnit.add('div, p, a', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div, p, a').length, 10);
+});
+
 jsUnit.run();
 
 </script>
