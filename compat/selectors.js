@@ -146,22 +146,20 @@ if (!Element.prototype.querySelectorAll)
     
     function searchElements(parent, cssFilters, operator)
     {
-      var elements = [];
-      
-      for (var j=0, jlen=cssFilters.length; j<jlen; j++)
+      var elements = misago.querySelectorAll.operators[operator](parent, cssFilters[0]);
+      return Array.prototype.filter.call(elements, function(element)
       {
-        var cssFilter = cssFilters[j];
-        elements = misago.querySelectorAll.operators[operator](parent, cssFilter);
-        
-        // found nothing: skip next cssFilters
-        if (elements.length === 0) {
-          return [];
+        for (var i=1, ilen=cssFilters.length; i<ilen; i++)
+        {
+          if (!misago.querySelectorAll.filterElement(element, cssFilters[i])) {
+            return false;
+          }
         }
-      }
-      return elements;
+        return true;
+      });
     }
     
-    // FIXME: harden cssRule splitter (currently 'A+B' isn't recognized)
+    // FIXME: harden cssRule spliter (currently 'A+B' isn't recognized)
     function parseCssRule(cssRule)
     {
       var parts = cssRule.split(/\s+/);
@@ -217,95 +215,72 @@ if (!Element.prototype.querySelectorAll)
     }
   }
   
-  misago.querySelectorAll.selectors = {};
-  misago.querySelectorAll.selectors.id = function(id)
+  misago.querySelectorAll.filterElement = function(element, cssFilter)
   {
-    var elm = document.getElementById(id);
-    return elm ? [elm] : [];
-  }
-  misago.querySelectorAll.selectors.tagName = function(tagName) {
-    return this.getElementsByTagName(tagName);
-  }
-  misago.querySelectorAll.selectors.className = function(className) {
-    return this.getElementsByClassName(className);
-  }
-  
-  misago.querySelectorAll.operators = {};
-  misago.querySelectorAll.operators['descendant'] = function(parent, cssFilter) {
-    return misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
-  }
-  misago.querySelectorAll.operators['child'] = function(parent, cssFilter)
-  {
-    var elements = misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
-    return Array.prototype.filter.call(elements, function(element) {
-      return element.parentNode == parent;
-    });
-  }
-  misago.querySelectorAll.operators['adjacent'] = function(previousElement, cssFilter)
-  {
-    var nextElement = previousElement.get('nextElementSibling');
-    if (nextElement)
+    switch(cssFilter.selector)
     {
-      switch(cssFilter.selector)
-      {
-        case 'id':
-          if (nextElement.id == cssFilter.name) {
-            return [nextElement];
-          }
-        break;
-        
-        case 'tagName':
-          if (nextElement.tagName.toUpperCase() == cssFilter.name.toUpperCase()) {
-            return [nextElement];
-          }
-        break;
-        
-        case 'className':
-          if (nextElement.className == cssFilter.name) {
-            return [nextElement];
-          }
-        break;
-      }
+      case 'id':        if (element.id != cssFilter.name) return false; break;
+      case 'tagName':   if (element.tagName.toUpperCase() != cssFilter.name.toUpperCase()) return false; break;
+      case 'className': if (element.className != cssFilter.name) return false; break;
+      default: return false;
     }
-    return [];
+    return true;
   }
   
-  misago.querySelectorAll.operators['sibling'] = function(previousElement, cssFilter)
+  misago.querySelectorAll.selectors =
   {
-    var nextElement = previousElement;
-    var elements    = [];
+    id: function(id)
+    {
+      var elm = document.getElementById(id);
+      return elm ? [elm] : [];
+    },
     
-    while (nextElement && (nextElement = nextElement.nextSibling))
+    tagName: function(tagName) {
+      return this.getElementsByTagName(tagName);
+    },
+    
+    className: function(className) {
+      return this.getElementsByClassName(className);
+    }    
+  };
+  
+  misago.querySelectorAll.operators =
+  {
+    descendant: function(parent, cssFilter) {
+      return misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+    },
+    
+    child: function(parent, cssFilter)
     {
-      if (!nextElement.tagName) {
-        continue;
+      var elements = misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+      return Array.prototype.filter.call(elements, function(element) {
+        return element.parentNode == parent;
+      });
+    },
+    
+    adjacent: function(previousElement, cssFilter)
+    {
+      var nextElement = previousElement.get('nextElementSibling');
+      if (nextElement && misago.querySelectorAll.filterElement(nextElement, cssFilter)) {
+        return [nextElement];
       }
+      return [];
+    },
+    
+    sibling: function(previousElement, cssFilter)
+    {
+      var nextElement = previousElement;
+      var elements    = [];
       
-      switch(cssFilter.selector)
+      while (nextElement && (nextElement = nextElement.nextSibling))
       {
-        case 'id':
-          if (nextElement.id == cssFilter.name) {
-            elements.push(nextElement);
-          }
-        break;
-        
-        case 'tagName':
-          if (nextElement.tagName.toUpperCase() == cssFilter.name.toUpperCase()) {
-            elements.push(nextElement);
-          }
-        break;
-        
-        case 'className':
-          if (nextElement.className == cssFilter.name) {
-            elements.push(nextElement);
-          }
-        break;
-        
-        default: nextElement = null;
+        if (nextElement.tagName && misago.querySelectorAll.filterElement(nextElement, cssFilter)) {
+          elements.push(nextElement);
+        }
       }
+      return elements;
     }
-    return elements;
-  }
+  };
   
   
   Element.prototype.querySelectorAll = function(cssRule) {
