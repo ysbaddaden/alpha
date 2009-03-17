@@ -220,7 +220,8 @@ if (!Element.prototype.querySelectorAll)
               selector: 'attribute',
               name: parts[++i]
             };
-            var match = part.name.match(/^([^~|]+)((?:~|\||)=)(.+)$/);
+            
+            var match = part.name.match(/^([^~|^$*]+)((?:~|\||\^|\$|\*|)=)(.+)$/);
             if (match)
             {
               part.name     = match[1];
@@ -260,12 +261,8 @@ if (!Element.prototype.querySelectorAll)
       return misago.querySelectorAll.selectors.searches[cssFilter.selector].call(this, cssFilter.name);
     },
     
-    filter: function(cssFilter)
-    {
-      if (misago.querySelectorAll.selectors.filters[cssFilter.selector]) {
-        return misago.querySelectorAll.selectors.filters[cssFilter.selector].call(this, cssFilter);
-      }
-      throw new Error("Unknown or unsupported CSS selector: " + cssFilter.selector + ".");
+    filter: function(cssFilter) {
+      return misago.querySelectorAll.selectors.filters[cssFilter.selector].call(this, cssFilter);
     }
   };
   
@@ -325,6 +322,16 @@ if (!Element.prototype.querySelectorAll)
         case '|=':
           var re = new RegExp("(^|-)" + cssFilter.value + "(-|$)", 'i');
           return re.test(this.getAttribute(cssFilter.name));
+        
+        case '^=':
+          return (this.getAttribute(cssFilter.name).indexOf(cssFilter.value) === 0);
+        
+        case '$=':
+          var re = new RegExp(cssFilter.value + "$", 'i');
+          return re.test(this.getAttribute(cssFilter.name));
+        
+        case '*=':
+          return (this.getAttribute(cssFilter.name).indexOf(cssFilter.value) > -1);
       }
       return true;
     },
