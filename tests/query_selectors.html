@@ -165,6 +165,16 @@ jsUnit.add('article[class|=dtd]', function() {
   jsUnit.assertEquals(document.querySelectorAll('article[class|=dtd]').length, 1);
 });
 
+jsUnit.add(':first-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll(':first-child').length, 1);
+});
+jsUnit.add('a:first-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a:first-child').length, 3);
+});
+jsUnit.add('p:last-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll('p:last-child').length, 1);
+});
+
 jsUnit.run();
 
 </script>

@@ -101,9 +101,7 @@ if (!document.getElementsByClassName)
 if (!Element.prototype.querySelectorAll)
 {
   /**
-   * TODO: Handle attributes selectors with tests.
    * TODO: Handle pseudo selectors.
-   * OPTIMIZE: Fully parse the selectors at once (ie. merge parseSelectors, parseCssRule and parseCssPart).
    */
   misago.querySelectorAll = function(cssRules)
   {
@@ -167,7 +165,7 @@ if (!Element.prototype.querySelectorAll)
       {
         for (var i=1, ilen=cssFilters.length; i<ilen; i++)
         {
-          if (!misago.querySelectorAll.filterElement(element, cssFilters[i])) {
+          if (!misago.querySelectorAll.selectors.filter[cssFilters[i].selector].call(element, cssFilters[i])) {
             return false;
           }
         }
@@ -200,7 +198,7 @@ if (!Element.prototype.querySelectorAll)
     
     function parseCssPart(cssPart)
     {
-      var parts = cssPart.replace(/]/g, '').split(/(\#|\.|\[)/);
+      var parts = cssPart.replace(/]/g, '').split(/(\#|\.|\[|\:)/);
       var innerParts = [];
       
       for (var i=0, ilen=parts.length; i<ilen; i++)
@@ -232,6 +230,10 @@ if (!Element.prototype.querySelectorAll)
             innerParts.push(part);
             continue;
           
+          case ':':
+            innerParts.push({selector: 'pseudoSelector', name: parts[++i]});
+            continue;
+          
           default:
             innerParts.push({selector: 'tagName', name: parts[i]});
             continue;
@@ -252,52 +254,9 @@ if (!Element.prototype.querySelectorAll)
     }
   }
   
-  misago.querySelectorAll.filterElement = function(element, cssFilter)
-  {
-    switch(cssFilter.selector)
-    {
-      case 'id':
-        if (element.id != cssFilter.name) {
-          return false;
-        }
-      break;
-      
-      case 'tagName':
-        if (element.tagName.toUpperCase() != cssFilter.name.toUpperCase()) {
-          return false;
-        }
-      break;
-      
-      case 'className':
-        var re = new RegExp("(^|\\s)" + cssFilter.name + "(\\s|$)", 'i');
-        return re.test(element.className);
-      
-      case 'attribute':
-        if (!element.hasAttribute(cssFilter.name)) {
-          return false;
-        }
-        switch (cssFilter.operator)
-        {
-          case '=':
-            return (element.getAttribute(cssFilter.name) == cssFilter.value);
-          break;
-          
-          case '~=':
-            var re = new RegExp("(^|\\s)" + cssFilter.value + "(\\s|$)", 'i');
-            return re.test(element.getAttribute(cssFilter.name));
-          break;
-          
-          case '|=':
-            var re = new RegExp("(^|-)" + cssFilter.value + "(-|$)", 'i');
-            return re.test(element.getAttribute(cssFilter.name));
-          break;
-        }
-        return true;
-    }
-    return true;
-  }
+  misago.querySelectorAll.selectors = {};
   
-  misago.querySelectorAll.selectors =
+  misago.querySelectorAll.selectors.search =
   {
     id: function(id)
     {
@@ -311,18 +270,104 @@ if (!Element.prototype.querySelectorAll)
     
     className: function(className) {
       return this.getElementsByClassName(className);
+    },
+    
+    pseudoSelector: function(pseudoSelector) {
+      return misago.querySelectorAll.pseudoSelectors[pseudoSelector].call(this);
+    }
+  };
+  
+  misago.querySelectorAll.selectors.filter = {
+    id: function(cssFilter)
+    {
+      return (this.id == cssFilter.name);
+    },
+    
+    tagName: function(cssFilter)
+    {
+      return (this.tagName.toUpperCase() == cssFilter.name.toUpperCase());
+    },
+    
+    className: function(cssFilter)
+    {
+      var re = new RegExp("(^|\\s)" + cssFilter.name + "(\\s|$)", 'i');
+      return re.test(this.className);
+    },
+    
+    attribute: function(cssFilter)
+    {
+      if (!this.hasAttribute(cssFilter.name)) {
+        return false;
+      }
+      switch (cssFilter.operator)
+      {
+        case '=':
+          return (this.getAttribute(cssFilter.name) == cssFilter.value);
+        
+        case '~=':
+          var re = new RegExp("(^|\\s)" + cssFilter.value + "(\\s|$)", 'i');
+          return re.test(this.getAttribute(cssFilter.name));
+        
+        case '|=':
+          var re = new RegExp("(^|-)" + cssFilter.value + "(-|$)", 'i');
+          return re.test(this.getAttribute(cssFilter.name));
+      }
+      return true;
+    },
+    
+    pseudoSelector: function(cssFilter)
+    {
+      switch(cssFilter.name)
+      {
+        case 'first-child':
+          var previousElement = this.previousSibling;
+          while (previousElement && !previousElement.tagName) {
+            previousElement = previousElement.previousSibling;
+          }
+          return previousElement ? false : true;
+        break;
+        
+        case 'last-child':
+          var nextElement = this.nextSibling;
+          while (nextElement && !nextElement.tagName) {
+            nextElement = nextElement.nextSibling;
+          }
+          return nextElement ? false : true;
+        break;
+      }
+    }
+  };
+  
+  misago.querySelectorAll.pseudoSelectors =
+  {
+    'first-child': function()
+    {
+      var child = this.firstChild;
+      while(child && child.nextSibling) {
+        child = child.nextSibling;
+      }
+      return [child];
+    },
+    
+    'last-child': function()
+    {
+      var child = this.lastChild;
+      while(child && child.previousSibling) {
+        child = child.previousSibling;
+      }
+      return [child];
     }
   };
   
   misago.querySelectorAll.operators =
   {
     descendant: function(parent, cssFilter) {
-      return misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+      return misago.querySelectorAll.selectors.search[cssFilter.selector].call(parent, cssFilter.name);
     },
     
     child: function(parent, cssFilter)
     {
-      var elements = misago.querySelectorAll.selectors[cssFilter.selector].call(parent, cssFilter.name);
+      var elements = misago.querySelectorAll.selectors.search[cssFilter.selector].call(parent, cssFilter.name);
       return Array.prototype.filter.call(elements, function(element) {
         return element.parentNode == parent;
       });
@@ -331,7 +376,7 @@ if (!Element.prototype.querySelectorAll)
     adjacent: function(previousElement, cssFilter)
     {
       var nextElement = previousElement.get('nextElementSibling');
-      if (nextElement && misago.querySelectorAll.filterElement(nextElement, cssFilter)) {
+      if (nextElement && misago.querySelectorAll.selectors.filter[cssFilter.selector].call(nextElement, cssFilter)) {
         return [nextElement];
       }
       return false;
@@ -344,7 +389,7 @@ if (!Element.prototype.querySelectorAll)
       
       while (nextElement && (nextElement = nextElement.nextSibling))
       {
-        if (nextElement.tagName && misago.querySelectorAll.filterElement(nextElement, cssFilter)) {
+        if (nextElement.tagName && misago.querySelectorAll.selectors.filter[cssFilter.selector].call(nextElement, cssFilter)) {
           elements.push(nextElement);
         }
       }
