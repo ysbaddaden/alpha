@@ -165,7 +165,7 @@ if (!Element.prototype.querySelectorAll)
       {
         for (var i=1, ilen=cssFilters.length; i<ilen; i++)
         {
-          if (!misago.querySelectorAll.selectors.filter[cssFilters[i].selector].call(element, cssFilters[i])) {
+          if (!misago.querySelectorAll.selectors.filter.call(element, cssFilters[i])) {
             return false;
           }
         }
@@ -254,9 +254,22 @@ if (!Element.prototype.querySelectorAll)
     }
   }
   
-  misago.querySelectorAll.selectors = {};
+  misago.querySelectorAll.selectors =
+  {
+    search: function(cssFilter) {
+      return misago.querySelectorAll.selectors.searches[cssFilter.selector].call(this, cssFilter.name);
+    },
+    
+    filter: function(cssFilter)
+    {
+      if (misago.querySelectorAll.selectors.filters[cssFilter.selector]) {
+        return misago.querySelectorAll.selectors.filters[cssFilter.selector].call(this, cssFilter);
+      }
+      throw new Error("Unknown or unsupported CSS selector: " + cssFilter.selector + ".");
+    }
+  };
   
-  misago.querySelectorAll.selectors.search =
+  misago.querySelectorAll.selectors.searches =
   {
     id: function(id)
     {
@@ -273,18 +286,19 @@ if (!Element.prototype.querySelectorAll)
     },
     
     pseudoSelector: function(pseudoSelector) {
-      return misago.querySelectorAll.pseudoSelectors[pseudoSelector].call(this);
+      if (misago.querySelectorAll.pseudoSelectors.searches[pseudoSelector]) {
+        return misago.querySelectorAll.pseudoSelectors.searches[pseudoSelector].call(this);
+      }
+      throw new Error("Unknown or unsupported CSS pseudo-selector: " + pseudoSelector + ".");
     }
   };
   
-  misago.querySelectorAll.selectors.filter = {
-    id: function(cssFilter)
-    {
+  misago.querySelectorAll.selectors.filters = {
+    id: function(cssFilter) {
       return (this.id == cssFilter.name);
     },
     
-    tagName: function(cssFilter)
-    {
+    tagName: function(cssFilter) {
       return (this.tagName.toUpperCase() == cssFilter.name.toUpperCase());
     },
     
@@ -317,29 +331,15 @@ if (!Element.prototype.querySelectorAll)
     
     pseudoSelector: function(cssFilter)
     {
-      switch(cssFilter.name)
-      {
-        case 'first-child':
-          var previousElement = this.previousSibling;
-          while (previousElement && !previousElement.tagName) {
-            previousElement = previousElement.previousSibling;
-          }
-          return previousElement ? false : true;
-        break;
-        
-        case 'last-child':
-          var nextElement = this.nextSibling;
-          while (nextElement && !nextElement.tagName) {
-            nextElement = nextElement.nextSibling;
-          }
-          return nextElement ? false : true;
-        break;
+      if (misago.querySelectorAll.pseudoSelectors.filters[cssFilter.name]) {
+        return misago.querySelectorAll.pseudoSelectors.filters[cssFilter.name].call(this, cssFilter);
       }
+      throw new Error("Unknown or unsupported CSS pseudo-selector: " + cssFilter.name + ".");
     }
   };
   
-  misago.querySelectorAll.pseudoSelectors =
-  {
+  misago.querySelectorAll.pseudoSelectors = {};
+  misago.querySelectorAll.pseudoSelectors.searches = {
     'first-child': function()
     {
       var child = this.firstChild;
@@ -359,15 +359,35 @@ if (!Element.prototype.querySelectorAll)
     }
   };
   
+  misago.querySelectorAll.pseudoSelectors.filters = {
+    'first-child': function(cssFilter)
+    {
+      var previousElement = this.previousSibling;
+      while (previousElement && !previousElement.tagName) {
+        previousElement = previousElement.previousSibling;
+      }
+      return previousElement ? false : true;
+    },
+    
+    'last-child': function(cssFilter)
+    {
+      var nextElement = this.nextSibling;
+      while (nextElement && !nextElement.tagName) {
+        nextElement = nextElement.nextSibling;
+      }
+      return nextElement ? false : true;
+    }
+  };
+  
   misago.querySelectorAll.operators =
   {
     descendant: function(parent, cssFilter) {
-      return misago.querySelectorAll.selectors.search[cssFilter.selector].call(parent, cssFilter.name);
+      return misago.querySelectorAll.selectors.search.call(parent, cssFilter);
     },
     
     child: function(parent, cssFilter)
     {
-      var elements = misago.querySelectorAll.selectors.search[cssFilter.selector].call(parent, cssFilter.name);
+      var elements = misago.querySelectorAll.selectors.search.call(parent, cssFilter);
       return Array.prototype.filter.call(elements, function(element) {
         return element.parentNode == parent;
       });
@@ -376,7 +396,9 @@ if (!Element.prototype.querySelectorAll)
     adjacent: function(previousElement, cssFilter)
     {
       var nextElement = previousElement.get('nextElementSibling');
-      if (nextElement && misago.querySelectorAll.selectors.filter[cssFilter.selector].call(nextElement, cssFilter)) {
+      if (nextElement
+        && misago.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
+      {
         return [nextElement];
       }
       return false;
@@ -389,7 +411,9 @@ if (!Element.prototype.querySelectorAll)
       
       while (nextElement && (nextElement = nextElement.nextSibling))
       {
-        if (nextElement.tagName && misago.querySelectorAll.selectors.filter[cssFilter.selector].call(nextElement, cssFilter)) {
+        if (nextElement.tagName
+          && misago.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
+        {
           elements.push(nextElement);
         }
       }
@@ -406,4 +430,3 @@ if (!Element.prototype.querySelectorAll)
     return misago.querySelectorAll.apply(document, arguments);
   }
 }
-
