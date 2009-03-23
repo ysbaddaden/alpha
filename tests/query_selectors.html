@@ -26,7 +26,7 @@
   </div>
   
   <p>
-    <a href="" class="more"></a>
+    <a href="" class="more" id="bug"></a>
   </p>
 
 
@@ -110,6 +110,10 @@ jsUnit.add('div a#link', function() {
 jsUnit.add('div a#nothing .more', function() {
   jsUnit.assertEquals(document.querySelectorAll('div a#nothing .more').length, 0);
 });
+jsUnit.add('div #bug', function() {
+  jsUnit.assertEquals(document.querySelectorAll('div a#link').length, 0);
+});
+
 
 // operators
 jsUnit.add('div > p', function() {
@@ -175,17 +179,28 @@ jsUnit.add('article[class*=exam]', function() {
   jsUnit.assertEquals(document.querySelectorAll('article[class*=exam]').length, 1);
 });
 
-jsUnit.add(':first-child', function() {
-  jsUnit.assertEquals(document.querySelectorAll(':first-child').length, 1);
-});
 jsUnit.add('a:first-child', function() {
   jsUnit.assertEquals(document.querySelectorAll('a:first-child').length, 3);
 });
 jsUnit.add('p:last-child', function() {
   jsUnit.assertEquals(document.querySelectorAll('p:last-child').length, 1);
 });
-
+jsUnit.add('p:only-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll('p:only-child').length, 1);
+});
+/*
+jsUnit.add('div.block :first-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll(':first-child').length, 5);
+});
+jsUnit.add('div.block :last-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll(':last-child').length, 5);
+});
+jsUnit.add('div.block :only-child', function() {
+  jsUnit.assertEquals(document.querySelectorAll(':only-child').length, 3);
+});
+*/
 jsUnit.run();
+
 
 </script>
 

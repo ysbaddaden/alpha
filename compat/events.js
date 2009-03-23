@@ -1,9 +1,9 @@
 /**
- * EMulates DOM Event Handling in Internet Explorer.
+ * Emulates DOM events in Internet Explorer.
  *
  * requires: misago/core.js
  *
- * FIXME: Conflicts with Event DOM prototype on IE8?
+ * FIXME: Does it conflict with the Event DOM prototype on IE8?
  */
 
 if (!Element.prototype.addEventListener)

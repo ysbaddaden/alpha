@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>some windows</title>
+  <style type="text/css">
+  
+  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; background: red; }
+  /*
+  body > p { height: 2000px; width: 2000px; position: relative; }
+  body > p button { position: absolute; bottom: 0; right: 0; }
+  */
+  
+  .notification { position: fixed; top: 1.5em; right: 1.5em; }
+  .notification .background { background: #000; opacity: .75;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+  .notification .content { position: relative; padding: 1.5em; color: #FFF; font-weight: bold; }
+  
+  </style>
+</head>
+<body>
+
+<p>
+  <button id="open-notification">click-me</button>
+</p>
+
+<script type="text/javascript" src="../../compat/array.js"></script>
+<script type="text/javascript" src="../../compat/core.js"></script>
+<script type="text/javascript" src="../../compat/element.js"></script>
+<script type="text/javascript" src="../../compat/selectors.js"></script>
+
+<script type="text/javascript" src="../../addons/object.js"></script>
+<script type="text/javascript" src="../../addons/function.js"></script>
+<script type="text/javascript" src="../../addons/array.js"></script>
+<script type="text/javascript" src="../../addons/string.js"></script>
+<script type="text/javascript" src="../../addons/classname.js"></script>
+<script type="text/javascript" src="../../addons/style.js"></script>
+
+<script type="text/javascript" src="../../ui/ui.js"></script>
+<script type="text/javascript" src="../../ui/overlay.js"></script>
+<script type="text/javascript" src="../../ui/window.js"></script>
+<script type="text/javascript" src="../../ui/dialog.js"></script>
+<script type="text/javascript" src="../../ui/notification.js"></script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+document.getElementById('open-notification').addEventListener('click', function()
+{
+  var notification = new UI.Notification();
+  notification.setMessage('This is a message.');
+}, false);
+
+</script>
+
+</body>
+</html>

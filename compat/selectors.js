@@ -118,6 +118,8 @@ if (!Element.prototype.querySelectorAll)
       foundElements   = mergeArrays(foundElements, newElements);
     });
     
+//    console.log(foundElements.length);
+    
     foundElements = misago.extendElements ? misago.extendElements(foundElements) : foundElements;
     return new misago.NodeList(foundElements);
     
@@ -349,20 +351,45 @@ if (!Element.prototype.querySelectorAll)
   misago.querySelectorAll.pseudoSelectors.searches = {
     'first-child': function()
     {
-      var child = this.firstChild;
-      while(child && child.nextSibling) {
-        child = child.nextSibling;
+      var elements = (this.all) ? this.all : this.getElementsByTagName('*');
+      var foundElements = [];
+      for (var i=0, ilen=elements.length; i<ilen; i++)
+      {
+        var child = elements[i].get('firstElementChild');
+        if (child) {
+          foundElements.push(child);
+        }
       }
-      return [child];
+      return foundElements;
     },
     
     'last-child': function()
     {
-      var child = this.lastChild;
-      while(child && child.previousSibling) {
-        child = child.previousSibling;
+      var elements = (this.all) ? this.all : this.getElementsByTagName('*');
+      var foundElements = [];
+      for (var i=0, ilen=elements.length; i<ilen; i++)
+      {
+        var child = elements[i].get('lastElementChild');
+        if (child) {
+          foundElements.push(child);
+        }
       }
-      return [child];
+      return foundElements;
+    },
+    
+    'only-child': function()
+    {
+      var elements = (this.all) ? this.all : this.getElementsByTagName('*');
+      var foundElements = [];
+      for (var i=0, ilen=elements.length; i<ilen; i++)
+      {
+        var firstChild = elements[i].get('firstElementChild');
+        var lastChild  = elements[i].get('lastElementChild');
+        if (firstChild == lastChild) {
+          foundElements.push(firstChild);
+        }
+      }
+      return foundElements;
     }
   };
   
@@ -374,6 +401,7 @@ if (!Element.prototype.querySelectorAll)
         previousElement = previousElement.previousSibling;
       }
       return previousElement ? false : true;
+//      return (this.get('parentNode').get('firstElementChild') == this);
     },
     
     'last-child': function(cssFilter)
@@ -383,6 +411,13 @@ if (!Element.prototype.querySelectorAll)
         nextElement = nextElement.nextSibling;
       }
       return nextElement ? false : true;
+//      return (this.get('parentNode').get('lastElementChild') == this);
+    },
+    
+    'only-child': function(cssFilter)
+    {
+      return (misago.querySelectorAll.pseudoSelectors.filters['first-child'].call(this)
+        && misago.querySelectorAll.pseudoSelectors.filters['last-child'].call(this));
     }
   };
   

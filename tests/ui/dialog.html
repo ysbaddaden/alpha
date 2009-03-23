@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>some windows</title>
+  <style type="text/css">
+  
+  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; background: red; }
+  /*
+  body > p { height: 2000px; width: 2000px; position: relative; }
+  body > p button { position: absolute; bottom: 0; right: 0; }
+  */
+  .overlay { background: #000; opacity: .5; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); }
+  
+  .dialog { border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
+    border-right-color: #888; border-bottom-color: #888; background: #DDD;
+    min-width: 500px;, _width: 500px; }
+  .dialog .titlebar { text-align: right; border: solid #DDD; border-width: 4px 4px 0; font-weight: bold; }
+  .dialog .titlebar .title { float: left; }
+  .dialog .titlebar a { cursor: pointer; }
+  .dialog .content { min-height: 250px; _height: 250px;
+    margin: 4px; padding: 4px; background: #FFF;
+    border: 1px solid; border-top-color: #888; border-left-color: #888;
+    border-right-color: #BBB; border-bottom-color: #BBB; }
+  
+  </style>
+</head>
+<body>
+
+<p>
+  <button id="open-dialog">click-me</button>
+</p>
+
+<script type="text/javascript" src="../../compat/array.js"></script>
+<script type="text/javascript" src="../../compat/core.js"></script>
+<script type="text/javascript" src="../../compat/element.js"></script>
+<script type="text/javascript" src="../../compat/selectors.js"></script>
+
+<script type="text/javascript" src="../../addons/object.js"></script>
+<script type="text/javascript" src="../../addons/function.js"></script>
+<script type="text/javascript" src="../../addons/array.js"></script>
+<script type="text/javascript" src="../../addons/string.js"></script>
+<script type="text/javascript" src="../../addons/classname.js"></script>
+<script type="text/javascript" src="../../addons/style.js"></script>
+
+<script type="text/javascript" src="../../ui/ui.js"></script>
+<script type="text/javascript" src="../../ui/overlay.js"></script>
+<script type="text/javascript" src="../../ui/window.js"></script>
+<script type="text/javascript" src="../../ui/dialog.js"></script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+document.getElementById('open-dialog').addEventListener('click', function()
+{
+  var dialog = new UI.Dialog({modal: true});
+  
+  dialog.setTitle('File Manager');
+
+//  dialog.setContent('<p>this is some content as string</p>');
+  var p = document.createElement('p');
+  p.innerHTML = 'this is some content as element';
+  dialog.setContent(p);
+
+  dialog.display();
+}, false);
+
+</script>
+
+</body>
+</html>
