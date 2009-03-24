@@ -1,16 +1,4 @@
 
-if (!Element.prototype.removeNode)
-{
-  // Not standard but useful.
-	Element.prototype.removeNode = function()
-	{
-		var parent = this.parentNode;
-		if (parent) {
-		  parent.removeChild(this);
-	  }
-	}
-}
-
 /**
  * Returns attributes as extended elements. Also permits
  * to create pseudo getters in MSIE < 8.
