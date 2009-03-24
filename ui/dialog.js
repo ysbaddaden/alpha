@@ -1,6 +1,7 @@
 
+// TODO: Handle dialog buttons (cancel, ok, and customs).
 // TODO: Handle some callbacks.
-// TODO: UI.Dialog: Permit to behave like a real popup, or like an iframe, using some AJAX.
+// TODO: UI.Dialog: Permit to behave like a real popup, or like an iframe, using AJAX to load it's content as well as any further click.
 // IMPROVE: UI.Dialog: Use fixed position in browsers that support it.
 UI.Dialog = function(options)
 {
