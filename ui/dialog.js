@@ -1,8 +1,9 @@
 
+// FIXME: Overlay and content isn't destroyed in IE?!
+
 // TODO: Handle dialog buttons (cancel, ok, and customs).
 // TODO: Handle some callbacks.
 // TODO: UI.Dialog: Permit to behave like a real popup, or like an iframe, using AJAX to load it's content as well as any further click.
-// IMPROVE: UI.Dialog: Use fixed position in browsers that support it.
 UI.Dialog = function(options)
 {
   this.options = {
@@ -74,27 +75,27 @@ UI.Dialog.prototype.setPosition = function()
   var style = {};
   
   if (position.top) {
-    style.top = '0px';
+    style.top = 0;
   }
   else if (position.bottom) {
-    style.bottom = '0px';
+    style.bottom = 0;
   }
   else
   {
-    style.top  = Math.max(0, (window.innerHeight || window.clientHeight) - this.container.offsetHeight) / 2;
-    style.top += document.body.scrollTop;
+    style.top = Math.max(0, (window.innerHeight || document.documentElement.clientHeight) - this.container.offsetHeight) / 2;
+    style.top = (style.top + document.body.scrollTop) + 'px';
   }
   
   if (position.left) {
-    style.left = '0px';
+    style.left = 0;
   }
   else if (position.right) {
-    style.right = '0px';
+    style.right = 0;
   }
   else
   {
-    style.left  = Math.max(0, (window.innerWidth || window.clientWidth) - this.container.offsetWidth) / 2;
-    style.left += document.body.scrollLeft;
+    style.left = Math.max(0, (window.innerWidth || document.documentElement.clientWidth) - this.container.offsetWidth) / 2;
+    style.left = (style.left + document.body.scrollLeft) + 'px';
   }
   
   this.container.setStyle(style);
@@ -112,13 +113,13 @@ UI.Dialog.prototype.hide    = UI.Window.prototype.hide;
 UI.Dialog.prototype.onClose = UI.Window.prototype.onClose;
 UI.Dialog.prototype.destroy = function()
 {
-  UI.Window.prototype.destroy.call(this);
-  
   if (this.options.modal) {
     this.overlay.destroy();
   }
   delete this.title;
   delete this.titlebar;
+  
+  UI.Window.prototype.destroy.call(this);
 }
 
 UI.Dialog.prototype.setTitle = function(title) {

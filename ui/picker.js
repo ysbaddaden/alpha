@@ -1,4 +1,6 @@
 
+// FIXME: closeOnOuterClick doesn't work in IE.
+
 UI.Picker = function(relativeElement, options)
 {
   if (typeof relativeElement == 'undefined') {

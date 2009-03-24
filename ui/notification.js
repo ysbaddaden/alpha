@@ -21,6 +21,7 @@ UI.Notification = function(options)
 
 UI.Notification.prototype.setPosition = function()
 {
+  /*
   if (misago.browser.ie6)
   {
     this.container.setStyle({
@@ -29,20 +30,22 @@ UI.Notification.prototype.setPosition = function()
       left: this.container.getStyle('left') + document.body.scrollLeft + 'px'
     });
   }
+  */
   this.background.setStyle({
     position: 'absolute',
     top:  0,
     left: 0,
-    width:  this.container.offsetWidth,
-    height: this.container.offsetHeight
+    width:  this.container.offsetWidth + 'px',
+    height: this.container.offsetHeight + 'px'
   });
 }
 
 UI.Notification.prototype.display = function()
 {
-  if (!this.container.parentNode) {
+  if (!this.container.parentNode || !this.container.parentNode.tagName) {
     document.body.appendChild(this.container);
   }
+  
   this.setPosition.call(this);
   this.container.setStyle('display', 'block');
   
@@ -54,11 +57,12 @@ UI.Notification.prototype.display = function()
 UI.Notification.prototype.hide = function()
 {
   this.container.setStyle('display', 'none');
+//  this.background.setStyle('display', 'none'); // fix for IE
 }
 
 UI.Notification.prototype.destroy = function()
 {
-  this.container.removeNode();
+  this.container.parentNode.removeChild(this.container);
   delete this.container;
   delete this.background;
   delete this.content;

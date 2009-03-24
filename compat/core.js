@@ -33,8 +33,9 @@ misago.NodeList.prototype.item = function(i) {
   return this[i];
 }
 
-// The following tries to fix MSIE < 8.
-if (typeof Element == "undefined")
+
+// The following tries to fix the DOM Element in MSIE < 8.
+if (typeof Element == 'undefined')
 {
   // Garbage Collector, to prevent memory leaks
   misago.garbage = [];
@@ -45,12 +46,10 @@ if (typeof Element == "undefined")
       var element = misago.garbage[i];
       if (element)
       {
-        /*
         // FIXME: Calling elm.clearAttributes() on unload crashes IE7?!
-        if (element.clearAttributes) {
-          element.clearAttributes();
-        }
-        */
+//        if (element.clearAttributes) {
+//          element.clearAttributes();
+//        }
         if (element.clearEvents) {
           element.clearEvents();
         }
@@ -58,6 +57,35 @@ if (typeof Element == "undefined")
       delete misago.garbage[i];
     }
   });
+  
+  // Generic Object prototype emulator
+  misago.prototypeEmulator = function()
+  {
+    var Obj       = {};
+    Obj.prototype = {};
+
+    Obj._misago_extend = function(o)
+    {
+      if (!o._misago_extended)
+      {
+        misago.garbage.push(o);
+
+        for (var method in Obj.prototype)
+        {
+          // saves the original method
+          if (o[method] && !o['_misago_' + method]) {
+            o['_misago_' + method] = o[method];
+          }
+          
+          // creates (or overwrites) the method
+          o[method] = Obj.prototype[method];
+        }
+        o._misago_extended = true;
+      }
+      return o;
+    }
+    return Obj;
+  }
 
   // Generic Object prototype emulator
   misago.prototypeEmulator = function()
@@ -89,7 +117,9 @@ if (typeof Element == "undefined")
   }
 
   // Emulates the DOM Element prototype
-  var Element = new misago.prototypeEmulator();
+  // NOTE: we do not declare 'var Element', because it causes a bug with IE8,
+  // where Element is suddenly undefined for the script.
+  Element = new misago.prototypeEmulator();
 
   // Manually extends an element
   misago.extendElement = function(elm) {
@@ -105,7 +135,7 @@ if (typeof Element == "undefined")
     }
     return rs;
   }
-
+  
   // document.createElement should return an already extended element
   misago._msie_createElement = document.createElement;
   document.createElement = function(tagName)

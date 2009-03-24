@@ -9,10 +9,14 @@ UI.Window.prototype.createContainer = function()
   if (this.options.id) {
     this.container.id = this.options.id;
   }
+  
+  // FIXME: closeOnEscape won't work on IE.
   if (this.options.closeOnEscape)
   {
     this.bounds.closeOnEscape = this.onClose.bind(this);
-    window.addEventListener('keyup', this.bounds.closeOnEscape, false);
+    
+    var elm = (document.documentElement) ? document.documentElement : window;
+    elm.addEventListener('keyup', this.bounds.closeOnEscape, false);
   }
 }
 
@@ -25,10 +29,12 @@ UI.Window.prototype.createContent = function()
 
 UI.Window.prototype.destroy = function()
 {
-  this.container.removeNode();
+  this.container.parentNode.removeChild(this.container);
   
-  if (this.bounds.closeOnEscape) {
-    window.removeEventListener('keyup', this.bounds.closeOnEscape, false);
+  if (this.bounds.closeOnEscape)
+  {
+    var elm = (document.documentElement) ? document.documentElement : window;
+    elm.removeEventListener('keyup', this.bounds.closeOnEscape, false);
   }
   delete this.content;
   delete this.container;
@@ -63,7 +69,7 @@ UI.Window.prototype.setContent = function(content)
 
 UI.Window.prototype.display = function()
 {
-  if (!this.container.parentNode)
+  if (!this.container.parentNode || !this.container.parentNode.tagName)
   {
     this.container.setStyle('visibility', 'hidden');
     document.body.appendChild(this.container);

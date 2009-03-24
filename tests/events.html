@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 </head>
 <body>
 
@@ -28,6 +30,16 @@ var _event_type = misago.browser.ie ? 'click' : 'focus';
 
 jsUnit.add("Event must be prototyped", function() {
   jsUnit.assertObject(Event.prototype);
+});
+
+jsUnit.add("window.addEventListener must be defined", function() {
+  jsUnit.assertFunction(window.addEventListener);
+});
+jsUnit.add("document.body.addEventListener must be defined", function() {
+  jsUnit.assertFunction(document.body.addEventListener);
+});
+jsUnit.add("document.documentElement.addEventListener must be defined", function() {
+  jsUnit.assertFunction(document.documentElement.addEventListener);
 });
 
 jsUnit.add("elm.addEventListener with one listener", function()

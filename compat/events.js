@@ -1,20 +1,19 @@
 /**
  * Emulates DOM events in Internet Explorer.
- *
  * requires: misago/core.js
- *
- * FIXME: Does it conflict with the Event DOM prototype on IE8?
  */
 
 if (!Element.prototype.addEventListener)
 {
   // fixes the Event DOM prototype
-  var Event = new misago.prototypeEmulator();
+  if (typeof Event == 'undefined') {
+    Event = new misago.prototypeEmulator();
+  }
 
   Event.prototype.preventDefault = function() {
     this.returnValue = false;
   }
-  
+
   Event.prototype.stopPropagation = function() {
     this.cancelBubble = true;
   }
@@ -28,27 +27,27 @@ if (!Element.prototype.addEventListener)
 
     // target: the element the event happened on
     if (event.target) {
-      event.target = misago.extendElement(event.target);
+      event.target = misago.$(event.target);
     }
     else if (event.srcElement) {
-      event.target = misago.extendElement(event.srcElement);
+      event.target = misago.$(event.srcElement);
     }
 
     // currentTarget: the element that handles the event
     if (!event.currentTarget && currentTarget) {
-      event.currentTarget = misago.extendElement(currentTarget);
+      event.currentTarget = misago.$(currentTarget);
     }
 
     // relatedTarget:
     if (event.type == 'mouseover')
     {
       // the element the mouse came from
-      event.relatedTarget = misago.extendElement(event.fromElement);
+      event.relatedTarget = misago.$(event.fromElement);
     }
     else if (event.type == 'mouseout')
     {
       // the element the mouse left to
-      event.relatedTarget = misago.extendElement(event.toElement);
+      event.relatedTarget = misago.$(event.toElement);
     }
     else {
       event.relatedTarget = null;
@@ -137,20 +136,33 @@ if (!Element.prototype.addEventListener)
     {
       for (var type in this._misago_events)
       {
-        for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++) {
-          delete this._misago_events[type].listeners[i];
+        if (this._misago_events[type].listeners)
+        {
+          for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++) {
+            delete this._misago_events[type].listeners[i];
+          }
+          this.detachEvent('on' + type, this._misago_events[type].real_listener);
         }
-        this.detachEvent('on' + type, this._misago_events[type].real_listener);
         delete this._misago_events[type];
       }
     }
   }
 
-  document.body.addEventListener    = Element.prototype.addEventListener;
-  document.body.removeEventListener = Element.prototype.removeEventListener;
-  document.body.clearEvents         = Element.prototype.clearEvents;
+  if (typeof document.body.addEventListener == 'undefined')
+  {
+    document.body.addEventListener    = Element.prototype.addEventListener;
+    document.body.removeEventListener = Element.prototype.removeEventListener;
+    document.body.clearEvents         = Element.prototype.clearEvents;
+    
+    document.documentElement.addEventListener    = Element.prototype.addEventListener;
+    document.documentElement.removeEventListener = Element.prototype.removeEventListener;
+    document.documentElement.clearEvents         = Element.prototype.clearEvents;
+  }
 
-  window.addEventListener           = Element.prototype.addEventListener;
-  window.removeEventListener        = Element.prototype.removeEventListener;
-  document.body.clearEvents         = Element.prototype.clearEvents;
+  if (typeof window.addEventListener == 'undefined')
+  {
+    window.addEventListener    = Element.prototype.addEventListener;
+    window.removeEventListener = Element.prototype.removeEventListener;
+    window.clearEvents         = Element.prototype.clearEvents;
+  }
 }

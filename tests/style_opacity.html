@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+  <title>some windows</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <style type="text/css">
+  
+  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; background: #07A; }
+  body p { color: #000; }
+  
+  </style>
+</head>
+<body>
+
+<p id="para">
+  this is some content
+</p>
+
+<script type="text/javascript" src="../compat/array.js"></script>
+<script type="text/javascript" src="../compat/core.js"></script>
+
+<script type="text/javascript" src="../addons/style.js"></script>
+
+<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+<script type="text/javascript">
+
+var para = document.getElementById('para');
+para.setStyle('opacity', 0.5);
+console.log(para.getStyle('opacity'));
+
+</script>
+
+</body>
+</html>

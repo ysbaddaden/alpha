@@ -1,0 +1,21 @@
+
+IE bugs :
+
+  elm.parentNode is defined whatever if the element is inserted in the DOM or not.
+  You can't use it to check if the element is inserted or not.
+  
+    Quick fix: check for 'elm.parentNode' and 'elm.parentNode.tagName'.
+
+    Possible compat fixes:
+      in Element.prototype.createElement, set parentNode to undefined.
+      in Element.prototype.removeNode, set parentNode to undefined.
+
+
+IE 8 bugs :
+  
+  In order to be sure to use IE8's engine (and not a compatibility view or whatever)
+  you have to declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
+  
+  I personnaly use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+

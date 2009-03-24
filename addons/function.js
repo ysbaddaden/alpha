@@ -18,7 +18,7 @@ Function.prototype.pass = function(args, bind)
 {
 	var self = this;
 	return function() {
-		self.apply(bind || self, args);
+		self.apply(bind || self, args || []);
 	}
 }
 
@@ -29,7 +29,7 @@ Function.prototype.delay = function(delay, bind, args)
 {
 	var self = this;
 	return setTimeout(function() {
-		self.apply(bind || self, args);
+		self.apply(bind || self, args || []);
 	}, delay);
 }
 
@@ -37,11 +37,15 @@ Function.prototype.delay = function(delay, bind, args)
  * Bufferizes a call to a function.
  * 
  * The buffered function will be called once, and only once,
- * when the delay expires. Just buffer it again to delay the
+ * when the delay expires. Just debounce it again to delay the
  * execution again and again.
  * 
  * Eg: you want to run function once the user stops to write
  * something.
+ *
+ * <code>
+ * elm.addEventListener('keyup', my_listener.debounce(300, elm), false);
+ * </code>
  */
 Function.prototype.debounce = function(delay, bind, args)
 {
@@ -50,7 +54,7 @@ Function.prototype.debounce = function(delay, bind, args)
 	return function()
 	{
 		clearTimeout(timer);
-		timer = self.delay(delay, bind, args);
+		timer = self.delay(delay, bind, args || []);
 	}
 }
 
