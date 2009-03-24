@@ -1,5 +1,6 @@
 
-// FIXME: closeOnOuterClick doesn't work in IE.
+// CHANGED: closeOnOuterClick should now work under IE (untested).
+// TODO: Implement a position:auto case, where the tooltip is displayed at the best place in the visible area (defaulting to top-right).
 
 UI.Picker = function(relativeElement, options)
 {
@@ -11,6 +12,7 @@ UI.Picker = function(relativeElement, options)
   this.options = {
     id: null,
     className: '',
+    position: null,
     onClose: 'hide',
     closeOnEscape: true,
     closeOnOuterClick: true
@@ -32,7 +34,8 @@ UI.Picker.prototype.createPicker = function()
   
   if (this.options.closeOnOuterClick)
   {
-    window.addEventListener('click', function(evt)
+    var elm = document.documentElement ? document.documentElement : window;
+    elm.addEventListener('click', function(evt)
     {
       var obj = evt.target;
       do
@@ -52,26 +55,85 @@ UI.Picker.prototype.createPicker = function()
 
 UI.Picker.prototype.bounds = {};
 
-// TODO: Handle a given position around relativeElement
 UI.Picker.prototype.computePosition = function()
 {
-  var pos = this.relativeElement.getPosition();
-  var style = {
-    left: pos.x,
-    top:  pos.y + this.relativeElement.offsetHeight
+  var relativePosition = this.relativeElement.getPosition();
+  var pos = {
+    left: relativePosition.x,
+    top:  relativePosition.y
   };
-  return style;
+  
+  if (this.options.position && this.options.position.indexOf)
+  {
+    // vertical position
+    if (this.options.position.indexOf('top') > -1) {
+      pos.top -= this.container.offsetHeight;
+    }
+    else if (this.options.position.indexOf('bottom') > -1) {
+      pos.top += this.relativeElement.offsetHeight;
+    }
+    else
+    {
+      pos.top += this.relativeElement.offsetHeight / 2;
+      pos.top -= this.container.offsetHeight / 2;
+    }
+    
+    // horizontal position
+    if (this.options.position.indexOf('left') > -1) {
+      pos.left -= this.container.offsetWidth;
+    }
+    else if (this.options.position.indexOf('right') > -1) {
+      pos.left += this.relativeElement.offsetWidth;
+    }
+    else
+    {
+      pos.left += this.relativeElement.offsetWidth / 2;
+      pos.left -= this.container.offsetWidth / 2;
+    }
+  }
+  else {
+    pos.top += this.relativeElement.offsetHeight;
+  }
+  
+  // normalizes the position
+  if (this.options.position && this.options.position.indexOf)
+  {
+    var className = [];
+    if (this.options.position.indexOf('top') > -1) {
+      className.push('top');
+    }
+    else if (this.options.position.indexOf('bottom') > -1) {
+      className.push('bottom');
+    }
+    if (this.options.position.indexOf('left') > -1) {
+      className.push('left');
+    }
+    else if (this.options.position.indexOf('right') > -1) {
+      className.push('right');
+    }
+    pos.position = className.join('-');
+  }
+  return pos;
 }
 
 UI.Picker.prototype.setPosition = function()
 {
+  this.container.setStyle('position', 'absolute');
+  
   var pos = this.computePosition();
-  this.container.setStyle({
-    position: 'absolute',
+  var style = {
     left: pos.left + 'px',
-    top:  pos.top  + 'px',
-    'min-width': this.relativeElement.offsetWidth + 'px'
-  });
+    top:  pos.top  + 'px'
+  };
+  
+  if (!pos.position) {
+    style['min-width'] = this.relativeElement.offsetWidth + 'px';
+  }
+  else {
+    this.container.className += ' ' + pos.position;
+  }
+  
+  this.container.setStyle(style);
 }
 
 UI.Picker.prototype.onClose    = UI.Window.prototype.onClose;

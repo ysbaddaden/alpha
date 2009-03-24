@@ -1,63 +1,139 @@
 
+// TODO: Change the default position to auto, when Picker supports it.
+
 UI.Tooltip = function(relativeElement, options)
 {
+  if (typeof relativeElement == 'undefined') {
+    throw new Error('Missing required parameter: relativeElement.');
+  }
+  this.relativeElement = misago.$(relativeElement);
+  
   this.options = {
     id: null,
     className: '',
-    position:  'bottom'
+    position: 'top right',
+    onClose: 'hide',
+    closeOnEscape: true,
+    closeOnOuterClick: true
   };
   this.options.merge(options || {});
+  this.options.className += ' tooltip';
   
-  this.relativeElement = misago.$(relativeElement);
+  UI.Picker.prototype.createPicker.call(this);
+  this.createArrow();
 }
 
-// TODO: Add the tooltip arrow (CSS based) + it's position (as className)
-UI.Tooltip.prototype.createPicker = function()
+UI.Tooltip.prototype.bounds = {};
+
+UI.Tooltip.prototype.createArrow = function()
 {
-  var options = {
-    id: this.options.id,
-    className: this.options.className,
-    position: this.options.position
-  };
-  this.picker = new Picker(this.relativeElement, options);
-  
-  /*
-  var arrow = document.createElement('div');
-  arrow.className = 'arrow';
-  this.picker.container.appendChild(arrow);
-  */
+  this.arrow = document.createElement('div');
+  this.arrow.className = 'arrow';
+  this.container.appendChild(this.arrow);
 }
 
-UI.Tooltip.prototype.display = function()
+UI.Tooltip.prototype.setContainerPosition = function(pos)
 {
-  if (!this.picker) {
-    this.createPicker();
-  }
-  this.picker.setPosition();
-  this.picker.display();
-}
-
-UI.Tooltip.prototype.hide = function()
-{
-  if (this.picker) {
-    this.picker.hide();
-  }
-}
-
-UI.Tooltip.prototype.destroy    = function()
-{
-  if (this.picker)
+  var style = {};
+  switch(pos.position)
   {
-    this.picker.destroy();
-    delete this.picker;
+    case 'top':
+      style.top  = pos.top - this.arrow.offsetHeight + 'px';
+      style.left = pos.left + 'px';
+      break;
+    case 'bottom':
+      style.top  = pos.top + this.arrow.offsetHeight + 'px';
+      style.left = pos.left + 'px';
+      break;
+    case 'left':
+      style.left = pos.left - this.arrow.offsetWidth  + 'px';
+      style.top  = pos.top + 'px';
+      break;
+    case 'right':
+      style.left = pos.left + this.arrow.offsetWidth  + 'px';
+      style.top  = pos.top + 'px';
+      break;
+    case 'top-left':
+      style.left = pos.left + 3 * this.arrow.offsetWidth + 'px';
+      style.top  = pos.top - this.arrow.offsetHeight + 'px';
+      break;
+    case 'top-right':
+      style.left = pos.left - 3 * this.arrow.offsetWidth + 'px';
+      style.top  = pos.top - this.arrow.offsetHeight + 'px';
+      break;
+    case 'bottom-left':
+      style.left = pos.left + 3 * this.arrow.offsetWidth + 'px';
+      style.top  = pos.top + this.arrow.offsetHeight + 'px';
+      break;
+    case 'bottom-right':
+      style.left = pos.left - 3 * this.arrow.offsetWidth + 'px';
+      style.top  = pos.top + this.arrow.offsetHeight + 'px';
+      break;
   }
+  this.container.setStyle(style);
+}
+  
+UI.Tooltip.prototype.setArrowPosition = function(pos)
+{
+  var style = {};
+  switch(pos.position)
+  {
+    case 'bottom':
+      style.top  = -this.arrow.offsetWidth + 'px';
+      style.left = (this.container.offsetWidth - this.arrow.offsetWidth) / 2 + 'px';
+      break;
+    case 'top':
+      style.left = (this.container.offsetWidth - this.arrow.offsetWidth) / 2 + 'px';
+      break;
+    case 'left':
+      style.right = -this.arrow.offsetWidth + 'px';
+      style.top   = (this.container.offsetHeight - this.arrow.offsetHeight) / 2 + 'px';
+      break;
+    case 'right':
+      style.left = -this.arrow.offsetWidth + 'px';
+      style.top  = (this.container.offsetHeight - this.arrow.offsetHeight) / 2 + 'px';
+      break;
+    
+    case 'top-left':
+      style.right = 2 * this.arrow.offsetWidth + 'px';
+      break;
+    case 'top-right':
+      style.left  = 2 * this.arrow.offsetWidth + 'px';
+      break;
+    
+    case 'bottom-left':
+      style.right = 2 * this.arrow.offsetWidth + 'px';
+      style.top   = -this.arrow.offsetHeight + 'px';
+      break;
+    case 'bottom-right':
+      style.left  = 2 * this.arrow.offsetWidth + 'px'
+      style.top   = -this.arrow.offsetHeight + 'px';
+      break;
+  }
+  this.arrow.setStyle(style);
 }
 
-UI.Tooltip.prototype.setContent = function(content)
+UI.Tooltip.prototype.setPosition = function()
 {
-  if (!this.picker) {
-    this.createPicker();
-  }
-  this.picker.setContent(content);
+  this.container.setStyle('position', 'absolute');
+  this.arrow.setStyle('position', 'absolute');
+  
+  var pos = UI.Picker.prototype.computePosition.call(this);
+  this.container.className += ' ' + pos.position;
+  
+  this.setContainerPosition(pos);
+  this.setArrowPosition(pos);
 }
+
+UI.Tooltip.prototype.onClose = UI.Picker.prototype.onClose;
+UI.Tooltip.prototype.display = UI.Picker.prototype.display;
+UI.Tooltip.prototype.hide    = UI.Picker.prototype.hide;
+
+UI.Tooltip.prototype.destroy = function()
+{
+  UI.Picker.prototype.destroy.call(this);
+  delete this.arrow;
+}
+
+UI.Tooltip.prototype.setContent = UI.Picker.prototype.setContent;
 

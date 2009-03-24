@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
-  <title>UI.Picker (windows attached to an element)</title>
+  <title>UI.Tooltip</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <style type="text/css">
   
@@ -9,17 +9,38 @@
   body > p { text-align: center; margin: 3em 0; }
   button { margin: 0 3em; }
   
-  .picker { border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
-    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
-  .picker .content { padding: 4px; background: #F4F4F4; }
+  .tooltip { font-weight: bold; }
+  .tooltip .content { padding: .5em 1.5em; background: #888; color: #FFF;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+  
+  .top .arrow { border-top: 10px #888 solid; border-left: 5px transparent solid;
+    border-right: 5px transparent solid; border-bottom: 0; }
+  
+  .top-right .arrow { border-top: 10px #888 solid; border-left: 0;
+    border-right: 10px transparent solid; border-bottom: 0; }
+  
+  .top-left .arrow { border-top: 10px #888 solid; border-left: 10px transparent solid;
+    border-right: 0; border-bottom: 0; }
+  
+  .bottom .arrow { border-bottom: 10px #888 solid; border-left: 5px transparent solid;
+    border-right: 5px transparent solid; border-top: 0; }
+  
+  .bottom-right .arrow { border-top: 0; border-left: 0;
+    border-right: 10px transparent solid; border-bottom: 10px #888 solid; }
+  
+  .bottom-left .arrow { border-top: 0; border-left: 10px transparent solid;
+    border-right: 0; border-bottom: 10px #888 solid; }
+  
+  .left .arrow { border-top: 5px transparent solid; border-bottom: 5px transparent solid;
+    border-right: 0; border-left: 10px #888 solid; }
+
+  .right .arrow { border-top: 5px transparent solid; border-bottom: 5px transparent solid;
+    border-right: 10px #888 solid; border-left: 0; }
   
   </style>
 </head>
 <body>
 
-<p>
-  <button class="">standard input picker</button>
-</p>
 <p>
   <button class="top">top</button>
   <button class="bottom">bottom</button>
@@ -29,8 +50,8 @@
 <p>
   <button class="top left">top left</button>
   <button class="top right">top right</button>
-  <button class="bottom left">bottom left</button>
   <button class="bottom right">bottom right</button>
+  <button class="bottom left">bottom left</button>
 </p>
 
 <script type="text/javascript" src="../../compat/array.js"></script>
@@ -53,6 +74,7 @@
 <script type="text/javascript" src="../../ui/ui.js"></script>
 <script type="text/javascript" src="../../ui/window.js"></script>
 <script type="text/javascript" src="../../ui/picker.js"></script>
+<script type="text/javascript" src="../../ui/tooltip.js"></script>
 
 <!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
@@ -62,9 +84,9 @@ Array.prototype.forEach.call(buttons, function(btn)
 {
   btn.addEventListener('click', function()
   {
-    var picker = new UI.Picker(btn, {position: btn.className});
-    picker.setContent('a picker');
-    picker.display();
+    var tooltip = new UI.Tooltip(btn, {position: btn.className});
+    tooltip.setContent("Hey! I'm a tooltip!");
+    tooltip.display();
   }, false);
 });
 </script>

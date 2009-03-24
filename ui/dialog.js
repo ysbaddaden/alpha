@@ -1,6 +1,4 @@
 
-// FIXME: Overlay and content isn't destroyed in IE?!
-
 // TODO: Handle dialog buttons (cancel, ok, and customs).
 // TODO: Handle some callbacks.
 // TODO: UI.Dialog: Permit to behave like a real popup, or like an iframe, using AJAX to load it's content as well as any further click.
