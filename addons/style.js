@@ -12,7 +12,7 @@ Element.prototype.setStyle = function(property, value)
     if (property == 'opacity')
     {
       this.style.cssText += ';-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=' + (value * 100) + ')";' +
-        'filter:alpha(opacity=' + (value * 100) + ');zoom:1;opacity=' + value;
+        'filter:alpha(opacity=' + (value * 100) + ');zoom:1;opacity:' + value;
     }
     else {
       this.style.cssText += ';' + property.hyphenize() + ':' + value;
