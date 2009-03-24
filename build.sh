@@ -13,7 +13,8 @@ cat compat/array.js \
     compat/json2.js \
     > build/compat.js
 
-cat addons/array.js \
+cat addons/object.js \
+    addons/array.js \
     addons/function.js \
     addons/string.js \
     addons/element.js \

@@ -1,21 +1,32 @@
 
+TODO:
+  Find a better CSS3 selector engine (faster and full featured). The one I wrote is
+  just a joke (it's too slow and limited).
+
+
 IE bugs :
 
-  elm.parentNode is defined whatever if the element is inserted in the DOM or not.
-  You can't use it to check if the element is inserted or not.
+  * elm.parentNode is defined whatever if the element is inserted in the DOM or not.
+    You can't use it to check if the element is inserted or not.
   
     Quick fix: check for 'elm.parentNode' and 'elm.parentNode.tagName'.
-
-    Possible compat fixes:
-      in Element.prototype.createElement, set parentNode to undefined.
-      in Element.prototype.removeNode, set parentNode to undefined.
 
 
 IE 8 bugs :
   
-  In order to be sure to use IE8's engine (and not a compatibility view or whatever)
-  you have to declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
+  * In order to be sure to use IE8's engine (and not a compatibility view or whatever)
+    you have to declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
   
-  I personnaly use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    I personnaly use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
+  * You musn't declare a 'var Element' or 'var Event' or whatever DOM prototype in a
+    script, even inside an if block like the following example, because the variable
+    will be set to 'undefined' for the whole script, causing the if check to be true!
+  
+    if (typeof Element == 'undefined') {
+      var Element = function() {};
+    }
+
+  * IE8 implements elm.querySelectorAll(), which comes with restricted support of CSS
+    selectors (CSS2.1 only, and no CSS3 at all).
 
