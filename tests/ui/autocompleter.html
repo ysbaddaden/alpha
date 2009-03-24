@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>UI.Autocompleter</title>
+  <style type="text/css">
+  
+  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; }
+  
+  .picker { border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
+    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
+  .picker .content { padding: 4px; background: #F4F4F4; }
+  
+  .autocompleter .content { padding: 2px; }
+  .autocompleter ul { list-style: none; margin: 0; padding: 0; background: #F4F4F4; }
+  .autocompleter li { padding: 2px; }
+  .autocompleter li.selected { background: #07A; color: #FFF; }
+  
+  </style>
+</head>
+<body>
+
+<p>
+  <input type="text" name="autocomplete" id="autocomplete"/>
+</p>
+
+<script type="text/javascript" src="../../compat/array.js"></script>
+<script type="text/javascript" src="../../compat/core.js"></script>
+<script type="text/javascript" src="../../compat/element.js"></script>
+<script type="text/javascript" src="../../compat/selectors.js"></script>
+
+<script type="text/javascript" src="../../addons/object.js"></script>
+<script type="text/javascript" src="../../addons/function.js"></script>
+<script type="text/javascript" src="../../addons/array.js"></script>
+<script type="text/javascript" src="../../addons/string.js"></script>
+<script type="text/javascript" src="../../addons/classname.js"></script>
+<script type="text/javascript" src="../../addons/style.js"></script>
+<script type="text/javascript" src="../../addons/element.js"></script>
+<script type="text/javascript" src="../../addons/ajax.js"></script>
+
+<script type="text/javascript" src="../../ui/ui.js"></script>
+<script type="text/javascript" src="../../ui/overlay.js"></script>
+<script type="text/javascript" src="../../ui/window.js"></script>
+<script type="text/javascript" src="../../ui/picker.js"></script>
+<script type="text/javascript" src="../../ui/autocompleter.js"></script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+var autocompleter = new UI.Autocompleter('autocomplete', '../ajax/autocompleter.html');
+
+
+
+</script>
+
+</body>
+</html>
