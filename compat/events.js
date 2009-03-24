@@ -140,7 +140,8 @@ if (!Element.prototype.addEventListener)
         for (var i=0, len=this._misago_events[type].listeners.length; i<len; i++) {
           delete this._misago_events[type].listeners[i];
         }
-        this.detachEvent(type, this._misago_events[type].real_listener);
+        this.detachEvent('on' + type, this._misago_events[type].real_listener);
+        delete this._misago_events[type];
       }
     }
   }
