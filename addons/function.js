@@ -43,7 +43,7 @@ Function.prototype.delay = function(delay, bind, args)
  * Eg: you want to run function once the user stops to write
  * something.
  */
-Function.prototype.buffered = function(delay, bind, args)
+Function.prototype.debounce = function(delay, bind, args)
 {
 	var self = this;
 	var timer;

@@ -27,15 +27,15 @@ Ajax.prototype.onreadystatechange = function()
     if (this.options.update)
     {
       var elm = misago.$(this.options.update);
-      elm.innerHTML = this.responseText;
+      elm.innerHTML = this.xhr.responseText;
     }
-    this.options.onComplete(this.responseText, this.responseXML);
+    this.options.onComplete(this.xhr.responseText, this.xhr.responseXML);
     
     if (this.xhr.status >= 400) {
       this.options.onFailure(this.xhr.status);
     }
     else if (this.xhr.status >= 200) {
-      this.options.onSuccess(this.xhr.status, this.responseText, this.responseXML);
+      this.options.onSuccess(this.xhr.responseText, this.xhr.responseXML, this.xhr.status);
     }
   }
 }
@@ -45,7 +45,7 @@ Ajax.prototype.parseData = function(data)
   if (typeof data == 'object')
   {
     var str = [];
-    if (data instanceof 'Array')
+    if (data instanceof Array)
     {
       data.forEach(function(key) {
         str.push(key + '=' + data[key]);
@@ -62,7 +62,7 @@ Ajax.prototype.parseData = function(data)
   return data;
 }
 
-Ajax.prototype.prepareRequest = function(url)
+Ajax.prototype.prepareRequest = function(method, url)
 {
   this.xhr.open(method.toUpperCase(), url, this.options.async);
   this.headers.forEach(function(header) {
@@ -71,7 +71,7 @@ Ajax.prototype.prepareRequest = function(url)
   this.xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 }
 
-Ajax.prototype.send(method, url, data)
+Ajax.prototype.send = function(method, url, data)
 {
   if (typeof url == 'object')
   {
