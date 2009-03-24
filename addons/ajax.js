@@ -86,6 +86,7 @@ Ajax.prototype.send = function(method, url, data)
   this.xhr.send(data);
 }
 
+/*
 Ajax.prototype.get = function(url, data) {
   this.send('GET', url, data);
 }
@@ -101,6 +102,7 @@ Ajax.prototype.put = function(url, data) {
 Ajax.prototype.delete = function(url, data) {
   this.send('DELETE', url, data);
 }
+*/
 
 Ajax.prototype.abort = function() {
   this.xhr.abort();

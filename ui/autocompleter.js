@@ -66,7 +66,7 @@ UI.Autocompleter.prototype.request = function()
   {
     var data = {};
     data[this.options.param] = token;
-    this.ajax[this.options.method](data);
+    this.ajax.send(this.options.method, data);
   }
 }
 

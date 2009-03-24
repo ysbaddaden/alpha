@@ -6,6 +6,7 @@ cat compat/array.js \
     compat/events.js \
     compat/selectors.js \
     compat/xmlhttprequest.js \
+    compat/json2.js \
     > compat.js
 
 cat addons/array.js \
@@ -23,5 +24,10 @@ cat ui/ui.js \
     ui/dialog.js \
     ui/picker.js \
     ui/notification.js \
+    ui/autocompleter.js \
     > ui.js
+
+java -jar ~/bin/yuicompressor-2.4.2.jar compat.js -o compat-compressed.js --type js --charset utf-8
+java -jar ~/bin/yuicompressor-2.4.2.jar addons.js -o addons-compressed.js --type js --charset utf-8
+java -jar ~/bin/yuicompressor-2.4.2.jar ui.js     -o ui-compressed.js     --type js --charset utf-8
 
