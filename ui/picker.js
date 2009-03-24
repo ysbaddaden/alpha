@@ -15,8 +15,16 @@ UI.Picker = function(relativeElement, options)
   };
   this.options.merge(options || {});
   
+  this.createPicker();
+}
+
+UI.Picker.prototype.createPicker = function()
+{
   UI.Window.prototype.createContainer.call(this);
   this.container.className = 'picker ' + this.options.className;
+  if (this.options.id) {
+    this.container.id = this.options.id;
+  }
   
   UI.Window.prototype.createContent.call(this);
   
@@ -41,16 +49,29 @@ UI.Picker = function(relativeElement, options)
 }
 
 UI.Picker.prototype.bounds = {};
-UI.Picker.prototype.setPosition = function()
+
+// TODO: Handle a given position around relativeElement
+UI.Picker.prototype.computePosition = function()
 {
   var pos = this.relativeElement.getPosition();
+  var style = {
+    left: pos.x,
+    top:  pos.y + this.relativeElement.offsetHeight
+  };
+  return style;
+}
+
+UI.Picker.prototype.setPosition = function()
+{
+  var pos = this.computePosition();
   this.container.setStyle({
     position: 'absolute',
-    left: pos.x + 'px',
-    top:  pos.y + this.relativeElement.offsetHeight + 'px',
+    left: pos.left + 'px',
+    top:  pos.top  + 'px',
     'min-width': this.relativeElement.offsetWidth + 'px'
   });
 }
+
 UI.Picker.prototype.onClose    = UI.Window.prototype.onClose;
 UI.Picker.prototype.display    = UI.Window.prototype.display;
 UI.Picker.prototype.hide       = UI.Window.prototype.hide;

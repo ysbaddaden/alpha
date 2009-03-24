@@ -3,7 +3,6 @@
  * Mostly emulates DOM prototypes in MSIE < 8.
  *
  * TODO: What about memory leaks in IE8?
- * TODO: Write a misago.NodeList class.
  */
 
 var misago = {};

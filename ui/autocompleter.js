@@ -1,4 +1,6 @@
 
+// TODO: UI.Autocompleter: Add support for multiple tokens.
+
 UI.Autocompleter = function(input, url, options) {
   this.initialize(input, url, options);
 }

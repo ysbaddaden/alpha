@@ -26,10 +26,6 @@ function new_input()
 var _event_type = misago.browser.ie ? 'click' : 'focus';
 
 
-// TODO: Test event.target
-// TODO: Test event.currentTarget
-// TODO: Test event.relatedTarget
-
 jsUnit.add("Event must be prototyped", function() {
   jsUnit.assertObject(Event.prototype);
 });

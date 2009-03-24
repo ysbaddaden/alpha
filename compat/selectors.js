@@ -101,7 +101,7 @@ if (!document.getElementsByClassName)
 if (!Element.prototype.querySelectorAll)
 {
   /**
-   * TODO: Handle pseudo selectors.
+   * TODO: Handle more CSS3 pseudo selectors.
    */
   misago.querySelectorAll = function(cssRules)
   {
