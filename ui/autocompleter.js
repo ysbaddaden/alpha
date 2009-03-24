@@ -53,8 +53,8 @@ UI.Autocompleter.prototype.onInput = function(evt)
     case 8: case 37: case 39: case 46: return; // backspace, left, right, delete
     case 38: this.moveSelectionUp();   return; // up
     case 40: this.moveSelectionDown(); return; // down
-    case 13: this.chooseSelection();   return; // enter
-    case 27: this.cancel();            return; // esc
+    case 13: this.chooseSelection(); evt.preventDefault(); return; // enter
+    case 27: this.cancel(); evt.preventDefault(); return; // esc
   }
   this.debouncedRequest();
 }
