@@ -6,7 +6,7 @@ fixing, implementing and emulating standard JavaScript and
 DOM in older browsers.
 
 
-= Why another JavaScript library
+== Why another JavaScript library
 
 The basic idea is to permit a developer to run some
 pure javascript and DOM code in Internet Explorer without
@@ -15,7 +15,7 @@ even thinking about it. I like to see my code run with
 browsers in the market. Problem is Internet Explorer.
 
 A lot of libraries are creating whole framework to 'fix'
-all browsers. It implies to learn a complete new syntaxes,
+all browsers. It implies to learn complete new syntaxes,
 and doesn't help you to learn either what JavaScript or
 the DOM is. I wanted something that is just DOM and
 JavaScript. That's the reason why it's obstrusive: let's

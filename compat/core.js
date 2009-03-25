@@ -15,11 +15,12 @@ misago.browser = {};
   misago.browser.ie    = (window.VBArray) ? true : false;
   misago.browser.ie6   = (misago.browser.ie && document.implementation) ? true : false;
   misago.browser.ie7   = (misago.browser.ie && window.XMLHttpRequest) ? true : false;
-  misago.browser.ie8   = (misago.browser.ie && Element && Element.prototype) ? true : false;
+//  misago.browser.ie8   = (misago.browser.ie && Element && Element.prototype) ? true : false;
   misago.browser.opera = (window.opera) ? true : false;
   misago.browser.gecko = (window.netscape && !misago.browser.opera) ? true : false;
   misago.browser.khtml = (ua.indexOf("safari") + 1 || ua.indexOf("konqueror") + 1) ? true : false;
 })();
+
 
 // NodeList emulator
 misago.NodeList = function(nodes)

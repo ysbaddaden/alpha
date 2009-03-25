@@ -54,7 +54,7 @@ jsUnit.add("elm.addEventListener with one listener", function()
   elm[_event_type]();
   jsUnit.assertTrue(test);
   
-  elm.removeNode();
+  elm.parentNode.removeChild(elm);
 });
 
 jsUnit.add("elm.addEventListener with many listeners", function()
@@ -73,7 +73,7 @@ jsUnit.add("elm.addEventListener with many listeners", function()
   elm[_event_type]();
   jsUnit.assertFalse(test);
 
-  elm.removeNode();
+  elm.parentNode.removeChild(elm);
 });
 
 jsUnit.add("elm.removeEventListener", function()
@@ -91,7 +91,7 @@ jsUnit.add("elm.removeEventListener", function()
   elm[_event_type]();
   jsUnit.assertNull(test);
 
-  elm.removeNode();
+  elm.parentNode.removeChild(elm);
 });
 
 if (Element.prototype.clearEvents)
@@ -113,7 +113,7 @@ if (Element.prototype.clearEvents)
     elm[_event_type]();
     jsUnit.assertNull(test);
 
-    elm.removeNode();
+    elm.parentNode.removeChild(elm);
   });
 }
 

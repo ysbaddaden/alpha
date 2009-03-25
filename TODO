@@ -1,7 +1,11 @@
 
 TODO:
-  Find a better CSS3 selector engine (faster and full featured). The one I wrote is
-  just a joke (it's too slow and limited).
+
+  * Find a better CSS3 selector engine (faster and full featured). The one I wrote
+    is just a joke (it's too slow and limited).
+
+  * I'm not that satisfied with the Ajax object. It's mostly an interface to XHR.
+    Maybe if it transparently supports XML and JSON I'll like it better :)
 
 
 IE bugs :
@@ -13,11 +17,11 @@ IE bugs :
 
 
 IE 8 bugs :
-  
+
   * In order to be sure to use IE8's engine (and not a compatibility view or whatever)
     you have to declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
-  
-    I personnaly use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    I personally use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
   * You musn't declare a 'var Element' or 'var Event' or whatever DOM prototype in a
     script, even inside an if block like the following example, because the variable
