@@ -1,0 +1,111 @@
+
+= JS-compat
+
+JS-compat is an obstrusive javascript library that aims at
+fixing, implementing and emulating standard javascript and
+DOM in older browsers.
+
+
+= Why another JavaScript library
+
+The basic idea is to permit a developer to run some
+pure javascript and DOM code in Internet Explorer without
+even thinking about it.
+
+I like to see my code run with (nearly) no change on the
+different standard compliant browsers in the market. Problem
+is Internet Explorer.
+
+A lot of libraries are creating whole framework to 'fix'
+all browsers. It implies to learn a complete new syntaxes,
+and doesn't help you to learn either what JavaScript or
+the DOM is. I wanted something that is just DOM and
+JavaScript. That's the reason why it's obstrusive: let's
+just fix things the way standards say they must be.
+
+
+== DOM prototypes in IE < 8
+
+The prefered way to extend objects in JavaScript, is throught
+the prototype. Problem is IE doesn't implement DOM prototypes,
+like Element and Event, before IE8. Thus when Element and Event
+are undefined, JS-compat emulates them.
+
+For instance, if you wish to create a hide() method available
+for all elements, just do this:
+
+ Element.prototype.hide = function() {
+   // ...
+ }
+
+The following problem is elements and events won't be extended
+automatically. You have to extend them manually. We don't want
+to think about that, so JS-compat interfaces the basic methods,
+like document.getElementById or elm.getElementsByTagName, to
+always return already extended elements.
+
+So you can do:
+
+ document.getElementById('elm').hide();
+
+
+== DOM events in IE
+
+Internet Explorer (even IE8) lacks support for DOM Events, and
+still relies on attachEvent, detachEvent, etc. Js-compat thus
+implements them. Support is limited to the bubbling mode only.
+The capture mode seems harder to emulate and isn't available
+yet (but might be doable).
+
+It's also not possible to manually create and fire events.
+
+JS-compat also fixes the Event object passed to the callback
+--in fact IE doesn't even pass any Event object. All the
+elements related to the event are fixed: target, relatedTarget,
+currentTarget; 'this' is fixed also; as well as some values,
+like pageX and pageY.
+
+For instance:
+
+ document.getElementById('elm').addEventListener('click', function(evt) {
+   alert(evt.relatedTarget);
+ }, false);
+
+
+== Limitations and concerns
+
+Even thought IE8 has support for getters and setters, older
+releases do not, and I don't think it's possible to emulate
+it without relying on ugly hacks (see
+http://alex.dojotoolkit.org/08/jscript/lettable.html ). This
+fact leads to some difficulties.
+
+For instance, how to return extended elements in IE6/7 for
+related attributes, like firstChild, nextSibling or parentNode?
+Possible solutions are:
+
+  * manually extend them (eg: misago.$(elm.parentNode));
+  * implement a get(attribute) method that will always
+     return extended elements.
+
+The same question arises for the emulation of Firefox 3.5's
+children, countElementChild, lastElementChild, etc. attributes.
+Those can be emulated throught getters in most browsers, but
+not in IE6 and IE7. Sadly :(
+
+So use whatever method you prefer. Use the get(attribute) method
+if you care about IE6/7, or just don't think about it if you don't
+care about IE6/7.
+
+
+== Backward compatibility
+
+New browsers come with nice new features, that are obviously
+lacking in older releases that we still have to support. One
+goal of JS-compat is to implement (or emulate) these when
+they're missing. Of course it's slower, but speed issues can
+be a good reason to encourage users to upgrade.
+
+Here are a few examples: the JSON object, getElementsByClassName
+and querySelectorAll methods, etc.
+
