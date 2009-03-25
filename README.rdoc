@@ -84,9 +84,9 @@ For instance, how to return extended elements in IE6/7 for
 related attributes, like firstChild, nextSibling or parentNode?
 Possible solutions are:
 
-  * manually extend them (eg: misago.$(elm.parentNode));
-  * implement a get(attribute) method that will always
-     return extended elements.
+* manually extend them (eg: misago.$(elm.parentNode));
+* implement a get(attribute) method that will always
+   return extended elements.
 
 The same question arises for the emulation of Firefox 3.5's
 children, countElementChild, lastElementChild, etc. attributes.
