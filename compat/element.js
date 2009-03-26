@@ -104,3 +104,31 @@ if (!Element.prototype.children)
   }
 }
 
+(function()
+{
+  // makes getAttribute('class') and setAttribute('class') to work in IE < 8.
+
+  var elm = document.createElement('div');
+  elm.className = 'something';
+  if (elm.getAttribute('class') != 'something')
+  {
+    misago._msie_getAttribute = Element.prototype.getAttribute;
+    Element.prototype.getAttribute = function(attr)
+    {
+      if (attr == 'class') {
+        attr = 'className';
+      }
+      return misago._msie_getAttribute(attr);
+    }
+    
+    misago._msie_setAttribute = Element.prototype.setAttribute;
+    Element.prototype.setAttribute = function(attr, value)
+    {
+      if (attr == 'class') {
+        attr = 'className';
+      }
+      return misago._msie_setAttribute(attr, value);
+    }
+  }
+})();
+

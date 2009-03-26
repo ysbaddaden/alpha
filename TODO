@@ -2,35 +2,65 @@
 TODO:
 
   * Find a better CSS3 selector engine (faster and full featured). The one I wrote
-    is just a joke (it's too slow and limited).
+    is just a joke (it's slow and limited).
 
-  * I'm not that satisfied with the Ajax object. It's mostly an interface to XHR.
-    Maybe if it transparently supports XML and JSON I'll like it better :)
+  * I'm not that satisfied with the Ajax object. It's just an interface to
+    XMLHttpRequest. Maybe if it transparently supported XML and JSON I'd like it
+    better :)
+
+  * Core could just be a feature support check tool only. It would check the presence
+    of a feature (let's say the JSON object), and if it's lacking, or broken somehow,
+    it shall compile a list of javascript files to be download and eventually insert
+    them --using a server script that would cache a compressed version for instance.
+    
+    That way new browsers wouldn't have to download and process a lot of scripts.
+    Maybe it could speed up the initial page load time? Or maybe it's just stupid,
+    and I shall better rely on IE's conditional comments: one for IE6/7, one for IE8
+    and one for the other browsers.
 
 
 IE bugs :
 
-  * elm.parentNode is defined whatever if the element is inserted in the DOM or not.
-    You can't use it to check if the element is inserted or not.
-  
+  * elm.parentNode is always defined, whatever if the element is inserted in the DOM
+    or not. You can't use it to check if the element is inserted or not.
+    
     Quick fix: check for 'elm.parentNode' and 'elm.parentNode.tagName'.
+    
+    Maybe I can fix it somehow  by overwriting document.createElement,
+    document.removeChild and document.removeNode?
+
+  * 'window' is just useless in IE. You can't get any viewport information out of it.
+    You can't bind events (they won't be called). You have to check
+    'document.documentElement' instead, leading to some burden to the developer: she
+    needs to check out the presence of document.documentElement to choose the one to
+    use.
+    
+    I can fix the events, by transparently binding document.documentElement instead
+    of the window object. For instance:
+    
+    window.addEventListener = function(type, fn, useCapture) {
+      return document.documentElement.addEventListener(type, fn, useCapture);
+    }
+    
+    I can fix missing values in IE8, using getters. But... what about IE6-7? Maybe
+    throught another 'get(attribute)' method? :(
 
 
 IE 8 bugs :
 
   * In order to be sure to use IE8's engine (and not a compatibility view or whatever)
-    you have to declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
+    you better declare the X-UA-Compatible HTTP meta. Otherwise, expect problems.
     
     I personally use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
   * You musn't declare a 'var Element' or 'var Event' or whatever DOM prototype in a
     script, even inside an if block like the following example, because the variable
     will be set to 'undefined' for the whole script, causing the if check to be true!
-  
+    
     if (typeof Element == 'undefined') {
       var Element = function() {};
     }
 
-  * IE8 implements elm.querySelectorAll(), which comes with restricted support of CSS
+  * IE8 implements elm.querySelectorAll(), but comes with a restricted support of CSS
     selectors (CSS2.1 only, and no CSS3 at all).
 
