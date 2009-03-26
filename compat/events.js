@@ -161,8 +161,19 @@ if (!Element.prototype.addEventListener)
 
   if (typeof window.addEventListener == 'undefined')
   {
+    /*
     window.addEventListener    = Element.prototype.addEventListener;
     window.removeEventListener = Element.prototype.removeEventListener;
     window.clearEvents         = Element.prototype.clearEvents;
+    */
+    window.addEventListener = function(type, listener, useCapture) {
+      return document.documentElement.addEventListener(type, listener, useCapture);
+    }
+    window.removeEventListener = function(type, listener, useCapture) {
+      return document.documentElement.removeEventListener(type, listener, useCapture);
+    }
+    window.clearEvents = function() {
+      return document.documentElement.clearEvents();
+    }
   }
 }
