@@ -107,3 +107,25 @@ can be a good reason to encourage users to upgrade.
 Here are a few examples: the JSON object, getElementsByClassName
 and querySelectorAll methods, etc.
 
+
+== About Explorer Canvas (by Google)
+
+From what I tested, excanvas.js must be loaded in the document's HEAD,
+and any script that needs to access canvas elements must be defered,
+or started on load. For instance:
+
+  <script type="text/javascript" defer="defer">
+  var ctx = document.getElementById('my-canvas').getContext('2d');
+  </script>
+
+  <script type="text/javascript">
+  window.addEventListener('load', function()
+  {
+    var canvas = document.createElement('canvas');
+    var ctx    = canvas.getContext('2d');
+  }, false);
+  </script>
+
+If excanvas.js is loaded, created elements will be automatically extended
+(thanks to Kokone::Compat).
+

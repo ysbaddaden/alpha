@@ -76,10 +76,14 @@ if (typeof Element == 'undefined')
   }
   
   // document.createElement should return an already extended element
+  // also extends <canvas> elements if excanvas.js is loaded
   kokone._msie_createElement = document.createElement;
   document.createElement = function(tagName)
   {
     var elm = kokone._msie_createElement(tagName);
+    if(tagName == 'canvas' && window.G_vmlCanvasManager) {
+      elm = G_vmlCanvasManager.initElement(elm);
+    }
     return kokone.extendElement(elm);
   }
 

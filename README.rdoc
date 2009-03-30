@@ -35,9 +35,9 @@ there are tons of memory leakages, too (feel free to send patches!). But it work
 
 Kokone is currently separated in 3 parts :
 
-# 'compat' tries to fix, emulate and implement broken and missing features (yes it's obstrusive).
-# 'addons' adds a few methods that I think are missing.
-# 'ui' proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (this one is unobstrusive).
+* 'compat' tries to fix, emulate and implement broken and missing features (yes it's obstrusive).
+* 'addons' adds a few methods that I think are missing.
+* 'ui' proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (this one is unobstrusive).
 
 You may just use 'compat' or compat + addons, or compat + addons + ui, or
 just parts of them (be sure not to miss requirements). Whatever you want.
@@ -45,7 +45,6 @@ just parts of them (be sure not to miss requirements). Whatever you want.
 
 == TODO
 
-* Inject Explorer Canvas (excanvas) from Google into compat, in order to fix the HTML5 canvas element.
 * A Drag And Drop library (is it possible to follow the standards?)
 * An animation library to enable some DHTML.
 
