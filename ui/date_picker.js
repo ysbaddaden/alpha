@@ -4,7 +4,7 @@
 
 UI.DatePicker = function(input, options)
 {
-  this.input = misago.$(input);
+  this.input = kokone.$(input);
   
   this.options = {
     className: ''

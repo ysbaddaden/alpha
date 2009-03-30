@@ -18,7 +18,7 @@
  *  - support for HTML5 elements in IE (that's IE's fault).
  */
 
-if (!Element.prototype.querySelectorAll || misago.browser.ie)
+if (!Element.prototype.querySelectorAll || kokone.browser.ie)
 {
   var Sly = (function()
   {

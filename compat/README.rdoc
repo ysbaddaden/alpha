@@ -1,7 +1,7 @@
 
-= JS-compat::Compat
+= Kokone::Compat
 
-JS-compat::Compat is an obstrusive javascript library that
+Kokone::Compat is an obstrusive javascript library that
 aims at fixing, implementing and emulating standard JavaScript
 and DOM in older browsers.
 
@@ -27,7 +27,7 @@ just fix things the way standards say they must be.
 The prefered way to extend objects in JavaScript is throught
 objects' prototype. JavaScript is all about prototypes. Problem
 is IE doesn't implement the DOM prototypes, like Element and
-Event, before IE8. JS-compat::Compat thus emulates Element and
+Event, before IE8. Kokone::Compat thus emulates Element and
 Event when they're undefined.
 
 For instance, if you wish to create a hide() method available
@@ -39,7 +39,7 @@ for all elements, just do:
 
 The following problem is elements and events won't be extended
 automatically, and you thus have to extend them manually. We
-don't want to have to think about that, so JS-compat::Compat
+don't want to have to think about that, so Kokone::Compat
 interfaces the basic methods, like document.getElementById or
 elm.getElementsByTagName, to always return already extended
 elements.
@@ -52,13 +52,13 @@ So you can do:
 == DOM events in IE
 
 Internet Explorer (even IE8) lacks support for DOM Events, and
-still relies on attachEvent, detachEvent, etc. JS-compat::Compat
+still relies on attachEvent, detachEvent, etc. Kokone::Compat
 thus implements them. Support is limited to the bubbling mode only.
 The capture mode seems harder to emulate and isn't available
 yet (but might be doable). It's also not possible to manually
 create and fire events.
 
-JS-compat::Compat also fixes the Event object passed to the callback
+Kokone::Compat also fixes the Event object passed to the callback
 --in fact IE doesn't even pass any Event object. All the
 elements related to the event are fixed: target, relatedTarget,
 currentTarget; 'this' is fixed also; as well as some values,
@@ -100,7 +100,7 @@ care about IE6/7.
 
 New browsers come with nice new features, that are obviously
 lacking in older releases that we still have to support. One
-goal of JS-compat::Compat is to implement (or emulate) these
+goal of Kokone::Compat is to implement (or emulate) these
 when they're missing. Of course it's slower, but speed issues
 can be a good reason to encourage users to upgrade.
 

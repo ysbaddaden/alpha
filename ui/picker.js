@@ -6,7 +6,7 @@ UI.Picker = function(relativeElement, options)
   if (typeof relativeElement == 'undefined') {
     throw new Error('Missing required parameter: relativeElement.');
   }
-  this.relativeElement = misago.$(relativeElement);
+  this.relativeElement = kokone.$(relativeElement);
   
   this.options = {
     id: null,

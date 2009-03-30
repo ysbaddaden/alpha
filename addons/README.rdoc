@@ -1,6 +1,6 @@
-== JS-compat::Addons
+== Kokone::Addons
 
-JS-Compat::Addons is a collection of obstrusive methods that provides a few
+Kokone::Addons is a collection of obstrusive methods that provides a few
 useful methods to standard prototypes, like Element.hasClassName(),
 Element.setStyle() or String.trim().
 

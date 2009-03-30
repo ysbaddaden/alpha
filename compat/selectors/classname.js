@@ -10,7 +10,7 @@ if (!document.getElementsByClassName)
     // querySelectorAll (MSIE 8)
     // deactivated, because we will overwrite querySelectorAll (and there is no way to call/apply a native function).
     Element.prototype._msie_querySelectorAll = Element.prototype.querySelectorAll;
-    misago.getElementsByClassName = function(parent, className)
+    kokone.getElementsByClassName = function(parent, className)
     {
       var classes = className.split(" ");
       var cssRule = "";
@@ -25,7 +25,7 @@ if (!document.getElementsByClassName)
   else*/ if (document.evaluate)
   {
     // XPATH (Firefox 2, etc.)
-    misago.getElementsByClassName = function(parent, className)
+    kokone.getElementsByClassName = function(parent, className)
     {
       var classes = className.split(" ");
       var classesToCheck = "";
@@ -49,13 +49,13 @@ if (!document.getElementsByClassName)
       while ((node = elements.iterateNext())) {
         returnElements.push(node);
       }
-      return new misago.NodeList(returnElements);
+      return new kokone.NodeList(returnElements);
     }
   }
   else
   {
     // DOM PARSING (IE6, IE7, etc.)
-    misago.getElementsByClassName = function(parent, className)
+    kokone.getElementsByClassName = function(parent, className)
     {
       var classes = className.split(" ");
       var classesToCheck = [];
@@ -86,17 +86,17 @@ if (!document.getElementsByClassName)
         }
       }
 
-      returnElements = misago.extendElements ? misago.extendElements(returnElements) : returnElements;
-      return new misago.NodeList(returnElements);
+      returnElements = kokone.extendElements ? kokone.extendElements(returnElements) : returnElements;
+      return new kokone.NodeList(returnElements);
     }
   }
 
   Element.prototype.getElementsByClassName = function(className) {
-  return misago.getElementsByClassName(this, className);
+    return kokone.getElementsByClassName(this, className);
   }
 
   document.getElementsByClassName = function(className) {
-  return misago.getElementsByClassName(document, className);
+    return kokone.getElementsByClassName(document, className);
   }
 }
 

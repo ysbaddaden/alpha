@@ -1,6 +1,6 @@
-== JS-compat::UI
+== Kokone::UI
 
-JS-Compat::UI is a collection of widgets to enhance web pages with dialogs,
+Kokone::UI is a collection of widgets to enhance web pages with dialogs,
 date pickers, tooltips, etc. It's unobstrusive, but requires some obstrusive
-methods from JS-compat::Addons.
+methods from Kokone::Addons.
 

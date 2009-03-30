@@ -26,7 +26,7 @@ Ajax.prototype.onreadystatechange = function()
   {
     if (this.options.update)
     {
-      var elm = misago.$(this.options.update);
+      var elm = kokone.$(this.options.update);
       elm.innerHTML = this.xhr.responseText;
     }
     this.options.onComplete(this.xhr.responseText, this.xhr.responseXML);

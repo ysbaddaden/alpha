@@ -25,7 +25,7 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
   this.list.addEventListener('click',     this.onChoice.bind(this),       false);
   this.list.addEventListener('mouseover', this.hoverSelection.bind(this), false);
   
-  this.input = misago.$(input);
+  this.input = kokone.$(input);
   this.input.addEventListener('keyup', this.onInput.bind(this), false);
   
   this.ajax = new Ajax({

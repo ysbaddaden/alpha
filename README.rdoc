@@ -1,7 +1,7 @@
 
-= JS-compat (name to be changed soon)
+= Kokone
 
-JS-compat is yet another JavaScript library, but an obstrusive one.
+Kokone is yet another JavaScript library, but an obstrusive one.
 
 
 == Why?
@@ -33,7 +33,7 @@ there are tons of memory leakages, too (feel free to send patches!). But it work
 
 == Organisation
 
-JS-compat is currently separated in 3 parts :
+Kokone is currently separated in 3 parts :
 
 # 'compat' tries to fix, emulate and implement broken and missing features (yes it's obstrusive).
 # 'addons' adds a few methods that I think are missing.

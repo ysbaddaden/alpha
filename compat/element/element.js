@@ -12,14 +12,14 @@
  */
 Element.prototype.get = function(attribute)
 {
-  if (this['_misago_get_' + attribute]) {
-    return this['_misago_get_' + attribute]();
+  if (this['_kokone_get_' + attribute]) {
+    return this['_kokone_get_' + attribute]();
   }
   
   if (this[attribute])
   {
     if (this[attribute].tagName) {
-      return misago.$(this[attribute]);
+      return kokone.$(this[attribute]);
     }
     return this[attribute];
   }
@@ -29,7 +29,7 @@ Element.prototype.get = function(attribute)
 
 if (!Element.prototype.children)
 {
-  Element.prototype._misago_get_children = function()
+  Element.prototype._kokone_get_children = function()
   {
     var children = [];
     var child = this.firstChild;
@@ -40,10 +40,10 @@ if (!Element.prototype.children)
       }
       child = child.nextSibling;
     }
-    return misago.extendElements ? misago.extendElements(children) : children;
+    return kokone.extendElements ? kokone.extendElements(children) : children;
   }
 
-  Element.prototype._misago_get_childElementCount = function()
+  Element.prototype._kokone_get_childElementCount = function()
   {
     var child = this.firstChild;
     var count = 0;
@@ -57,50 +57,50 @@ if (!Element.prototype.children)
     return count;
   }
 
-  Element.prototype._misago_get_firstElementChild = function()
+  Element.prototype._kokone_get_firstElementChild = function()
   {
     var child = this.firstChild;
     while (child && !child.tagName) {
       child = child.nextSibling;
     }
-    return (child && child.tagName) ? misago.$(child) : null;
+    return (child && child.tagName) ? kokone.$(child) : null;
   }
 
-  Element.prototype._misago_get_lastElementChild = function()
+  Element.prototype._kokone_get_lastElementChild = function()
   {
     var child = this.lastChild;
     while (child && !child.tagName) {
       child = child.previousSibling;
     }
-    return (child && child.tagName) ? misago.$(child) : null;
+    return (child && child.tagName) ? kokone.$(child) : null;
   }
 
-  Element.prototype._misago_get_nextElementSibling = function()
+  Element.prototype._kokone_get_nextElementSibling = function()
   {
     var sibling = this.nextSibling;
     while (sibling && !sibling.tagName) {
       sibling = sibling.nextSibling;
     }
-    return (sibling && sibling.tagName) ? misago.$(sibling) : null;
+    return (sibling && sibling.tagName) ? kokone.$(sibling) : null;
   }
 
-  Element.prototype._misago_get_previousElementSibling = function()
+  Element.prototype._kokone_get_previousElementSibling = function()
   {
     var sibling = this.previousSibling;
     while (sibling && !sibling.tagName) {
       sibling = sibling.previousSibling;
     }
-    return (sibling && sibling.tagName) ? misago.$(sibling) : null;
+    return (sibling && sibling.tagName) ? kokone.$(sibling) : null;
   }
   
   if (Element.prototype.__defineGetter__)
   {
-    Element.prototype.__defineGetter__('children', Element.prototype._misago_get_children);
-    Element.prototype.__defineGetter__('childElementCount', Element.prototype._misago_get_childElementCount);
-    Element.prototype.__defineGetter__('firstElementChild', Element.prototype._misago_get_firstElementChild);
-    Element.prototype.__defineGetter__('lastElementChild', Element.prototype._misago_get_lastElementChild);
-    Element.prototype.__defineGetter__('nextElementSibling', Element.prototype._misago_get_nextElementSibling);
-    Element.prototype.__defineGetter__('previousElementSibling', Element.prototype._misago_get_previousElementSibling);
+    Element.prototype.__defineGetter__('children', Element.prototype._kokone_get_children);
+    Element.prototype.__defineGetter__('childElementCount', Element.prototype._kokone_get_childElementCount);
+    Element.prototype.__defineGetter__('firstElementChild', Element.prototype._kokone_get_firstElementChild);
+    Element.prototype.__defineGetter__('lastElementChild', Element.prototype._kokone_get_lastElementChild);
+    Element.prototype.__defineGetter__('nextElementSibling', Element.prototype._kokone_get_nextElementSibling);
+    Element.prototype.__defineGetter__('previousElementSibling', Element.prototype._kokone_get_previousElementSibling);
   }
 }
 
@@ -112,22 +112,22 @@ if (!Element.prototype.children)
   elm.className = 'something';
   if (elm.getAttribute('class') != 'something')
   {
-    misago._msie_getAttribute = elm.getAttribute;
+    kokone._msie_getAttribute = elm.getAttribute;
     Element.prototype.getAttribute = function(attr)
     {
       if (attr == 'class') {
         attr = 'className';
       }
-      return this._misago_getAttribute(attr);
+      return this._kokone_getAttribute(attr);
     }
     
-    misago._msie_setAttribute = elm.setAttribute;
+    kokone._msie_setAttribute = elm.setAttribute;
     Element.prototype.setAttribute = function(attr, value)
     {
       if (attr == 'class') {
         attr = 'className';
       }
-      return this._misago_setAttribute(attr, value);
+      return this._kokone_setAttribute(attr, value);
     }
   }
 })();

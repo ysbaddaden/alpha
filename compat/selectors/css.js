@@ -3,7 +3,7 @@
 
 if (!Element.prototype.querySelectorAll)
 {
-  misago.querySelectorAll = function(cssRules)
+  kokone.querySelectorAll = function(cssRules)
   {
     if (typeof cssRules == 'undefined' || !cssRules || cssRules.length == 0) {
       throw new Error("Missing parameter cssRule in querySelectorAll().");
@@ -18,8 +18,8 @@ if (!Element.prototype.querySelectorAll)
       foundElements   = mergeArrays(foundElements, newElements);
     });
     
-    foundElements = misago.extendElements ? misago.extendElements(foundElements) : foundElements;
-    return new misago.NodeList(foundElements);
+    foundElements = kokone.extendElements ? kokone.extendElements(foundElements) : foundElements;
+    return new kokone.NodeList(foundElements);
     
     
     function execute(cssRule)
@@ -60,12 +60,12 @@ if (!Element.prototype.querySelectorAll)
     
     function searchElements(parent, cssFilters, operator)
     {
-      var elements = misago.querySelectorAll.operators[operator](parent, cssFilters[0]);
+      var elements = kokone.querySelectorAll.operators[operator](parent, cssFilters[0]);
       return Array.prototype.filter.call(elements, function(element)
       {
         for (var i=1, ilen=cssFilters.length; i<ilen; i++)
         {
-          if (!misago.querySelectorAll.selectors.filter.call(element, cssFilters[i])) {
+          if (!kokone.querySelectorAll.selectors.filter.call(element, cssFilters[i])) {
             return false;
           }
         }
@@ -155,18 +155,18 @@ if (!Element.prototype.querySelectorAll)
     }
   }
   
-  misago.querySelectorAll.selectors =
+  kokone.querySelectorAll.selectors =
   {
     search: function(cssFilter) {
-      return misago.querySelectorAll.selectors.searches[cssFilter.selector].call(this, cssFilter.name);
+      return kokone.querySelectorAll.selectors.searches[cssFilter.selector].call(this, cssFilter.name);
     },
     
     filter: function(cssFilter) {
-      return misago.querySelectorAll.selectors.filters[cssFilter.selector].call(this, cssFilter);
+      return kokone.querySelectorAll.selectors.filters[cssFilter.selector].call(this, cssFilter);
     }
   };
   
-  misago.querySelectorAll.selectors.searches =
+  kokone.querySelectorAll.selectors.searches =
   {
     id: function(id)
     {
@@ -183,14 +183,14 @@ if (!Element.prototype.querySelectorAll)
     },
     
     pseudoSelector: function(pseudoSelector) {
-      if (misago.querySelectorAll.pseudoSelectors.searches[pseudoSelector]) {
-        return misago.querySelectorAll.pseudoSelectors.searches[pseudoSelector].call(this);
+      if (kokone.querySelectorAll.pseudoSelectors.searches[pseudoSelector]) {
+        return kokone.querySelectorAll.pseudoSelectors.searches[pseudoSelector].call(this);
       }
       throw new Error("Unknown or unsupported CSS pseudo-selector: " + pseudoSelector + ".");
     }
   };
   
-  misago.querySelectorAll.selectors.filters = {
+  kokone.querySelectorAll.selectors.filters = {
     id: function(cssFilter) {
       return (this.id == cssFilter.name);
     },
@@ -238,15 +238,15 @@ if (!Element.prototype.querySelectorAll)
     
     pseudoSelector: function(cssFilter)
     {
-      if (misago.querySelectorAll.pseudoSelectors.filters[cssFilter.name]) {
-        return misago.querySelectorAll.pseudoSelectors.filters[cssFilter.name].call(this, cssFilter);
+      if (kokone.querySelectorAll.pseudoSelectors.filters[cssFilter.name]) {
+        return kokone.querySelectorAll.pseudoSelectors.filters[cssFilter.name].call(this, cssFilter);
       }
       throw new Error("Unknown or unsupported CSS pseudo-selector: " + cssFilter.name + ".");
     }
   };
   
-  misago.querySelectorAll.pseudoSelectors = {};
-  misago.querySelectorAll.pseudoSelectors.searches = {
+  kokone.querySelectorAll.pseudoSelectors = {};
+  kokone.querySelectorAll.pseudoSelectors.searches = {
     'first-child': function()
     {
       var elements = (this.all) ? this.all : this.getElementsByTagName('*');
@@ -291,7 +291,7 @@ if (!Element.prototype.querySelectorAll)
     }
   };
   
-  misago.querySelectorAll.pseudoSelectors.filters = {
+  kokone.querySelectorAll.pseudoSelectors.filters = {
     'first-child': function(cssFilter)
     {
       var previousElement = this.previousSibling;
@@ -314,20 +314,20 @@ if (!Element.prototype.querySelectorAll)
     
     'only-child': function(cssFilter)
     {
-      return (misago.querySelectorAll.pseudoSelectors.filters['first-child'].call(this)
-        && misago.querySelectorAll.pseudoSelectors.filters['last-child'].call(this));
+      return (kokone.querySelectorAll.pseudoSelectors.filters['first-child'].call(this)
+        && kokone.querySelectorAll.pseudoSelectors.filters['last-child'].call(this));
     }
   };
   
-  misago.querySelectorAll.operators =
+  kokone.querySelectorAll.operators =
   {
     descendant: function(parent, cssFilter) {
-      return misago.querySelectorAll.selectors.search.call(parent, cssFilter);
+      return kokone.querySelectorAll.selectors.search.call(parent, cssFilter);
     },
     
     child: function(parent, cssFilter)
     {
-      var elements = misago.querySelectorAll.selectors.search.call(parent, cssFilter);
+      var elements = kokone.querySelectorAll.selectors.search.call(parent, cssFilter);
       return Array.prototype.filter.call(elements, function(element) {
         return element.parentNode == parent;
       });
@@ -337,7 +337,7 @@ if (!Element.prototype.querySelectorAll)
     {
       var nextElement = previousElement.get('nextElementSibling');
       if (nextElement
-        && misago.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
+        && kokone.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
       {
         return [nextElement];
       }
@@ -352,7 +352,7 @@ if (!Element.prototype.querySelectorAll)
       while (nextElement && (nextElement = nextElement.nextSibling))
       {
         if (nextElement.tagName
-          && misago.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
+          && kokone.querySelectorAll.selectors.filter.call(nextElement, cssFilter))
         {
           elements.push(nextElement);
         }
@@ -363,11 +363,11 @@ if (!Element.prototype.querySelectorAll)
   
   
   Element.prototype.querySelectorAll = function(cssRule) {
-    return misago.querySelectorAll.apply(this, arguments);
+    return kokone.querySelectorAll.apply(this, arguments);
   }
   
   document.querySelectorAll = function(cssRule) {
-    return misago.querySelectorAll.apply(document, arguments);
+    return kokone.querySelectorAll.apply(document, arguments);
   }
 }
 

@@ -22,7 +22,7 @@ UI.Notification = function(options)
 UI.Notification.prototype.setPosition = function()
 {
   /*
-  if (misago.browser.ie6)
+  if (kokone.browser.ie6)
   {
     this.container.setStyle({
       position: 'absolute',
