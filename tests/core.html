@@ -2,9 +2,6 @@
 <head>
 </head>
 <body>
-  <script type="text/javascript" src="jsunit.js"></script>
-  <script type="text/javascript" src="../compat/array.js"></script>
-  <script type="text/javascript" src="../compat/core.js"></script>
 
   <div id="test"></div>
   <div id="toto">
@@ -14,7 +11,12 @@
   
   <input type="text" name="titi" style="display:none"/>
 
-  <script type="text/javascript">
+
+<script type="text/javascript" src="jsunit.js"></script>
+<script type="text/javascript" src="loader.js"></script>
+<script type="text/javascript">load_compat('..');</script>
+
+<script type="text/javascript">
 
 Element.prototype.get_id = function() {
   return this.id;

@@ -22,22 +22,26 @@
     </div>
     
     <article class="dtd-example">
-      <p></p>
+      <p class="empty"></p>
     </article>
   </div>
   
-  <p>
+  <p class="c">
     <a href="" class="more" id="bug"></a>
   </p>
 
 
-<script type="text/javascript" src="../compat/array.js"></script>
-<script type="text/javascript" src="../compat/core.js"></script>
-<script type="text/javascript" src="../compat/element.js"></script>
-<script type="text/javascript" src="../compat/selectors.js"></script>
-
 <script type="text/javascript" src="jsunit.js"></script>
+<script type="text/javascript" src="loader.js"></script>
 <script type="text/javascript">
+load_compat('..');
+</script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+// IE will have a lot of failures, since it doesn't understand any HTML5 elements,
+// and looks like it refuses to consider them as elements.
 
 jsUnit.add('document.querySelectorAll', function() {
   jsUnit.assertEquals(typeof document.querySelectorAll, 'function');
@@ -112,11 +116,12 @@ jsUnit.add('div a#nothing .more', function() {
   jsUnit.assertEquals(document.querySelectorAll('div a#nothing .more').length, 0);
 });
 jsUnit.add('div #bug', function() {
-  jsUnit.assertEquals(document.querySelectorAll('div a#link').length, 0);
+  jsUnit.assertEquals(document.querySelectorAll('div a#bug').length, 0);
 });
 
 
 // operators
+
 jsUnit.add('div > p', function() {
   jsUnit.assertEquals(document.querySelectorAll('div > p').length, 2);
 });
@@ -137,11 +142,9 @@ jsUnit.add('section + section.toc', function() {
   jsUnit.assertEquals(document.querySelectorAll('section + section.toc').length, 1);
 });
 
-/*
 jsUnit.add('section ~ section', function() {
   jsUnit.assertEquals(document.querySelectorAll('section ~ section').length, 3);
 });
-*/
 
 jsUnit.add('div, p, a', function() {
   jsUnit.assertEquals(document.querySelectorAll('div, p, a').length, 10);
@@ -153,11 +156,15 @@ jsUnit.add('a[class]', function() {
 jsUnit.add('a[href]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[href]').length, 4);
 });
+
 jsUnit.add('a[class][href]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[class][href]').length, 3);
 });
 jsUnit.add('a[href][lang][class]', function() {
   jsUnit.assertEquals(document.querySelectorAll('a[href][lang][class]').length, 1);
+});
+jsUnit.add('a[lang][class]', function() {
+  jsUnit.assertEquals(document.querySelectorAll('a[lang][class]').length, 1);
 });
 
 jsUnit.add('a[class=edit]', function() {
@@ -189,19 +196,18 @@ jsUnit.add('p:last-child', function() {
 jsUnit.add('p:only-child', function() {
   jsUnit.assertEquals(document.querySelectorAll('p:only-child').length, 1);
 });
-/*
+
 jsUnit.add('div.block :first-child', function() {
-  jsUnit.assertEquals(document.querySelectorAll(':first-child').length, 5);
+  jsUnit.assertEquals(document.querySelectorAll('div.block :first-child').length, 5);
 });
 jsUnit.add('div.block :last-child', function() {
-  jsUnit.assertEquals(document.querySelectorAll(':last-child').length, 5);
+  jsUnit.assertEquals(document.querySelectorAll('div.block :last-child').length, 5);
 });
 jsUnit.add('div.block :only-child', function() {
-  jsUnit.assertEquals(document.querySelectorAll(':only-child').length, 3);
+  jsUnit.assertEquals(document.querySelectorAll('div.block :only-child').length, 2);
 });
-*/
-jsUnit.run();
 
+jsUnit.run();
 
 </script>
 

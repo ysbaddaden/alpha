@@ -126,4 +126,5 @@ UI.Dialog.prototype.setTitle = function(title) {
 }
 
 UI.Dialog.prototype.setContent = UI.Window.prototype.setContent;
+UI.Dialog.prototype.getContent = UI.Window.prototype.getContent;
 

@@ -1,109 +1,57 @@
 
-= JS-compat
+= JS-compat (name to be changed soon)
 
-JS-compat is an obstrusive javascript library that aims at
-fixing, implementing and emulating standard JavaScript and
-DOM in older browsers.
+JS-compat is yet another JavaScript library, but an obstrusive one.
 
 
-== Why another JavaScript library
+== Why?
 
-The basic idea is to permit a developer to run some
-pure javascript and DOM code in Internet Explorer without
-even thinking about it. I like to see my code run with
-(nearly) no change on the different standard compliant
-browsers in the market. Problem is Internet Explorer.
+The initial idea was to create a compatibility library, permitting developers
+to write JavaScript and DOM as they are defined by the ECMAScript and the W3C.
+This means an obstrusive framework, that would transparently add support for
+missing methods, like addEventListener() or querySelectorAll().
 
-A lot of libraries are creating whole framework to 'fix'
-all browsers. It implies to learn complete new syntaxes,
-and doesn't help you to learn either what JavaScript or
-the DOM is. I wanted something that is just DOM and
-JavaScript. That's the reason why it's obstrusive: let's
-just fix things the way standards say they must be.
+I'm sick of having to load tons of JavaScript frameworks, and to learn all of
+these just because I want to use a tool that uses jQuery and another one that
+uses Mootools. I'm sick of having to rewrite a lot of code written in Mootools,
+because I want to use a charting library that's written with jQuery (because
+it's stupid to load multiple libraries) with means I have to understand the
+jQuery syntax --which I never understood, and will certainly never understand.
 
+I love server frameworks, but I can't stand JavaScript libraries. Unless
+you're building a Rich Internet Application, but if that's the case, you'd
+better switch to GWT instead.
 
-== DOM prototypes in IE < 8
+What I want is to be able to do some DOM and JavaScript and see it working in
+most browsers without having to think (too much) about it. I want to be able
+to load a tool at a glimpse (like a charting library) that do not rely on a
+particular library, and that you can just load.
 
-The prefered way to extend objects in JavaScript is throught
-objects' prototype. JavaScript is all about prototypes. Problem
-is IE doesn't implement the DOM prototypes, like Element and
-Event, before IE8. JS-compat thus emulates Element and Event
-when they're undefined.
-
-For instance, if you wish to create a hide() method available
-for all elements, just do:
-
- Element.prototype.hide = function() {
-   // ...
- }
-
-The following problem is elements and events won't be extended
-automatically, and you thus have to extend them manually. We
-don't want to have to think about that, so JS-compat interfaces
-the basic methods, like document.getElementById or
-elm.getElementsByTagName, to always return already extended
-elements.
-
-So you can do:
-
- document.getElementById('elm').hide();
+Of course, behing obstrusive, it certainly collapses with frameworks. I'm sure
+there are tons of memory leakages, too (feel free to send patches!). But it works.
 
 
-== DOM events in IE
+== Organisation
 
-Internet Explorer (even IE8) lacks support for DOM Events, and
-still relies on attachEvent, detachEvent, etc. Js-compat thus
-implements them. Support is limited to the bubbling mode only.
-The capture mode seems harder to emulate and isn't available
-yet (but might be doable). It's also not possible to manually
-create and fire events.
+JS-compat is currently separated in 3 parts :
 
-JS-compat also fixes the Event object passed to the callback
---in fact IE doesn't even pass any Event object. All the
-elements related to the event are fixed: target, relatedTarget,
-currentTarget; 'this' is fixed also; as well as some values,
-like pageX and pageY.
+# 'compat' tries to fix, emulate and implement broken and missing features (yes it's obstrusive).
+# 'addons' adds a few methods that I think are missing.
+# 'ui' proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (this one is unobstrusive).
 
-For instance:
-
- document.getElementById('elm').addEventListener('click', function(evt) {
-   alert(evt.relatedTarget);
- }, false);
+You may just use 'compat' or compat + addons, or compat + addons + ui, or
+just parts of them (be sure not to miss requirements). Whatever you want.
 
 
-== Limitations and concerns
+== TODO
 
-Even thought IE8 has support for getters and setters, older
-releases do not, and I don't think it's possible to emulate
-it without relying on ugly hacks (see
-http://alex.dojotoolkit.org/08/jscript/lettable.html ). This
-fact leads to some difficulties.
-
-For instance, how to return extended elements in IE6/7 for
-related attributes, like firstChild, nextSibling or parentNode?
-Possible solutions are:
-
-* manually extend them (eg: misago.$(elm.parentNode));
-* implement a get(attribute) method that will always return extended elements.
-
-The same question arises for the emulation of Firefox 3.5's
-children, countElementChild, lastElementChild, etc. attributes.
-Those can be emulated throught getters in most browsers, but
-not in IE6 and IE7. Sadly :(
-
-So use whatever method you prefer. Use the get(attribute) method
-if you care about IE6/7, or just don't think about it if you don't
-care about IE6/7.
+* Inject Explorer Canvas (excanvas) from Google into compat, in order to fix the HTML5 canvas element.
+* A Drag And Drop library (is it possible to follow the standards?)
+* An animation library to enable some DHTML.
 
 
-== Backward compatibility
+== COULD DO
 
-New browsers come with nice new features, that are obviously
-lacking in older releases that we still have to support. One
-goal of JS-compat is to implement (or emulate) these when
-they're missing. Of course it's slower, but speed issues can
-be a good reason to encourage users to upgrade.
-
-Here are a few examples: the JSON object, getElementsByClassName
-and querySelectorAll methods, etc.
+* A charting library to draw charts --something that uses SVG and Canvas.
+* A game library, with sprite animations, etc.
 

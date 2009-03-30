@@ -1,5 +1,4 @@
 
-// CHANGED: closeOnOuterClick should now work under IE (untested).
 // TODO: Implement a position:auto case, where the tooltip is displayed at the best place in the visible area (defaulting to top-right).
 
 UI.Picker = function(relativeElement, options)
@@ -141,4 +140,5 @@ UI.Picker.prototype.display    = UI.Window.prototype.display;
 UI.Picker.prototype.hide       = UI.Window.prototype.hide;
 UI.Picker.prototype.destroy    = UI.Window.prototype.destroy;
 UI.Picker.prototype.setContent = UI.Window.prototype.setContent;
+UI.Picker.prototype.getContent = UI.Window.prototype.getContent;
 

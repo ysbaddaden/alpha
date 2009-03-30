@@ -1,5 +1,6 @@
 
-// TODO: Change the default position to auto, when Picker supports it.
+// TODO: Change the default position to auto, when UI.Picker supports it.
+// FIXME: Arrows are broken in IE6? It looks like it doesn't support transparent borders.
 
 UI.Tooltip = function(relativeElement, options)
 {

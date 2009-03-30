@@ -10,7 +10,6 @@ UI.Window.prototype.createContainer = function()
     this.container.id = this.options.id;
   }
   
-  // FIXME: closeOnEscape won't work on IE.
   if (this.options.closeOnEscape)
   {
     this.bounds.closeOnEscape = this.onClose.bind(this);
@@ -65,6 +64,10 @@ UI.Window.prototype.setContent = function(content)
   else {
     this.content.innerHTML = content;
   }
+}
+
+UI.Window.prototype.getContent = function(content) {
+  return this.content;
 }
 
 UI.Window.prototype.display = function()

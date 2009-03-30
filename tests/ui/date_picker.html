@@ -13,26 +13,26 @@
     border-right-color: #888; border-bottom-color: #888; background: #DDD; }
   .picker .content { padding: 4px; background: #F4F4F4; }
   
+  .date-picker { font-size: 10px; }
+  .date-picker .date { font-weight: bold; }
+  .date-picker .weekdays { font-weight: bold; }
+  .date-picker .days { background: #FFF; }
+  .date-picker table { text-align: center; }
+  .date-picker td    { padding: .15em .5em; }
+  .date-picker .days td, .date-picker .before, .date-picker .after { cursor: pointer; }
+  
+  .date-picker .days td:hover { background: #07A; color: #FFF; }
+  .date-picker .today { background: #FFC; }
+  .date-picker .wrong { color: #888; }
+  .date-picker .selected { font-weight: bold; }
+  
   </style>
 </head>
 <body>
 
 <p>
-  <button class="">standard input picker</button>
+  <input type="text" class="date" value="2009-03-15"/>
 </p>
-<p>
-  <button class="top">top</button>
-  <button class="bottom">bottom</button>
-  <button class="left">left</button>
-  <button class="right">right</button>
-</p>
-<p>
-  <button class="top left">top left</button>
-  <button class="top right">top right</button>
-  <button class="bottom left">bottom left</button>
-  <button class="bottom right">bottom right</button>
-</p>
-
 
 <script type="text/javascript" src="../loader.js"></script>
 <script type="text/javascript">
@@ -44,16 +44,11 @@ load_ui('../..');
 <!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
 
-var buttons = document.getElementsByTagName('button');
-Array.prototype.forEach.call(buttons, function(btn)
-{
-  btn.addEventListener('click', function()
-  {
-    var picker = new UI.Picker(btn, {position: btn.className});
-    picker.setContent('a picker');
-    picker.display();
-  }, false);
+var inputs = document.getElementsByTagName('input');
+Array.prototype.forEach.call(inputs, function(input) {
+  new UI.DatePicker(input);
 });
+
 </script>
 
 </body>

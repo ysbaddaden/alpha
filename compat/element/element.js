@@ -112,22 +112,22 @@ if (!Element.prototype.children)
   elm.className = 'something';
   if (elm.getAttribute('class') != 'something')
   {
-    misago._msie_getAttribute = Element.prototype.getAttribute;
+    misago._msie_getAttribute = elm.getAttribute;
     Element.prototype.getAttribute = function(attr)
     {
       if (attr == 'class') {
         attr = 'className';
       }
-      return misago._msie_getAttribute(attr);
+      return this._misago_getAttribute(attr);
     }
     
-    misago._msie_setAttribute = Element.prototype.setAttribute;
+    misago._msie_setAttribute = elm.setAttribute;
     Element.prototype.setAttribute = function(attr, value)
     {
       if (attr == 'class') {
         attr = 'className';
       }
-      return misago._msie_setAttribute(attr, value);
+      return this._misago_setAttribute(attr, value);
     }
   }
 })();

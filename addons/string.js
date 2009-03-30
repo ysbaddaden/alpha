@@ -30,3 +30,7 @@ String.prototype.hyphenize = function()
   return str.replace(/[-]+$/, '');
 }
 
+String.prototype.trim = function() {
+  return this.replace(/^\s+|\s+$/, '');
+}
+
