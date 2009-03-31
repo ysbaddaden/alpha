@@ -39,8 +39,7 @@ UI.ColorPicker = function(input, options)
 		putSlider(i);
 		
 		// the base color
-//  setBaseColor(getHueColor(i));
-		setBaseColor(color);
+    setBaseColor(getHueColor(i));
 		setColor(color);
 	}
 	
@@ -219,6 +218,14 @@ UI.ColorPicker = function(input, options)
 		slider.style.top = pos - Math.floor(slider.getAttribute('height') / 2) + 'px';
 	}
   
+  function getCrosshairPosition()
+  {
+		var c_pos = crosshair.getPosition();
+		var g_pos = gradient.getPosition();
+		c_pos.x -= g_pos.x;
+		c_pos.y -= g_pos.y;
+    return c_pos;
+  }
   
 	// handles the slider
 	function Slider()
@@ -255,9 +262,9 @@ UI.ColorPicker = function(input, options)
 				var pos = getPosition(evt);
 				putSlider(pos);
 				
-				// sets base color
 				setBaseColor(getHueColor(pos));
-				setColor(getGradientColor(data.x, data.y));
+				pos = getCrosshairPosition();
+				setColor(getGradientColor(pos.x, pos.y));
 			}
 		}
 		
