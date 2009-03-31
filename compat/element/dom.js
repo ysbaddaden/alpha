@@ -56,8 +56,6 @@ if (typeof Element == 'undefined')
   }
 
   // Emulates the DOM Element prototype
-  // NOTE: we do not declare 'var Element', because it causes a bug with IE8,
-  // where Element is suddenly undefined for the script.
   Element = new kokone.prototypeEmulator();
 
   // Manually extends an element

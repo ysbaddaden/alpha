@@ -20,7 +20,6 @@ Element.prototype.setStyle = function(property, value)
   }
 }
 
-// IMPROVE: Linearize returned colors.
 Element.prototype.getStyle = function(property)
 {
   if (window.getComputedStyle) {

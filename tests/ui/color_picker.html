@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+  <title>UI.Picker (windows attached to an element)</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <style type="text/css">
+  
+  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; padding: 3em; }
+  body > p { text-align: center; margin: 0; }
+  
+  .picker { border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
+    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
+  .picker .content { padding: 4px; background: #F4F4F4; }
+  
+  .color-picker .content { position: relative; width: 190px; height: 187px; background: #FFF; }
+
+  .color-picker .gradient-wrapper { position: absolute; top: 10px; left: 10px; width: 150px; height: 150px; }
+  .color-picker .gradient         { position: absolute; top: 0; left: 0; background: #F00; }
+  .color-picker .crosshair        { position: absolute; /*top: 152px; left: 152px;*/ }
+
+  .color-picker .hue-wrapper { position: absolute; top: 10px; left: 170px; background: #F00; }
+  .color-picker .hue         { position: absolute; top: 0; left: 0; }
+  .color-picker .slider      { position: absolute; /*top: 7.5px;*/ left: -5px; }
+
+  .color-picker .color     { position: absolute; top: 170px; left: 10px; width: 90px; height: 15px;
+	  border: 1px solid #000; background: #000; }
+  .color-picker input      { position: absolute; top: 170px; left: 110px; display: block; font-size: 11px;
+	  width: 75px; height: 13px; border: 1px inset #666; background: #FFF; color: #333; }
+	
+  </style>
+</head>
+<body>
+
+<p>
+  <input type="text" class="color" value="#FFFFCC"/>
+</p>
+
+<script type="text/javascript" src="../loader.js"></script>
+<script type="text/javascript">
+load_compat('../..');
+load_addons('../..');
+load_ui('../..');
+</script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+var inputs = document.getElementsByTagName('input');
+Array.prototype.forEach.call(inputs, function(input)
+{
+  var picker = new UI.ColorPicker(input);
+  picker.display();
+});
+
+</script>
+
+</body>
+</html>
