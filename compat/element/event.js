@@ -85,14 +85,14 @@ if (!Element.prototype.addEventListener)
           self['_kokone_event_' + type + '_event'] = kokone.event(window.event, self);
           
           // runs the list of listeners for event type
-          for(var i = 0, len = self._kokone_events[type].listeners.length; i < len; i++) {
+          // we use a custom launcher in order for failing listeners not to stop the event dispatch.
+          // see http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/ for explanations.
+          for (var i = 0, len = self._kokone_events[type].listeners.length; i < len; i++) {
             self['_kokone_event_' + type + '_listener'] = self._kokone_events[type].listeners[i];
           }
         },
         custom_launcher: function(evt)
         {
-          // we use a custom launcher in order for failing listeners to not stop the event dispatch.
-          // See http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/ for explanations.
           if (evt.propertyName == '_kokone_event_' + type + '_listener') {
             self['_kokone_event_' + type + '_listener'].call(self, self['_kokone_event_' + type + '_event']);
           }
