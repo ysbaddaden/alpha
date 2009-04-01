@@ -7,20 +7,8 @@ IE bugs :
     Quick fix: check for 'elm.parentNode' and 'elm.parentNode.tagName'.
     
     Maybe I can fix it somehow by overwriting document.createElement,
-    document.removeChild and document.removeNode?
-
-  * 'window' is just useless in IE. You can't get any viewport information out of it.
-    You can't bind events (they won't be called). You have to check
-    'document.documentElement' instead, leading to some burden to the developer: you
-    need to check out the presence of document.documentElement :/
-    
-    I fixed the events, by transparently binding document.documentElement instead
-    of the window object.
-    
-    I can also fix missing values in IE8, using getters. But... what about IE6-7?
-    Maybe throught another 'get(attribute)' method? :(
-    
-    Another solution would be to use IE's proprietary event 'onpropertychange'?
+    document.removeChild and document.removeNode + checking out any property change
+    (using MS's onpropertychange)?
 
   * elm.children[] is broken in IE, since it considers comments as elements. So,
     either filter out comments when using children[] or, preferably, use an output
@@ -41,10 +29,24 @@ IE 8 bugs :
     script, even inside an if block like the following example, because the variable
     will be set to 'undefined' for the whole script, causing the if check to be true!
     
-    if (typeof Element == 'undefined') {
+    if (typeof Element == 'undefined') { // true: Element is undefined, even in IE8!
       var Element = function() {};
     }
 
   * IE8 implements elm.querySelectorAll(), but comes with a restricted support of CSS
-    selectors (CSS2.1 only, and no CSS3 at all).
+    selectors (CSS2.1 only, and no CSS3 at all). It's possible to overload the
+    querySelectorAll prototype, but you can't call the original one. You thus cannot
+    use it for CSS2.1 expressions, or for a speedy getElementsByClassName for instance.
+    
+    You can't do:
+    
+    Element.prototype._msie_querySelectorAll = Element.prototype.querySelectorAll;
+    Element.prototype.getElementsByClassName = function(className) {
+      return Element.prototype._msie_querySelectorAll.call(this, '.' + className); // throws an error: not callable.
+    }
+    
+    Of course you may simply call this.querySelectorAll(className), but if you overload
+    it and the one you write makes use of getElementsByClassName (for simplicity and
+    speed) you're in for some infinite loops :/
+
 

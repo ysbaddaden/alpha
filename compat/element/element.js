@@ -144,3 +144,29 @@ Element.prototype.get = function(attribute)
   }
 }
 
+if (typeof window.innerWidth == 'undefined')
+{
+  // window.innerHeight & window.innerWidth are undefined in IE.
+  if (Object.defineProperty)
+  {
+    // IE8
+    Object.defineProperty(window, 'innerWidth', {get: function() {
+      return document.documentElement.clientWidth;
+    }});
+    Object.defineProperty(window, 'innerHeight', {get: function() {
+      return document.documentElement.clientHeight;
+    }});
+  }
+  else
+  {
+    // IE6-7
+    window.attachEvent('onresize', function()
+    {
+      window.innerWidth  = document.documentElement.clientWidth;
+      window.innerHeight = document.documentElement.clientHeight;
+    });
+    window.innerWidth  = document.documentElement.clientWidth;
+    window.innerHeight = document.documentElement.clientHeight;
+  }
+}
+

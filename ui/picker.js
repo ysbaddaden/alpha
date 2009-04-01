@@ -1,5 +1,6 @@
 
 // TODO: Implement a position:auto case, where the tooltip is displayed at the best place in the visible area (defaulting to top-right).
+// TODO: Remove the closeOnOuterClick event on hide/destroy.
 
 UI.Picker = function(relativeElement, options)
 {
@@ -33,8 +34,9 @@ UI.Picker.prototype.createPicker = function()
   
   if (this.options.closeOnOuterClick)
   {
-    var elm = document.documentElement ? document.documentElement : window;
-    elm.addEventListener('click', function(evt)
+//    var elm = document.documentElement ? document.documentElement : window;
+//    elm.addEventListener('click', function(evt)
+    window.addEventListener('click', function(evt)
     {
       var obj = evt.target;
       do

@@ -13,8 +13,8 @@ UI.Overlay.prototype.display = function()
       position: 'absolute',
       top:  0,
       left: 0,
-      width:  (window.innerWidth  || document.documentElement.clientWidth)  + document.body.scrollLeft + 'px',
-      height: (window.innerHeight || document.documentElement.clientHeight) + document.body.scrollTop  + 'px'
+      width:  (window.innerWidth  /*|| document.documentElement.clientWidth*/)  + document.body.scrollLeft + 'px',
+      height: (window.innerHeight /*|| document.documentElement.clientHeight*/) + document.body.scrollTop  + 'px'
     });
     document.body.appendChild(this.element);
   }

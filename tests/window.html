@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+</head>
+<body>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="loader.js"></script>
+  <script type="text/javascript">
+  load_compat('..');
+  </script>
+
+
+<button id="btn">show viewport's inner size</button>
+
+  <div id="test">test</div>
+  <div id="toto">
+    <div id="tata">tata</div>
+  </div>
+  
+  <input type="text" name="titi" style="display:none"/>
+
+<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+<script type="text/javascript">
+
+console.log(window.innerWidth, window.innerHeight);
+
+document.getElementById('btn').addEventListener('click', function() {
+  console.log(window.innerWidth, window.innerHeight);
+}, false);;
+
+</script>
+
+</body>
+</html>

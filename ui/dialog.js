@@ -81,7 +81,7 @@ UI.Dialog.prototype.setPosition = function()
   }
   else
   {
-    style.top = Math.max(0, (window.innerHeight || document.documentElement.clientHeight) - this.container.offsetHeight) / 2;
+    style.top = Math.max(0, (window.innerHeight /*|| document.documentElement.clientHeight*/) - this.container.offsetHeight) / 2;
     style.top = (style.top + document.body.scrollTop) + 'px';
   }
   
@@ -93,7 +93,7 @@ UI.Dialog.prototype.setPosition = function()
   }
   else
   {
-    style.left = Math.max(0, (window.innerWidth || document.documentElement.clientWidth) - this.container.offsetWidth) / 2;
+    style.left = Math.max(0, (window.innerWidth /*|| document.documentElement.clientWidth*/) - this.container.offsetWidth) / 2;
     style.left = (style.left + document.body.scrollLeft) + 'px';
   }
   

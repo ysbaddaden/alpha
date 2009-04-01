@@ -14,8 +14,9 @@ UI.Window.prototype.createContainer = function()
   {
     this.bounds.closeOnEscape = this.onClose.bind(this);
     
-    var elm = (document.documentElement) ? document.documentElement : window;
-    elm.addEventListener('keyup', this.bounds.closeOnEscape, false);
+//    var elm = (document.documentElement) ? document.documentElement : window;
+//    elm.addEventListener('keyup', this.bounds.closeOnEscape, false);
+    window.addEventListener('keyup', this.bounds.closeOnEscape, false);
   }
 }
 
@@ -32,8 +33,9 @@ UI.Window.prototype.destroy = function()
   
   if (this.bounds.closeOnEscape)
   {
-    var elm = (document.documentElement) ? document.documentElement : window;
-    elm.removeEventListener('keyup', this.bounds.closeOnEscape, false);
+//    var elm = (document.documentElement) ? document.documentElement : window;
+//    elm.removeEventListener('keyup', this.bounds.closeOnEscape, false);
+    window.removeEventListener('keyup', this.bounds.closeOnEscape, false);
   }
   delete this.content;
   delete this.container;
