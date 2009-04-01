@@ -1,4 +1,123 @@
 
+(function()
+{
+  var elm = document.createElement('div');
+  
+  if (typeof elm.children == 'undefined')
+  {
+    Element.prototype._kokone_get_children = function()
+    {
+      var children = [];
+      var child = this.firstChild;
+      while (child)
+      {
+        if (child.nodeType == 1) {
+          children.push(child);
+        }
+        child = child.nextSibling;
+      }
+      return kokone.extendElements ? kokone.extendElements(children) : children;
+    }
+    
+    if (Object.defineProperty) {
+      Object.defineProperty(Element.prototype, 'children', {get: Element.prototype._kokone_get_children});
+    }
+    else if (Element.prototype.__defineGetter__) {
+      Element.prototype.__defineGetter__('children', Element.prototype._kokone_get_children);
+    }
+  }
+
+  if (typeof elm.childElementCount == 'undefined')
+  {
+    Element.prototype._kokone_get_childElementCount = function() {
+      return this.children.length;
+    }
+
+    Element.prototype._kokone_get_firstElementChild = function()
+    {
+      var child = this.firstChild;
+      while (child && child.nodeType != 1) {
+        child = child.nextSibling;
+      }
+      return (child && child.nodeType == 1) ? kokone.$(child) : null;
+    }
+
+    Element.prototype._kokone_get_lastElementChild = function()
+    {
+      var child = this.lastChild;
+      while (child && child.nodeType != 1) {
+        child = child.previousSibling;
+      }
+      return (child && child.nodeType == 1) ? kokone.$(child) : null;
+    }
+
+    Element.prototype._kokone_get_nextElementSibling = function()
+    {
+      var sibling = this.nextSibling;
+      while (sibling && sibling.nodeType != 1) {
+        sibling = sibling.nextSibling;
+      }
+      return (sibling && sibling.nodeType == 1) ? kokone.$(sibling) : null;
+    }
+
+    Element.prototype._kokone_get_previousElementSibling = function()
+    {
+      var sibling = this.previousSibling;
+      while (sibling && sibling.nodeType != 1) {
+        sibling = sibling.previousSibling;
+      }
+      return (sibling && sibling.nodeType == 1) ? kokone.$(sibling) : null;
+    }
+    
+    if (Object.defineProperty)
+    {
+      Object.defineProperty(Element.prototype, 'childElementCount',      {get: Element.prototype._kokone_get_childElementCount});
+      Object.defineProperty(Element.prototype, 'firstElementChild',      {get: Element.prototype._kokone_get_firstElementChild});
+      Object.defineProperty(Element.prototype, 'lastElementChild',       {get: Element.prototype._kokone_get_lastElementChild});
+      Object.defineProperty(Element.prototype, 'nextElementSibling',     {get: Element.prototype._kokone_get_nextElementSibling});
+      Object.defineProperty(Element.prototype, 'previousElementSibling', {get: Element.prototype._kokone_get_previousElementSibling});
+    }
+    else if (Element.prototype.__defineGetter__)
+    {
+      Element.prototype.__defineGetter__('childElementCount',      Element.prototype._kokone_get_childElementCount);
+      Element.prototype.__defineGetter__('firstElementChild',      Element.prototype._kokone_get_firstElementChild);
+      Element.prototype.__defineGetter__('lastElementChild',       Element.prototype._kokone_get_lastElementChild);
+      Element.prototype.__defineGetter__('nextElementSibling',     Element.prototype._kokone_get_nextElementSibling);
+      Element.prototype.__defineGetter__('previousElementSibling', Element.prototype._kokone_get_previousElementSibling);
+    }
+  }
+
+  // makes getAttribute('class') and setAttribute('class') to work in IE < 8.
+  elm.className = 'something';
+  
+  if (elm.getAttribute('class') != 'something')
+  {
+    Element.prototype.getAttribute = function(attr)
+    {
+      if (attr.toLowerCase() == 'class') {
+        attr = 'className';
+      }
+      return this._kokone_getAttribute(attr);
+    }
+    
+    Element.prototype.setAttribute = function(attr, value)
+    {
+      if (attr.toLowerCase() == 'class') {
+        attr = 'className';
+      }
+      return this._kokone_setAttribute(attr, value);
+    }
+  }
+
+  // elm.hasAttribute(name) is missing in IE < 8.
+  if (typeof elm.hasAttribute == 'undefined')
+  {
+    Element.prototype.hasAttribute = function(attr) {
+      return (typeof this.getAttribute(attr) == 'undefined') ? false : true;
+    }
+  }
+})();
+
 /**
  * Returns attributes as extended elements. Also permits
  * to create pseudo getters in MSIE < 8.
@@ -16,119 +135,12 @@ Element.prototype.get = function(attribute)
     return this['_kokone_get_' + attribute]();
   }
   
-  if (this[attribute])
+  if (typeof this[attribute] != 'undefined')
   {
-    if (this[attribute].tagName) {
+    if (this[attribute].nodeType == 1) {
       return kokone.$(this[attribute]);
     }
     return this[attribute];
   }
-  
-  throw new Error("Unknown attribute: " + attribute);
 }
-
-if (!Element.prototype.children)
-{
-  Element.prototype._kokone_get_children = function()
-  {
-    var children = [];
-    var child = this.firstChild;
-    while (child)
-    {
-      if (child.tagName) {
-        children.push(child);
-      }
-      child = child.nextSibling;
-    }
-    return kokone.extendElements ? kokone.extendElements(children) : children;
-  }
-
-  Element.prototype._kokone_get_childElementCount = function()
-  {
-    var child = this.firstChild;
-    var count = 0;
-    while (child)
-    {
-      if (child.tagName) {
-        count += 1;
-      }
-      child = child.nextSibling;
-    }
-    return count;
-  }
-
-  Element.prototype._kokone_get_firstElementChild = function()
-  {
-    var child = this.firstChild;
-    while (child && !child.tagName) {
-      child = child.nextSibling;
-    }
-    return (child && child.tagName) ? kokone.$(child) : null;
-  }
-
-  Element.prototype._kokone_get_lastElementChild = function()
-  {
-    var child = this.lastChild;
-    while (child && !child.tagName) {
-      child = child.previousSibling;
-    }
-    return (child && child.tagName) ? kokone.$(child) : null;
-  }
-
-  Element.prototype._kokone_get_nextElementSibling = function()
-  {
-    var sibling = this.nextSibling;
-    while (sibling && !sibling.tagName) {
-      sibling = sibling.nextSibling;
-    }
-    return (sibling && sibling.tagName) ? kokone.$(sibling) : null;
-  }
-
-  Element.prototype._kokone_get_previousElementSibling = function()
-  {
-    var sibling = this.previousSibling;
-    while (sibling && !sibling.tagName) {
-      sibling = sibling.previousSibling;
-    }
-    return (sibling && sibling.tagName) ? kokone.$(sibling) : null;
-  }
-  
-  if (Element.prototype.__defineGetter__)
-  {
-    Element.prototype.__defineGetter__('children', Element.prototype._kokone_get_children);
-    Element.prototype.__defineGetter__('childElementCount', Element.prototype._kokone_get_childElementCount);
-    Element.prototype.__defineGetter__('firstElementChild', Element.prototype._kokone_get_firstElementChild);
-    Element.prototype.__defineGetter__('lastElementChild', Element.prototype._kokone_get_lastElementChild);
-    Element.prototype.__defineGetter__('nextElementSibling', Element.prototype._kokone_get_nextElementSibling);
-    Element.prototype.__defineGetter__('previousElementSibling', Element.prototype._kokone_get_previousElementSibling);
-  }
-}
-
-(function()
-{
-  // makes getAttribute('class') and setAttribute('class') to work in IE < 8.
-
-  var elm = document.createElement('div');
-  elm.className = 'something';
-  if (elm.getAttribute('class') != 'something')
-  {
-    kokone._msie_getAttribute = elm.getAttribute;
-    Element.prototype.getAttribute = function(attr)
-    {
-      if (attr == 'class') {
-        attr = 'className';
-      }
-      return this._kokone_getAttribute(attr);
-    }
-    
-    kokone._msie_setAttribute = elm.setAttribute;
-    Element.prototype.setAttribute = function(attr, value)
-    {
-      if (attr == 'class') {
-        attr = 'className';
-      }
-      return this._kokone_setAttribute(attr, value);
-    }
-  }
-})();
 

@@ -14,11 +14,19 @@ IE bugs :
     'document.documentElement' instead, leading to some burden to the developer: you
     need to check out the presence of document.documentElement :/
     
-    I could fix the events, by transparently binding document.documentElement instead
+    I fixed the events, by transparently binding document.documentElement instead
     of the window object.
     
     I can also fix missing values in IE8, using getters. But... what about IE6-7?
     Maybe throught another 'get(attribute)' method? :(
+    
+    Another solution would be to use IE's proprietary event 'onpropertychange'?
+
+  * elm.children[] is broken in IE, since it considers comments as elements. So,
+    either filter out comments when using children[] or, preferably, use an output
+    filter on your server that strips out all comments from sent HTML -- it shall
+    fix some CSS bugs too (eg: :first-child not working because the firstc-child is
+    a comment).
 
 
 IE 8 bugs :
