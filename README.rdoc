@@ -43,7 +43,6 @@ You may use Compat or Compat + Addons, or Compat + Addons + UI, or just
 parts of these --be sure not to miss any requirements.
 
 
-
 == TODO
 
 * A Drag And Drop library (is it possible to follow the standards?)
