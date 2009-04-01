@@ -20,6 +20,7 @@ function load_addons(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/addons/string.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/element.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/classname.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/addons/color.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/style.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/ajax.js"></script>');
 }
@@ -35,5 +36,6 @@ function load_ui(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/ui/notification.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/ui/autocompleter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/ui/date_picker.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/ui/color_picker.js"></script>');
 }
 

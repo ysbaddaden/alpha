@@ -21,6 +21,7 @@ cat addons/object.js \
     addons/string.js \
     addons/element.js \
     addons/classname.js \
+    addons/color.js \
     addons/style.js \
     addons/ajax.js \
     > build/addons.js

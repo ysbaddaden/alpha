@@ -1,52 +1,21 @@
 
 TODO:
 
-  * Find a better CSS3 selector engine (faster and full featured). The one I wrote
-    is just a joke (it's slow and limited).
-
   * I'm not that satisfied with the Ajax object. It's just an interface to
     XMLHttpRequest. Maybe if it transparently supported XML and JSON I'd like it
     better :)
+  
+  * A translation library. I'm not sure how to handle this: a per language
+    JSON file; have multiple compiled files per language?
+  
+  * A Drag And Drop library (is it possible to follow the standards, thus have
+    it in Compat?). Implement UI.Sortable as an example.
+  
+  * An animation library (Fx) to enable some DHTML.
 
 
-IE bugs :
+COULD DO:
 
-  * elm.parentNode is always defined, whatever if the element is inserted in the DOM
-    or not. You can't use it to check if the element is inserted or not.
-    
-    Quick fix: check for 'elm.parentNode' and 'elm.parentNode.tagName'.
-    
-    Maybe I can fix it somehow by overwriting document.createElement,
-    document.removeChild and document.removeNode?
-
-  * 'window' is just useless in IE. You can't get any viewport information out of it.
-    You can't bind events (they won't be called). You have to check
-    'document.documentElement' instead, leading to some burden to the developer: you
-    need to check out the presence of document.documentElement :/
-    
-    I could fix the events, by transparently binding document.documentElement instead
-    of the window object.
-    
-    I can also fix missing values in IE8, using getters. But... what about IE6-7?
-    Maybe throught another 'get(attribute)' method? :(
-
-
-IE 8 bugs :
-
-  * In order to be sure to use IE8's engine (and not a compatibility view or whatever)
-    you better declare the X-UA-Compatible HTTP meta (and a valid doctype). Otherwise,
-    expect problems.
-    
-    I personally use: <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-
-  * You musn't declare a 'var Element' or 'var Event' or whatever DOM prototype in a
-    script, even inside an if block like the following example, because the variable
-    will be set to 'undefined' for the whole script, causing the if check to be true!
-    
-    if (typeof Element == 'undefined') {
-      var Element = function() {};
-    }
-
-  * IE8 implements elm.querySelectorAll(), but comes with a restricted support of CSS
-    selectors (CSS2.1 only, and no CSS3 at all).
+  * A charting library to draw charts --something that uses SVG and Canvas.
+  * A game library, with sprite animations, collisions, etc.
 

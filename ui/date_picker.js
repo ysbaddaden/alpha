@@ -1,6 +1,10 @@
 
 // TODO: Test in all browsers.
-// IMPROVE: Update calendar when date is modified in input (and valid).
+// TODO: Propose a display:'replace' option that will display the picker in place of the text input.
+// TODO: Add support for setting the time.
+// IMPROVE: Update calendar when date is manually modified in input (and is valid).
+// IMPROVE: Add capping dates (eg: from 2008-01-01 to 2009-12-31) and do not allow to choose dates that are outside this scope.
+// IMPROVE: Localize months and days.
 
 UI.DatePicker = function(input, options)
 {

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+  <title>Some manual event tests</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	
+  <style type="text/css">
+  #container { background-color: #FEA; text-align: center; }
+  </style>
+</head>
+<body>
+
+<script type="text/javascript" src="../jsunit.js"></script>
+<script type="text/javascript" src="../loader.js"></script>
+<script type="text/javascript">
+load_compat('../..');
+load_addons('../..');
+</script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+
+jsUnit.add('#FFF', function()
+{
+  var color = new Color('#FFF');
+  jsUnit.assertTrue(color.r == 255 && color.g == 255 && color.b == 255
+    && color.h == 0 && color.s == 0 && color.v == 100);
+});
+
+jsUnit.add('#00000A', function()
+{
+  var color = new Color('#00000A');
+  jsUnit.assertTrue(color.r == 0 && color.g == 0 && color.b == 10
+    && color.h == 60 && color.s == 100 && color.v == 4);
+});
+
+jsUnit.add('rgb(0, 0, 0)', function()
+{
+  var color = new Color('rgb(0, 0, 0)');
+  jsUnit.assertTrue(color.r == 0 && color.g == 0 && color.b == 0
+    && color.h == 0 && color.s == 0 && color.v == 0);
+});
+
+jsUnit.add('rgba(127, 0, 0, 0.75)', function()
+{
+  var color = new Color('rgba(127, 0, 0, 0.75)');
+  jsUnit.assertTrue(color.r == 127 && color.g == 0 && color.b == 0 && color.a == 0.75
+    && color.h == 0 && color.s == 100 && color.v == 50);
+});
+
+jsUnit.add('toRGB', function()
+{
+  var color = new Color('#FFC');
+  jsUnit.assertEquals(color.toRGB(), 'rgb(255, 255, 204)');
+});
+
+jsUnit.add('toRGBA', function()
+{
+  var color = new Color('#FFCFFC');
+  jsUnit.assertEquals(color.toRGBA(), 'rgba(255, 207, 252, 1)');
+
+  var color = new Color('rgb(0, 0, 0, 0.25)');
+  jsUnit.assertEquals(color.toRGBA(), 'rgba(0, 0, 0, 0.25)');
+});
+
+jsUnit.add('toString', function()
+{
+  var color = new Color('#FFCFFC');
+  jsUnit.assertEquals(color.toString(), '#FFCFFC');
+});
+
+jsUnit.run();
+
+</script>
+
+</body>
+</html>

@@ -11,20 +11,16 @@ to write JavaScript and DOM as they are defined by the ECMAScript and the W3C.
 This means an obstrusive framework, that would transparently add support for
 missing methods, like addEventListener() or querySelectorAll().
 
-I'm sick of having to load tons of JavaScript frameworks, and to learn all of
-these just because I want to use a tool that uses jQuery and another one that
-uses Mootools, which means I have to understand the jQuery syntax for instance
---which I never understood, and will certainly never. I love frameworks on
-servers, but I can't stand JavaScript's. Unless you're building a Rich Internet
-Application, but in that case, you'd better switch to something like GWT instead.
-
-What I want is to be able to do some DOM and JavaScript and see it working in
-most browsers without having to think (too much) about it. I want to be able
-to have tools that are just JavaScript, and nothing else.
+I've grown sick of having to load tons of JavaScript frameworks, and to learn
+them all, each with it's own syntax, or trying to implement object inheritence.
+I wanted to embrace the joy of object prototypes. I love frameworks on servers,
+but I can't stand JavaScript's. Unless you're building a Rich Internet
+Application, but in that case you'd better switch to something like GWT instead.
 
 Of course, behing obstrusive, it certainly collapses with frameworks, and I'm
-sure there are tons of memory leakages too (feel free to send patches!), but
-it works. That's all I'm asking.
+sure there are tons of memory leakages too (patches are welcome!).
+
+It works in all browsers I've tested. That's all I'm asking.
 
 
 == Organisation
@@ -32,26 +28,13 @@ it works. That's all I'm asking.
 Kokone is currently separated in 3 parts :
 
 * Compat tries to fix, emulate and implement broken and missing features (yes it's obstrusive).
-* Addons adds a few methods that I think are missing.
-* UI proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (this one is not obstrusive).
+* Addons adds a few methods that I think are missing (also obstrusive).
+* UI proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (lives in it's own namespace).
 
-I feel bad about the Addons part, since it goes back to having a library,
-but writing Kokone::UI, I felt the necessity to abstract some code out of
-it...
+I feel bad about the Addons part since it goes back to having a library,
+but writing Kokone::UI I felt the necessity to abstract some code out of
+it. So I did it.
 
-You may use Compat or Compat + Addons, or Compat + Addons + UI, or just
-parts of these --be sure not to miss any requirements.
-
-
-== TODO
-
-* A Drag And Drop library (is it possible to follow the standards?)
-* An animation library to enable some DHTML.
-
-
-== COULD DO
-
-* A charting library to draw charts --something that uses SVG and Canvas.
-* A game library, with sprite animations, etc.
-
+You may use Compat or Compat + Addons, or Compat + Addons + UI, or simply
+parts of these -- just be sure not to miss any requirements.
 
