@@ -75,22 +75,33 @@ if (!Element.prototype.addEventListener)
     if (!this._kokone_events[type])
     {
       var self = this;
+      
+      this['_kokone_event_' + type + '_counter'] = 0; // expando
       this._kokone_events[type] = {
         listeners: [],
         real_listener: function()
         {
           // the event object
-          var event = kokone.event(window.event, self);
-
+          self['_kokone_event_' + type + '_event'] = kokone.event(window.event, self);
+          
           // runs the list of listeners for event type
           for(var i = 0, len = self._kokone_events[type].listeners.length; i < len; i++) {
-            self._kokone_events[type].listeners[i].call(self, event);
+            self['_kokone_event_' + type + '_listener'] = self._kokone_events[type].listeners[i];
+          }
+        },
+        custom_launcher: function(evt)
+        {
+          // we use a custom launcher in order for failing listeners to not stop the event dispatch.
+          // See http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/ for explanations.
+          if (evt.propertyName == '_kokone_event_' + type + '_listener') {
+            self['_kokone_event_' + type + '_listener'].call(self, self['_kokone_event_' + type + '_event']);
           }
         }
       };
 
-      // we attach the real listener (once)
+      // we attach the real listener
       this.attachEvent('on' + type, this._kokone_events[type].real_listener);
+      this.attachEvent('onpropertychange', this._kokone_events[type].custom_launcher);
     }
 
     // adds the listener to internal list
@@ -119,6 +130,7 @@ if (!Element.prototype.addEventListener)
         if (this._kokone_events[type].listeners.length == 0)
         {
           this.detachEvent('on' + type, this._kokone_events[type].real_listener);
+          this.detachEvent('onpropertychange', this._kokone_events[type].custom_launcher);
           delete this._kokone_events[type];
         }
       }
@@ -142,6 +154,7 @@ if (!Element.prototype.addEventListener)
             delete this._kokone_events[type].listeners[i];
           }
           this.detachEvent('on' + type, this._kokone_events[type].real_listener);
+          this.detachEvent('onpropertychange', this._kokone_events[type].custom_launcher);
         }
         delete this._kokone_events[type];
       }
@@ -161,11 +174,6 @@ if (!Element.prototype.addEventListener)
 
   if (typeof window.addEventListener == 'undefined')
   {
-    /*
-    window.addEventListener    = Element.prototype.addEventListener;
-    window.removeEventListener = Element.prototype.removeEventListener;
-    window.clearEvents         = Element.prototype.clearEvents;
-    */
     window.addEventListener = function(type, listener, useCapture) {
       return document.documentElement.addEventListener(type, listener, useCapture);
     }

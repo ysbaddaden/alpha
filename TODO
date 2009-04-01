@@ -12,7 +12,9 @@ TODO:
     it in Compat?). Implement UI.Sortable as an example.
   
   * An animation library (Fx) to enable some DHTML.
-
+  
+  * TODO: Implement custom events (as defined by the DOM).
+    See http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/.
 
 COULD DO:
 

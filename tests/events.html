@@ -25,7 +25,7 @@ function new_input()
   return input;
 }
 
-var _event_type = misago.browser.ie ? 'click' : 'focus';
+var _event_type = kokone.browser.ie ? 'click' : 'focus';
 
 
 jsUnit.add("Event must be prototyped", function() {
@@ -113,6 +113,28 @@ if (Element.prototype.clearEvents)
     elm[_event_type]();
     jsUnit.assertNull(test);
 
+    elm.parentNode.removeChild(elm);
+  });
+  
+  jsUnit.add("throwing an error musn't stop further listeners to be called", function()
+  {
+    var elm  = new_input();
+    var test = null;
+    
+    elm.addEventListener('click', function()
+    {
+      test = true;
+      throw new Error("This ERROR IS EXPECTED, and shouldn't stop calling any further listener.");
+    }, false);
+    
+    elm.addEventListener('click', function()
+    {
+      test = false;
+    }, false);
+    
+    elm[_event_type]();
+    jsUnit.assertFalse(test);
+    
     elm.parentNode.removeChild(elm);
   });
 }
