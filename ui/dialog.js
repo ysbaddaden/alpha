@@ -15,7 +15,7 @@ UI.Dialog = function(options)
     closeOnEscape: true,
     modal: false
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
   this.bounds = {};
   

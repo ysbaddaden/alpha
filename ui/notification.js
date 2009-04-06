@@ -5,7 +5,7 @@ UI.Notification = function(options)
     autoHide: 1000,
     position: ['top', 'right']
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
   this.container = document.createElement('div');
   this.container.className = 'notification ' + this.options.className;

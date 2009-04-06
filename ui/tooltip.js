@@ -17,7 +17,7 @@ UI.Tooltip = function(relativeElement, options)
     closeOnEscape: true,
     closeOnOuterClick: true
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   this.options.className += ' tooltip';
   
   UI.Picker.prototype.createPicker.call(this);

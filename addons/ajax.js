@@ -8,7 +8,7 @@ var Ajax = function(options)
     onSuccess:  function() {},
     onFailure:  function() {}
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
   this.headers = [];
   

@@ -17,7 +17,7 @@ UI.Picker = function(relativeElement, options)
     closeOnEscape: true,
     closeOnOuterClick: true
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
   this.createPicker();
 }

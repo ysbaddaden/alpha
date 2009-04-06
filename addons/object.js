@@ -1,12 +1,12 @@
 
-Object.prototype.merge = function()
+Object.merge = function(obj)
 {
-  for (var a=0, alen=arguments.length; a<alen; a++)
+  for (var a=1, alen=arguments.length; a<alen; a++)
   {
     for (var i in arguments[a]) {
-      this[i] = arguments[a][i];
+      obj[i] = arguments[a][i];
     }
   }
-  return this;
+  return obj;
 }
 

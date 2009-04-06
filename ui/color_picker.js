@@ -8,7 +8,7 @@ UI.ColorPicker = function(input, options)
   this.options = {
     className: ''
   };
-  this.options.merge(this.options, options || {});
+  Object.merge(this.options, options || {});
   
   this.input = kokone.$(input);
   this.input.addEventListener('click', this.display.bind(this), false);

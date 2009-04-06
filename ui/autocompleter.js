@@ -19,7 +19,7 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
     param:    'token',
     minChars: 1
   };
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
   this.list = document.createElement('ul');
   this.list.addEventListener('click',     this.onChoice.bind(this),       false);

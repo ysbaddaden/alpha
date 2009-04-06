@@ -13,7 +13,7 @@ UI.DatePicker = function(input, options)
   this.options = {
     className: ''
   }
-  this.options.merge(options || {});
+  Object.merge(this.options, options || {});
   
 	this.months   = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	this.weekdays = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];

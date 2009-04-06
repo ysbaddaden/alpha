@@ -22,7 +22,9 @@ function load_addons(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/addons/classname.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/color.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/addons/style.js"></script>');
+  
   document.write('<script type="text/javascript" src="' + base_url + '/addons/ajax.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/addons/fx.js"></script>');
 }
 
 function load_ui(base_url)

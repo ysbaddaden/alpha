@@ -23,7 +23,7 @@ Element.prototype.setStyle = function(property, value)
 Element.prototype.getStyle = function(property)
 {
   if (window.getComputedStyle) {
-    return document.defaultView.getComputedStyle(this, null).getPropertyValue(property);
+    var v = document.defaultView.getComputedStyle(this, null).getPropertyValue(property);
   }
   else if (this.currentStyle)
   {
@@ -32,7 +32,12 @@ Element.prototype.getStyle = function(property)
       var alpha = this.filters["DXImageTransform.Microsoft.Alpha"] || this.filters.alpha || {};
       return (alpha.opacity || 100) / 100;
     }
-    return this.currentStyle[property.camelize()];
+    var v = this.currentStyle[property.camelize()];
   }
+
+  if (v.indexOf('#') > -1 || v.indexOf('rgb') > -1 || v.indexOf('rgba') > -1) {
+    var v = new Color(v);
+  }
+  return v;
 }
 
