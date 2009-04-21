@@ -1,13 +1,11 @@
 
-// TODO: Autofill the from value (get current's value).
+// IMPROVE: Transparently handle dimension (em, px, %, etc)?
 
 var Fx = function(self, styles, duration, transition)
 {
   var interval = 40;
-  var occurences = duration / interval, n = 0, nextStyles = {};
-  if (!transition) {
-    transition = 'linear';
-  }
+  var occurences = duration / 1000 * interval, n = 0, nextStyles = {};
+  transition = transition || 'linear';
   
   setInitialState();
   run();
@@ -18,7 +16,7 @@ var Fx = function(self, styles, duration, transition)
     
     if (++n < occurences)
     {
-      setTimeout(run, interval);
+      setTimeout(run, 1000 / interval);
       computeNextIncrement(n);
     }
   }
@@ -31,16 +29,38 @@ var Fx = function(self, styles, duration, transition)
       if (!(styles[s] instanceof Array))
       {
         var v = self.getStyle(s).replace('px', '');
+//        var v = getStyle(s);
         styles[s]     = [v, styles[s]];
         nextStyles[s] = [v, styles[s]];
       }
     }
   }
-  
+  /*
+  function getStyle(s)
+  {
+    switch(s)
+    {
+      case 'width':  return self.clientWidth;
+      case 'height': return self.clientHeight;
+      default: return self.getStyle(s);
+    }
+  }
+  */
   function computeNextIncrement(i)
   {
-    for (var s in styles) {
-      nextStyles[s] = Fx.transitions[transition](styles[s][0], styles[s][1], occurences, i);
+    for (var s in styles)
+    {
+      if (styles[s][0] instanceof Color)
+      {
+        var r = Math.round(Fx.transitions[transition](styles[s][0].r, styles[s][1].r, occurences, n));
+        var g = Math.round(Fx.transitions[transition](styles[s][0].g, styles[s][1].g, occurences, n));
+        var b = Math.round(Fx.transitions[transition](styles[s][0].b, styles[s][1].b, occurences, n));
+        var a = Math.round(Fx.transitions[transition](styles[s][0].a, styles[s][1].a, occurences, n));
+        nextStyles[s] = new Color([r, g, b, a]);
+      }
+      else {
+        nextStyles[s] = Fx.transitions[transition](styles[s][0], styles[s][1], occurences, i);
+      }
     }
   }
 }
@@ -48,15 +68,6 @@ var Fx = function(self, styles, duration, transition)
 Fx.transitions = {};
 Fx.transitions.linear = function(from, to, occurences, n)
 {
-  if (from instanceof Color)
-  {
-    var r = Math.round(Fx.transitions.linear(from.r, to.r, occurences, n));
-    var g = Math.round(Fx.transitions.linear(from.g, to.g, occurences, n));
-    var b = Math.round(Fx.transitions.linear(from.b, to.b, occurences, n));
-    var a = Math.round(Fx.transitions.linear(from.a, to.a, occurences, n));
-    return new Color([r, g, b, a]);
-  }
-  
   if (from == to) {
     return from;
   }

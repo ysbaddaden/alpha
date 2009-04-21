@@ -15,7 +15,7 @@ if (!Element.prototype.addClassName)
 	  if (!this.hasClassName(className))
 	  {
 		  this.className += ' ' + className;
-		  this.className = this.className.replace(/\s+/g, '');
+		  this.className = this.className.replace(/\s+/g, ' ');
 	  }
   }
 }
@@ -25,7 +25,7 @@ if (!Element.prototype.removeClassName)
   Element.prototype.removeClassName = function(className)
   {
 	  var re = new RegExp("(^|\\s)" + className + "(\\s|$)", 'i');
-	  this.className = this.className.replace(re, ' ').replace(/\s+/g, '');
+	  this.className = this.className.replace(re, ' ').replace(/\s+/g, ' ');
   }
 }
 

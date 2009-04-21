@@ -1,0 +1,123 @@
+<html>
+<head>
+
+<style type="text/css">
+
+body { background: #88F; }
+
+.shadow     { position: relative; }
+.shadow .tr { position: absolute; }
+.shadow .br { position: absolute; }
+.shadow .r  { position: absolute; }
+.shadow .b  { position: absolute; }
+.shadow .bl { position: absolute; }
+
+.box { border: 1px solid #888; width: 300px; height: 200px;
+  background: #FFF; margin: 10px; float: left; }
+
+</style>
+
+</head>
+<body>
+
+  <div class="box" id="box1"></div>
+  <div class="box" id="box2"></div>
+  <div class="box" id="box3"></div>
+  
+<script type="text/javascript" src="../jsunit.js"></script>
+<script type="text/javascript" src="../loader.js"></script>
+<script type="text/javascript">load_compat('../..');</script>
+<script type="text/javascript">load_addons('../..');</script>
+
+<script type="text/javascript">
+
+Element.prototype.addShadow = function(size, color)
+{
+  size  = size  || 5;
+  color = color || '#666';
+  var color_from = new Color(color); color_from.a = 1.0;
+  var color_to   = new Color(color); color_to.a   = 0.0;
+  
+  this.addClassName('shadow');
+  
+  var tr  = document.createElement('canvas');
+  var br  = document.createElement('canvas');
+  var bl  = document.createElement('canvas');
+  var r   = document.createElement('canvas');
+  var b   = document.createElement('canvas');
+  
+  tr.setAttribute('width', size);
+  tr.setAttribute('height', size);
+  tr.className = 'shadow tr';
+  tr.setStyle({top: 0, right: -size + 'px'});
+
+  var ctx = tr.getContext('2d');
+  var grad = ctx.createRadialGradient(0, size, 0, 0, size, size);
+  grad.addColorStop(0, color_from.toRGBA());
+  grad.addColorStop(1, color_to.toRGBA());
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  
+  r.setAttribute('width', size);
+  r.setAttribute('height', this.clientHeight - size);
+  r.className = 'shadow r';
+  r.setStyle({top: size + 'px', right: -size + 'px'});
+  
+  var ctx = r.getContext('2d');
+  var grad = ctx.createLinearGradient(0, 0, size, 0);
+  grad.addColorStop(0, color_from.toRGBA());
+  grad.addColorStop(1, color_to.toRGBA());
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, this.clientHeight - size);
+  
+  br.setAttribute('width', size);
+  br.setAttribute('height', size);
+  br.className = 'shadow br';
+  br.setStyle({bottom: -size + 'px', right: -size + 'px'});
+
+  var ctx = br.getContext('2d');
+  var grad = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
+  grad.addColorStop(0, color_from.toRGBA());
+  grad.addColorStop(1, color_to.toRGBA());
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+
+  b.setAttribute('width', this.clientWidth - size);
+  b.setAttribute('height', size);
+  b.className  = 'shadow b';
+  b.setStyle({bottom: -size + 'px', left: size + 'px'});
+
+  var ctx = b.getContext('2d');
+  var grad = ctx.createLinearGradient(0, 0, 0, size);
+  grad.addColorStop(0, color_from.toRGBA());
+  grad.addColorStop(1, color_to.toRGBA());
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, this.clientWidth - size, size);
+
+  bl.setAttribute('width', size);
+  bl.setAttribute('height', size);
+  bl.className = 'shadow bl';
+  bl.setStyle({bottom: -size + 'px', left: 0});
+
+  var ctx = bl.getContext('2d');
+  var grad = ctx.createRadialGradient(size, 0, 0, size, 0, size);
+  grad.addColorStop(0, color_from.toRGBA());
+  grad.addColorStop(1, color_to.toRGBA());
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+
+  this.appendChild(tr);
+  this.appendChild(br);
+  this.appendChild(bl);
+  this.appendChild(r);
+  this.appendChild(b);
+}
+
+document.getElementById('box1').addShadow(5, '#666');
+document.getElementById('box2').addShadow(8, '#696');
+document.getElementById('box3').addShadow(6, '#966');
+
+</script>
+
+</body>
+</html>
