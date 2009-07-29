@@ -14,7 +14,8 @@ var Fx = function(element, styles, options)
 Fx.prototype.options = {
   duration: 500,
   transition: 'linear',
-  interval: 40
+  interval: 40,
+  onComplete: function() {}
 };
 
 Fx.prototype.run = function()
@@ -25,6 +26,9 @@ Fx.prototype.run = function()
   {
     setTimeout(this.run.bind(this), 1000 / this.options.interval);
     this.computeNextIncrement(this.frame);
+  }
+  else {
+    this.options.onComplete();
   }
 }
 
