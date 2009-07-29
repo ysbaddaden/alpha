@@ -1,81 +1,80 @@
 
-// IMPROVE: Transparently handle dimension (em, px, %, etc)?
+// IMPROVE: Transparently handle dimensions (em, px, %, etc)?
 
-var Fx = function(self, styles, duration, transition)
+var Fx = function(element, styles, options)
 {
-  var interval = 40;
-  var occurences = duration / 1000 * interval, n = 0, nextStyles = {};
-  transition = transition || 'linear';
+  this.element = element;
+  this.styles  = styles;
+  this.options = Object.merge(this.options, options);
   
-  setInitialState();
-  run();
+  this.occurences = this.options.duration / 1000 * this.options.interval;
+  this.transition = Fx.transitions[this.options.transition];
+}
+
+Fx.prototype.options = {
+  duration: 500,
+  transition: 'linear',
+  interval: 40
+};
+
+Fx.prototype.run = function()
+{
+  this.element.setStyle(this.nextStyles);
   
-  function run()
+  if (++this.frame < this.occurences)
   {
-    self.setStyle(nextStyles);
-    
-    if (++n < occurences)
+    setTimeout(this.run.bind(this), 1000 / this.options.interval);
+    this.computeNextIncrement(this.frame);
+  }
+}
+
+Fx.prototype.setInitialState = function()
+{
+  this.nextStyles = [];
+  for (var s in this.styles)
+  {
+    if (!(this.styles[s] instanceof Array))
     {
-      setTimeout(run, 1000 / interval);
-      computeNextIncrement(n);
+      var v = this.element.getStyle(s).replace('px', '');
+      this.styles[s]     = [v, this.styles[s]];
+      this.nextStyles[s] = [v, this.styles[s]];
     }
   }
-  
-  function setInitialState()
+  this.frame = 0;
+}
+
+Fx.prototype.computeNextIncrement = function(i)
+{
+  for (var s in this.styles)
   {
-    var nextStyles = [];
-    for (var s in styles)
+    if (this.styles[s][0] instanceof Color)
     {
-      if (!(styles[s] instanceof Array))
-      {
-        var v = self.getStyle(s).replace('px', '');
-//        var v = getStyle(s);
-        styles[s]     = [v, styles[s]];
-        nextStyles[s] = [v, styles[s]];
-      }
+      var r = Math.round(this.transition(this.styles[s][0].r, this.styles[s][1].r, this.occurences, i));
+      var g = Math.round(this.transition(this.styles[s][0].g, this.styles[s][1].g, this.occurences, i));
+      var b = Math.round(this.transition(this.styles[s][0].b, this.styles[s][1].b, this.occurences, i));
+      var a = Math.round(this.transition(this.styles[s][0].a, this.styles[s][1].a, this.occurences, i));
+      this.nextStyles[s] = new Color([r, g, b, a]);
     }
-  }
-  /*
-  function getStyle(s)
-  {
-    switch(s)
-    {
-      case 'width':  return self.clientWidth;
-      case 'height': return self.clientHeight;
-      default: return self.getStyle(s);
-    }
-  }
-  */
-  function computeNextIncrement(i)
-  {
-    for (var s in styles)
-    {
-      if (styles[s][0] instanceof Color)
-      {
-        var r = Math.round(Fx.transitions[transition](styles[s][0].r, styles[s][1].r, occurences, n));
-        var g = Math.round(Fx.transitions[transition](styles[s][0].g, styles[s][1].g, occurences, n));
-        var b = Math.round(Fx.transitions[transition](styles[s][0].b, styles[s][1].b, occurences, n));
-        var a = Math.round(Fx.transitions[transition](styles[s][0].a, styles[s][1].a, occurences, n));
-        nextStyles[s] = new Color([r, g, b, a]);
-      }
-      else {
-        nextStyles[s] = Fx.transitions[transition](styles[s][0], styles[s][1], occurences, i);
-      }
+    else {
+      this.nextStyles[s] = this.transition(this.styles[s][0], this.styles[s][1], this.occurences, i);
     }
   }
 }
 
 Fx.transitions = {};
-Fx.transitions.linear = function(from, to, occurences, n)
+Fx.transitions.linear = function(a, b, occurences, i)
 {
-  if (from == to) {
-    return from;
+  if (a == b) {
+    return a;
   }
-  var v = ((to - from) / occurences * n);
-  return (from > to) ? from + v : v;
+  var v = ((b - a) / occurences * i);
+  return (a > b) ? a + v : v;
 }
 
-Element.prototype.fx = function(styles, duration, transition) {
-  new Fx(this, styles, duration, transition);
+Element.prototype.fx = function(styles, options)
+{
+  var f = new Fx(this, styles, options);
+  f.setInitialState();
+  f.run();
 }
 
