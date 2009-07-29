@@ -1,10 +1,10 @@
 /*
+   new UI.Notification({autoHide: 5000}, 'my custom message');
+   
    var n = new UI.Notification({autoHide: 2500});
    n.setMessage(document.getElementById('notification-message').innerHTML);
- 
- IMPROVE: smooth hide throught a fade-out (duration = 10% of autoHide).
  */
-UI.Notification = function(options)
+UI.Notification = function(options, mesg)
 {
   this.options = {
     autoHide: 1000,
@@ -23,6 +23,10 @@ UI.Notification = function(options)
   this.content = document.createElement('div');
   this.content.className = 'content';
   this.container.appendChild(this.content);
+  
+  if (mesg) {
+    this.setMessage(mesg);
+  }
 }
 
 UI.Notification.prototype.setPosition = function()
@@ -62,7 +66,16 @@ UI.Notification.prototype.display = function()
 
 UI.Notification.prototype.hide = function()
 {
-  this.container.setStyle('display', 'none');
+  if (this.container.fx)
+  {
+    var onComplete = function() {
+      this.container.setStyle('display', 'none');
+    }
+    this.container.fx({opacity: [1.0, 0.0]}, {onComplete: onComplete.bind(this)});
+  }
+  else {
+    this.container.setStyle('display', 'none');
+  }
 //  this.background.setStyle('display', 'none'); // fix for IE
 }
 
