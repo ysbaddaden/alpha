@@ -1,9 +1,15 @@
-
+/*
+   var n = new UI.Notification({autoHide: 2500});
+   n.setMessage(document.getElementById('notification-message').innerHTML);
+ 
+ IMPROVE: smooth hide throught a fade-out (duration = 10% of autoHide).
+ */
 UI.Notification = function(options)
 {
   this.options = {
     autoHide: 1000,
-    position: ['top', 'right']
+    position: ['top', 'right'],
+    className: ''
   };
   Object.merge(this.options, options || {});
   
