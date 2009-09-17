@@ -3,6 +3,8 @@
 {
   HTML5.Placeholder = function(element)
   {
+    /*@cc_on if (element.type == 'password') { return; } @*/
+    
     this.element = element;
     this.elementType = this.element.type;
     
