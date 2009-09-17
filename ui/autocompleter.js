@@ -1,5 +1,6 @@
 
 // TODO: UI.Autocompleter: Add support for multiple tokens.
+// TODO: UI.Autocompleter: Inherit font properties from input (family, size).
 
 UI.Autocompleter = function(input, url, options) {
   this.initialize(input, url, options);
@@ -17,7 +18,8 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
   this.options = {
     method:   'get',
     param:    'token',
-    minChars: 1
+    minChars: 1,
+    className: ''
   };
   Object.merge(this.options, options || {});
   
@@ -33,9 +35,13 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
     onSuccess: this.updateList.bind(this)
   });
   this.debouncedRequest = this.request.debounce(500, this);
-  this.picker = new UI.Picker(this.input, {className: 'autocompleter'});
+  this.picker = new UI.Picker(this.input, {className: 'autocompleter ' + this.options.className});
   
   this.selection = null;
+}
+
+UI.Autocompleter.prototype.setUrl = function(url) {
+  this.ajax.options.url = url;
 }
 
 UI.Autocompleter.prototype.getToken = function() {
@@ -53,8 +59,8 @@ UI.Autocompleter.prototype.onInput = function(evt)
     case 8: case 37: case 39: case 46: return; // backspace, left, right, delete
     case 38: this.moveSelectionUp();   return; // up
     case 40: this.moveSelectionDown(); return; // down
-    case 13: this.chooseSelection(); evt.preventDefault(); return; // enter
-    case 27: this.cancel(); evt.preventDefault(); return; // esc
+    case 13: this.chooseSelection(); evt.stopPropagation(); evt.preventDefault(); return; // enter
+    case 27: this.cancel(); evt.stopPropagation(); evt.preventDefault(); return; // esc
   }
   this.debouncedRequest();
 }
