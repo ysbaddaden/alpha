@@ -78,12 +78,21 @@ Ajax.prototype.send = function(method, url, data)
     data = url;
     url  = null;
   }
-  url = url || this.options.url;
+  url  = url || this.options.url;
   data = this.parseData(data);
   
   this.xhr.onreadystatechange = this.onreadystatechange.bind(this);
-  this.prepareRequest(method, url);
-  this.xhr.send(data);
+  
+  if (method.toUpperCase() == 'POST' || method.toUpperCase() == 'PUT')
+  {
+    this.prepareRequest(method, url);
+    this.xhr.send(data);
+  }
+  else
+  {
+    this.prepareRequest(method, (url.indexOf('?') == -1) ? url + '?' + data : url + '&' + data);
+    this.xhr.send();
+  }
 }
 
 /*
