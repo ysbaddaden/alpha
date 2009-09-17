@@ -19,7 +19,8 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
     method:   'get',
     param:    'token',
     minChars: 1,
-    className: ''
+    className: '',
+    onSelection: function(selection, token) {}
   };
   Object.merge(this.options, options || {});
   
@@ -28,7 +29,7 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
   this.list.addEventListener('mouseover', this.hoverSelection.bind(this), false);
   
   this.input = kokone.$(input);
-  this.input.addEventListener('keyup', this.onInput.bind(this), false);
+  this.input.addEventListener('keypress', this.onInput.bind(this), false);
   
   this.ajax = new Ajax({
     url: url,
@@ -108,7 +109,6 @@ UI.Autocompleter.prototype.markSelection = function(selection)
   if (this.selection) {
     this.selection.removeClassName('selected');
   }
-  
   this.selection = selection;
   this.selection.addClassName('selected');
 }
@@ -148,6 +148,7 @@ UI.Autocompleter.prototype.chooseSelection = function()
   {
     var token = this.selection.innerHTML;
     this.setToken(token);
+    this.options.onSelection(this.selection, token);
     this.cancel();
   }
 }
