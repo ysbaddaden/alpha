@@ -1,6 +1,4 @@
 
-// IMPROVE: Transparently handle dimensions (em, px, %, etc)?
-
 var Fx = function(element, styles, options)
 {
   this.element = element;
