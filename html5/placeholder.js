@@ -1,4 +1,6 @@
 
+// TODO: Remove placeholder on form submit!
+
 HTML5.Placeholder = function(element)
 {
   /*@cc_on if (element.type == 'password') { return; } @*/
@@ -7,7 +9,15 @@ HTML5.Placeholder = function(element)
   this.elementType = this.element.type;
   
   this.element.addEventListener('focus', this.removePlaceholder.bind(this), false);
-  this.element.addEventListener('blur',  this.setPlaceholder.bind(this),  false);
+  this.element.addEventListener('blur',  this.setPlaceholder.bind(this),    false);
+  
+  var parent = this.element.get('parentNode');
+  while (parent && parent.tagName.toLowerCase() != 'form') {
+    parent = parent.get('parentNode');
+  }
+  if (parent && parent.tagName.toLowerCase() == 'form') {
+    parent.addEventListener('submit', this.removePlaceholder.bind(this), false);
+  }
   
   this.setPlaceholder();
 }

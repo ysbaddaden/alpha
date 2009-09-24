@@ -1,0 +1,12 @@
+
+= Kokone::HTML5
+
+HTML5 comes with so many lovely features. Let's implement them!
+
+== TODO
+
+Everything! Work has just started.
+
+There is an autocompleter in Kokone::UI for instance. It should
+be rewritten to follow the datalist API.
+
