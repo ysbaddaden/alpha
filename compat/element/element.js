@@ -87,7 +87,7 @@
     }
   }
 
-  // makes getAttribute('class') and setAttribute('class') to work in IE < 8.
+  // makes getAttribute('class') and setAttribute('class') to work in IE < 8
   elm.className = 'something';
   
   if (elm.getAttribute('class') != 'something')
@@ -109,7 +109,7 @@
     }
   }
 
-  // elm.hasAttribute(name) is missing in IE < 8.
+  // elm.hasAttribute(name) is missing in IE < 8
   if (typeof elm.hasAttribute == 'undefined')
   {
     Element.prototype.hasAttribute = function(attr) {
@@ -122,12 +122,12 @@
  * Returns attributes as extended elements. Also permits
  * to create pseudo getters in MSIE < 8.
  * 
- * Use only if you want or need compatibility with MSIE < 8. 
+ * Use only if you want or need compatibility with MSIE < 8.
  * 
- * elm.get('nextSibling');
- * elm.get('parentNode');
- * elm.get('children');
- * elm.get('nextElementSibling');
+ *   elm.get('nextSibling');
+ *   elm.get('parentNode');
+ *   elm.get('children');
+ *   elm.get('nextElementSibling');
  */
 Element.prototype.get = function(attribute)
 {
@@ -144,29 +144,37 @@ Element.prototype.get = function(attribute)
   }
 }
 
+// window dimensions are undefined in IE
 if (typeof window.innerWidth == 'undefined')
 {
-  // window.innerHeight & window.innerWidth are undefined in IE.
   if (Object.defineProperty)
   {
-    // IE8
+    // IE 8
     Object.defineProperty(window, 'innerWidth', {get: function() {
       return document.documentElement.clientWidth;
     }});
     Object.defineProperty(window, 'innerHeight', {get: function() {
       return document.documentElement.clientHeight;
     }});
+    Object.defineProperty(window, 'pageXOffset', {get: function() {
+      return document.documentElement.scrollWidth;
+    }});
+    Object.defineProperty(window, 'pageYOffset', {get: function() {
+      return document.documentElement.scrollHeight;
+    }});
   }
   else
   {
-    // IE6-7
-    window.attachEvent('onresize', function()
+    // IE 6-7
+    function kokone.__msie_onresize()
     {
       window.innerWidth  = document.documentElement.clientWidth;
       window.innerHeight = document.documentElement.clientHeight;
-    });
-    window.innerWidth  = document.documentElement.clientWidth;
-    window.innerHeight = document.documentElement.clientHeight;
+      window.pageXOffset = document.documentElement.scrollWidth;
+      window.pageYOffset = document.documentElement.scrollHeight;
+    }
+    kokone.__msie_onresize();
+    window.attachEvent('onresize', kokone.__msie_onresize);
   }
 }
 

@@ -1,5 +1,8 @@
 
 // This file is DEPRECATED.
+// 
+// It was a custom implementation of querySelectorAll.
+// It works, but it's too slow and has problems.
 
 if (!Element.prototype.querySelectorAll)
 {
