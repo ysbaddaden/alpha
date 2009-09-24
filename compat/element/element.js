@@ -166,7 +166,7 @@ if (typeof window.innerWidth == 'undefined')
   else
   {
     // IE 6-7
-    function kokone.__msie_onresize()
+    kokone.__msie_onresize = function()
     {
       window.innerWidth  = document.documentElement.clientWidth;
       window.innerHeight = document.documentElement.clientHeight;

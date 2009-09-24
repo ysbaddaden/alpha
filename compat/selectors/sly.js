@@ -723,11 +723,7 @@ if (!Element.prototype.querySelectorAll || kokone.browser.ie)
 	    'empty': function(node) {
 		    return !(node.innerText || node.textContent || '').length;
 	    },
-/*
-	    'contains': function(node, text) {
-		    return (node.innerText || node.textContent || '').indexOf(text) != -1;
-	    },
-*/
+
 	    'index': function(node, index) {
 		    var count = 1;
 		    while ((node = node.previousSibling)) {
@@ -748,12 +744,12 @@ if (!Element.prototype.querySelectorAll || kokone.browser.ie)
 	    'root': function(node) {
 		    return (node.parentNode == node.ownerDocument);
 	    },
-     
-	    // http://www.w3.org/TR/css3-selectors/#target-pseudo
-	    'target': function(node) {
-		    var hash = location.hash;
-		    return (node.id && hash && node.id == hash.slice(1));
-	    }
+
+      // http://www.w3.org/TR/css3-selectors/#target-pseudo
+      'target': function(node) {
+        var hash = location.hash;
+        return (node.id && hash && node.id == hash.slice(1));
+      }
     };
 
     pseudos.first = pseudos['first-child'];
@@ -907,25 +903,6 @@ if (!Element.prototype.querySelectorAll || kokone.browser.ie)
 
     return Sly;
   })();
-  
-  /*
-  Sly.implement('pseudos',
-  {
-	  // All the exhilarating w3 ideas go here for the sake of completeness.
-	  // http://www.w3.org/TR/css3-selectors/#pseudo-classes
-   
-	  // http://www.w3.org/TR/css3-selectors/#root-pseudo
-	  'root': function(node) {
-		  return (node.parentNode == node.ownerDocument);
-	  },
-   
-	  // http://www.w3.org/TR/css3-selectors/#target-pseudo
-	  'target': function(node) {
-		  var hash = location.hash;
-		  return (node.id && hash && node.id == hash.slice(1));
-	  }
-  });
-  */
   
   Element.prototype.querySelectorAll = function(cssRule) {
     return Sly.search(cssRule, this);
