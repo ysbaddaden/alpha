@@ -1,6 +1,4 @@
 
-// TODO: Remove placeholder on form submit!
-
 HTML5.Placeholder = function(element)
 {
   /*@cc_on if (element.type == 'password') { return; } @*/
