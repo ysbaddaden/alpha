@@ -1,12 +1,24 @@
 
 = Kokone::HTML5
 
-HTML5 comes with so many lovely features. Let's implement them!
+HTML5 comes with so many lovely features. We have to use it!
+
 
 == TODO
 
 Everything! Work has just started.
 
+=== Implemented only when missing
+
+Right now browsers don't support HTML5 features, but they will soon.
+We thus need to detect if the browser is lacking or implementing
+natively each feature.
+
+=== Datalists
+
 There is an autocompleter in Kokone::UI for instance. It should
-be rewritten to follow the datalist API.
+be rewritten to follow the datalist standard.
+
+A generic Datalist object could be used to implement search inputs
+(which show the n last searches), and certainly more.
 
