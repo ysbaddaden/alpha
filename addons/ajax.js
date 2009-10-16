@@ -91,27 +91,9 @@ Ajax.prototype.send = function(method, url, data)
   else
   {
     this.prepareRequest(method, (url.indexOf('?') == -1) ? url + '?' + data : url + '&' + data);
-    this.xhr.send();
+    this.xhr.send('');
   }
 }
-
-/*
-Ajax.prototype.get = function(url, data) {
-  this.send('GET', url, data);
-}
-
-Ajax.prototype.post = function(url, data) {
-  this.send('POST', url, data);
-}
-
-Ajax.prototype.put = function(url, data) {
-  this.send('PUT', url, data);
-}
-
-Ajax.prototype.delete = function(url, data) {
-  this.send('DELETE', url, data);
-}
-*/
 
 Ajax.prototype.abort = function() {
   this.xhr.abort();
