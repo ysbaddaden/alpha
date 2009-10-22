@@ -91,7 +91,7 @@ Ajax.prototype.send = function(method, url, data)
   else
   {
     this.prepareRequest(method, (url.indexOf('?') == -1) ? url + '?' + data : url + '&' + data);
-    this.xhr.send();
+    this.xhr.send('');
   }
 }
 
