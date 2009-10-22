@@ -22,7 +22,17 @@
 
 <form method="get" action="#">
   <p>
+    Single token:
     <input type="text" name="autocomplete" id="autocomplete" autocomplete="off"/>
+    (1 character minimum)
+  </p>
+</form>
+
+<form method="get" action="#">
+  <p>
+    Multiple tokens:
+    <input type="text" name="autocomplete" id="autocomplete-many" autocomplete="off"/>
+    (2 characters minimum, using ',' as token separator)
   </p>
 </form>
 
@@ -36,9 +46,8 @@ load_ui('../..');
 
 <!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
-
-var autocompleter = new UI.Autocompleter('autocomplete', '../ajax/autocompleter.html');
-
+var autocompleter = new UI.Autocompleter('autocomplete',      '../ajax/autocompleter.html');
+var autocompleter = new UI.Autocompleter('autocomplete-many', '../ajax/autocompleter.html', {minChars: 2, multipleTokens: true});
 </script>
 
 </body>
