@@ -19,6 +19,8 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
     method:   'get',
     param:    'token',
     minChars: 1,
+    multipleTokens: true,
+    tokenSeparator: ',',
     className: '',
     onSelection: function(selection, token) {}
   };
@@ -41,18 +43,70 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
   this.selection = null;
 }
 
-UI.Autocompleter.prototype.setUrl = function(url) {
+UI.Autocompleter.prototype.setUrl = function(url)
+{
   this.ajax.options.url = url;
 }
 
-UI.Autocompleter.prototype.getToken = function() {
-  return this.input.value;
+UI.Autocompleter.prototype.getToken = function()
+{
+  var token;
+  
+	if (this.options.multipleTokens &&
+	  this.input.value.indexOf(this.options.tokenSeparator) > -1)
+	{
+		// gets caret position
+		var caretPosition = this.input.value.length;
+		if (document.selection)
+		{
+			// IE
+			this.input.focus();
+			var sel = document.selection.createRange();
+			sel.moveStart('character', -this.input.value.length);
+			caretPosition = sel.text.length;
+		}
+		else if (this.input.selectionStart || this.input.selectionStart == '0') {
+			caretPosition = this.input.selectionStart;
+		}
+		
+		// gets currently edited token
+		this.tokenIndex = this.input.value.substr(0, caretPosition).split(this.options.tokenSeparator).length - 1;
+		token = this.input.value.split(this.options.tokenSeparator)[this.tokenIndex];
+	}
+	else {
+	  token = this.input.value;
+	}
+  return token.trim();
 }
 
-UI.Autocompleter.prototype.setToken = function(token) {
-  return this.input.value = token;
+UI.Autocompleter.prototype.setToken = function(token)
+{
+	if (this.options.multipleTokens &&
+	  this.input.value.indexOf(this.options.tokenSeparator) > -1)
+	{
+		// updates edited token
+		var tokens = this.input.value.split(this.options.tokenSeparator);
+		tokens[this.tokenIndex] = token;
+		
+		// updates input
+	  var separator = this.options.tokenSeparator + ' ';
+		var value = '';
+		for (var i = 0; i < tokens.length; i++)
+		{
+			tokens[i] = tokens[i].trim();
+			if (tokens[i] != '') {
+				value += tokens[i] + separator;
+			}
+		}
+		this.input.value = value;
+	}
+	else {
+    return this.input.value = token;
+  }
 }
 
+// TODO: If multipleTokens & keyCode is tokenSeparator: do cancel, since we are now editing another token.
+// TODO: If multipleTokens & left/right keyCode: cancel if we changed from one token to another.
 UI.Autocompleter.prototype.onInput = function(evt)
 {
   switch(evt.keyCode)
