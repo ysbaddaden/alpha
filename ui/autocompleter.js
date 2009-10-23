@@ -1,5 +1,4 @@
 
-// TODO: UI.Autocompleter: Add support for multiple tokens.
 // TODO: UI.Autocompleter: Inherit font properties from input (family, size).
 
 UI.Autocompleter = function(input, url, options) {
@@ -19,7 +18,7 @@ UI.Autocompleter.prototype.initialize = function(input, url, options)
     method:   'get',
     param:    'token',
     minChars: 1,
-    multipleTokens: true,
+    multipleTokens: false,
     tokenSeparator: ',',
     className: '',
     onSelection: function(selection, token) {}
@@ -105,8 +104,7 @@ UI.Autocompleter.prototype.setToken = function(token)
   }
 }
 
-// TODO: If multipleTokens & keyCode is tokenSeparator: do cancel, since we are now editing another token.
-// TODO: If multipleTokens & left/right keyCode: cancel if we changed from one token to another.
+// IMPROVE: If multipleTokens & left/right keyCode: cancel if we changed from one token to another.
 UI.Autocompleter.prototype.onInput = function(evt)
 {
   switch(evt.keyCode)
@@ -116,6 +114,13 @@ UI.Autocompleter.prototype.onInput = function(evt)
     case 40: this.moveSelectionDown(); return; // down
     case 13: this.chooseSelection(); evt.stopPropagation(); evt.preventDefault(); return; // enter
     case 27: this.cancel(); evt.stopPropagation(); evt.preventDefault(); return; // esc
+    default:
+      if (this.options.multipleTokens
+        && String.fromCharCode(evt.which) == this.options.tokenSeparator)
+      {
+        this.cancel();
+        return;
+      }
   }
   this.debouncedRequest();
 }
