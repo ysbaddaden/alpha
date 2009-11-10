@@ -45,5 +45,6 @@ function load_html5(base_url)
 {
   document.write('<script type="text/javascript" src="' + base_url + '/html5/html5.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/html5/placeholder.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/html5/datalist.js"></script>');
 }
 

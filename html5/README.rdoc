@@ -3,7 +3,6 @@
 
 HTML5 comes with so many lovely features. We have to use it!
 
-
 == TODO
 
 Everything! Work has just started.
@@ -14,11 +13,12 @@ Right now browsers don't support HTML5 features, but they will soon.
 We thus need to detect if the browser is lacking or implementing
 natively each feature.
 
+See http://diveintohtml5.org/detect.html
+
 === Datalists
 
-There is an autocompleter in Kokone::UI for instance. It should
-be rewritten to follow the datalist standard.
-
-A generic Datalist object could be used to implement search inputs
-(which show the n last searches), and certainly more.
+There is an autocompleter in Kokone::UI. It should be rewritten to
+follow the datalist standard. A generic Datalist object could be
+used to implement search inputs (which show the n last searches)
+for instance, and certainly more.
 
