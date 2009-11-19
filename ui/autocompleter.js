@@ -205,7 +205,7 @@ UI.Autocompleter.prototype.chooseSelection = function()
 {
   if (this.selection)
   {
-    var token = this.selection.innerHTML;
+    var token = this.selection.textContent;
     this.setToken(token);
     this.options.onSelection(this.selection, token);
     this.cancel();

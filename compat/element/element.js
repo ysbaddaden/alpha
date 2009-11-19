@@ -3,6 +3,26 @@
 {
   var elm = document.createElement('div');
   
+  if (typeof elm.textContent == 'undefined')
+  {
+    Element.prototype._kokone_get_textContent = function ()
+    {
+      if (typeof this.innerText == 'undefined') {
+        return this.innerText;
+      }
+      var r = this.ownerDocument.createRange();
+      r.selectNodeContents(this);
+      return r.toString();
+    }
+    
+    if (Object.defineProperty) {
+      Object.defineProperty(Element.prototype, 'textContent', {get: Element.prototype._kokone_get_textContent});
+    }
+    else if (Element.prototype.__defineGetter__) {
+      Element.prototype.__defineGetter__('textContent', Element.prototype._kokone_get_textContent);
+    }
+  }
+  
   if (typeof elm.children == 'undefined')
   {
     Element.prototype._kokone_get_children = function()
