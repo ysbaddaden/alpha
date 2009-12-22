@@ -7,18 +7,20 @@ UI.Overlay = function()
 
 UI.Overlay.prototype.display = function()
 {
-  if (!this.element.parentNode || !this.element.parentNode.tagName)
-  {
-    this.element.setStyle({
-      position: 'absolute',
-      top:  0,
-      left: 0,
-      width:  (window.innerWidth  /*|| document.documentElement.clientWidth*/)  + document.body.scrollLeft + 'px',
-      height: (window.innerHeight /*|| document.documentElement.clientHeight*/) + document.body.scrollTop  + 'px'
-    });
+  if (!this.element.parentNode || !this.element.parentNode.tagName) {
     document.body.appendChild(this.element);
   }
-  this.element.setStyle('display', '');
+  
+  var innerHeight = (window.innerHeight || document.documentElement.clientHeight);
+  var innerWidth  = (window.innerWidth  || document.documentElement.clientWidth);
+  this.element.setStyle({
+    display: '',
+    position: 'absolute',
+    top:  0,
+    left: 0,
+    width:  ((document.body.clientWidth > innerWidth) ? document.body.clientWidth : innerWidth) + 'px',
+    height: ((document.body.clientWidth > innerWidth) ? document.body.clientWidth : innerWidth)  + 'px'
+  });
 }
 
 UI.Overlay.prototype.hide = function() {
