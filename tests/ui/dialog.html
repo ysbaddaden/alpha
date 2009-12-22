@@ -23,13 +23,21 @@
     border: 1px solid; border-top-color: #888; border-left-color: #888;
     border-right-color: #BBB; border-bottom-color: #BBB; }
   
+  p + p { margin: 300px 0 0; }
+  
   </style>
 </head>
 <body>
 
 <p>
-  <button id="open-dialog">click-me</button>
+  <button class="open-dialog">click-me</button>
 </p>
+
+<p>
+  <button class="open-dialog">click-me</button>
+</p>
+
+<p>&nbsp;</p>
 
 <script type="text/javascript" src="../loader.js"></script>
 <script type="text/javascript">
@@ -41,18 +49,21 @@ load_ui('../..');
 <!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
 
-document.getElementById('open-dialog').addEventListener('click', function()
+var buttons = document.getElementsByClassName('open-dialog');
+Array.prototype.forEach.call(buttons, function(button)
 {
-  var dialog = new UI.Dialog({modal: true, position: ['center', 'middle']});
-  
-  dialog.setTitle('File Manager');
-  
-  var p = document.createElement('p');
-  p.innerHTML = 'this is some content';
-  dialog.setContent(p);
-  
-  dialog.display();
-}, false);
+  button.addEventListener('click', function()
+  {
+    var dialog = new UI.Dialog({modal: true, position: ['center', 'middle']});
+    dialog.setTitle('File Manager');
+    
+    var p = document.createElement('p');
+    p.innerHTML = 'this is some content';
+    dialog.setContent(p);
+    
+    dialog.display();
+  }, false);
+});
 
 </script>
 
