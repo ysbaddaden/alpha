@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<script type="text/javascript">document.createElement('datalist');</script>
+  <style type="text/css">
+  
+  body, input { font: normal 14px/1.5 helvetica, arial, sans-serif; }
+  
+  .placeholder { color: #666; font-style: italic; }
+  
+  datalist { display: none; visibility: hidden; position: absolute;
+    border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
+    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
+  datalist option, datalist span { padding: 2px; background: #FFF; }
+  datalist option.selected, datalist span.selected { background: #07A; color: #FFF; }
+  datalist span { display: block; }
+  
+  </style>
+</head>
+<body>
+
+  <form method="get" action="#">
+    <p>Datalist tests:</p>
+    <p>
+      <input type="text" name="town" list="towns" placeholder="Select a town" autocomplete="off"/>
+      <datalist id="towns">
+        <option value="1"><span class="1">London</span></option>
+        <option value="2"><span class="2">New-York</span></option>
+        <option value="3"><span class="3">Paris</span></option>
+      </datalist>
+    </p>
+    <p>
+      <input type="submit"/>
+    </p>
+  </form>
+  
+  <script type="text/javascript" src="../jsunit.js"></script>
+  <script type="text/javascript" src="../loader.js"></script>
+  <script type="text/javascript">
+  load_compat('../..');
+  load_addons('../..');
+  load_html5('../..');
+  </script>
+</body>
+</html>

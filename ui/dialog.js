@@ -6,14 +6,14 @@
 UI.Dialog = function(options)
 {
   this.options = {
-    id: '',
-    className: '',
-    titlebar: true,
-    title: '',
-    position: 'center',
-    onClose: 'destroy',
+    id:            '',
+    className:     '',
+    titlebar:      true,
+    title:         '',
+    position:      'center',
+    onClose:       'destroy',
+    modal:         false,
     closeOnEscape: true,
-    modal: false
   };
   Object.merge(this.options, options || {});
   
@@ -81,8 +81,8 @@ UI.Dialog.prototype.setPosition = function()
   }
   else
   {
-    style.top = Math.max(0, (window.innerHeight /*|| document.documentElement.clientHeight*/) - this.container.offsetHeight) / 2;
-    style.top = (style.top + document.body.scrollTop) + 'px';
+    style.top = Math.max(0, (window.innerHeight || document.documentElement.clientHeight) - this.container.offsetHeight) / 2
+      + (window.pageYOffset || document.documentElement.scrollTop) + 'px';
   }
   
   if (position.left) {
@@ -93,8 +93,8 @@ UI.Dialog.prototype.setPosition = function()
   }
   else
   {
-    style.left = Math.max(0, (window.innerWidth /*|| document.documentElement.clientWidth*/) - this.container.offsetWidth) / 2;
-    style.left = (style.left + document.body.scrollLeft) + 'px';
+    style.left = Math.max(0, (window.innerWidth  || document.documentElement.clientWidth) - this.container.offsetWidth)  / 2
+      + (window.pageXOffset || document.documentElement.scrollLeft) + 'px';
   }
   
   this.container.setStyle(style);
