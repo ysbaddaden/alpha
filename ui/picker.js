@@ -1,6 +1,5 @@
 
-// TODO: Implement a position:auto case, where the tooltip is displayed at the best place in the visible area (defaulting to top-right).
-// TODO: Remove the closeOnOuterClick event on hide/destroy.
+// TODO: Implement a position:auto case, where the tooltip is displayed at the best place in the visible area (starting from top-right).
 
 UI.Picker = function(relativeElement, options)
 {
@@ -34,9 +33,7 @@ UI.Picker.prototype.createPicker = function()
   
   if (this.options.closeOnOuterClick)
   {
-//    var elm = document.documentElement ? document.documentElement : window;
-//    elm.addEventListener('click', function(evt)
-    window.addEventListener('click', function(evt)
+    this.bounds.closeOnOuterClick = function(evt)
     {
       var obj = evt.target;
       do
@@ -48,9 +45,11 @@ UI.Picker.prototype.createPicker = function()
         }
       }
       while(obj = obj.parentNode);
-      
       this.onClose();
-    }.bind(this), false);
+    }.bind(this);
+//    var elm = document.documentElement ? document.documentElement : window;
+//    elm.addEventListener('click', function(evt)
+    window.addEventListener('click', this.bounds.closeOnOuterClick, false);
   }
 }
 
@@ -137,10 +136,15 @@ UI.Picker.prototype.setPosition = function()
   this.container.setStyle(style);
 }
 
+UI.Picker.prototype.destroy = function()
+{
+  window.removeEventListener('click', this.bounds.closeOnOuterClick, false);
+  UI.Window.prototype.destroy.call(this);
+}
+
 UI.Picker.prototype.onClose    = UI.Window.prototype.onClose;
 UI.Picker.prototype.display    = UI.Window.prototype.display;
 UI.Picker.prototype.hide       = UI.Window.prototype.hide;
-UI.Picker.prototype.destroy    = UI.Window.prototype.destroy;
 UI.Picker.prototype.setContent = UI.Window.prototype.setContent;
 UI.Picker.prototype.getContent = UI.Window.prototype.getContent;
 
