@@ -12,7 +12,9 @@ UI.Window.prototype.createContainer = function()
   
   if (this.options.closeOnEscape)
   {
-    this.bounds.closeOnEscape = this.onClose.bind(this);
+    this.bounds.closeOnEscape = function() {
+      this.onClose();
+    }.bind(this);
     
 //    var elm = (document.documentElement) ? document.documentElement : window;
 //    elm.addEventListener('keyup', this.bounds.closeOnEscape, false);
