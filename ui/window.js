@@ -1,7 +1,6 @@
 
-UI.Window = function() {
-  throw new Error("UI.Window can't be instanciated.");  
-}
+UI.Window = function() {}
+UI.Window.prototype.bounds = {};
 
 UI.Window.prototype.createContainer = function()
 {

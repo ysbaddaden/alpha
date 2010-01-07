@@ -34,7 +34,7 @@ UI.Dialog = function(options)
   }
 }
 
-UI.Dialog.prototype.bounds = {};
+UI.Dialog.prototype = new UI.Window();
 
 UI.Dialog.prototype.createTitlebar = function()
 {
@@ -108,8 +108,6 @@ UI.Dialog.prototype.display = function()
   UI.Window.prototype.display.call(this);
 }
 
-UI.Dialog.prototype.hide    = UI.Window.prototype.hide;
-UI.Dialog.prototype.onClose = UI.Window.prototype.onClose;
 UI.Dialog.prototype.destroy = function()
 {
   if (this.options.modal) {
@@ -124,7 +122,4 @@ UI.Dialog.prototype.destroy = function()
 UI.Dialog.prototype.setTitle = function(title) {
   this.title.innerHTML = title;
 }
-
-UI.Dialog.prototype.setContent = UI.Window.prototype.setContent;
-UI.Dialog.prototype.getContent = UI.Window.prototype.getContent;
 

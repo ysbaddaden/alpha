@@ -21,6 +21,8 @@ UI.Picker = function(relativeElement, options)
   this.createPicker();
 }
 
+UI.Picker.prototype = new UI.Window();
+
 UI.Picker.prototype.createPicker = function()
 {
   UI.Window.prototype.createContainer.call(this);
@@ -52,8 +54,6 @@ UI.Picker.prototype.createPicker = function()
     window.addEventListener('click', this.bounds.closeOnOuterClick, false);
   }
 }
-
-UI.Picker.prototype.bounds = {};
 
 UI.Picker.prototype.computePosition = function()
 {
@@ -141,10 +141,4 @@ UI.Picker.prototype.destroy = function()
   window.removeEventListener('click', this.bounds.closeOnOuterClick, false);
   UI.Window.prototype.destroy.call(this);
 }
-
-UI.Picker.prototype.onClose    = UI.Window.prototype.onClose;
-UI.Picker.prototype.display    = UI.Window.prototype.display;
-UI.Picker.prototype.hide       = UI.Window.prototype.hide;
-UI.Picker.prototype.setContent = UI.Window.prototype.setContent;
-UI.Picker.prototype.getContent = UI.Window.prototype.getContent;
 
