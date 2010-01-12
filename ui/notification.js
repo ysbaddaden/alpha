@@ -15,15 +15,7 @@ UI.Notification = function(options, mesg)
   
   this.container = document.createElement('div');
   this.container.className = 'notification ' + this.options.className;
-  /*
-  this.background = document.createElement('div');
-  this.background.className = 'background';
-  this.container.appendChild(this.background);
   
-  this.content = document.createElement('div');
-  this.content.className = 'content';
-  this.container.appendChild(this.content);
-  */
   if (mesg) {
     this.setMessage(mesg);
   }
@@ -39,15 +31,6 @@ UI.Notification.prototype.setPosition = function()
       left: this.container.getStyle('left') + document.documentElement.scrollLeft + 'px'
     });
   }
-  /*
-  this.background.setStyle({
-    position: 'absolute',
-    top:  0,
-    left: 0,
-    width:  this.container.offsetWidth + 'px',
-    height: this.container.offsetHeight + 'px'
-  });
-  */
 }
 
 UI.Notification.prototype.display = function()
@@ -76,20 +59,16 @@ UI.Notification.prototype.hide = function()
   else {
     this.container.setStyle('display', 'none');
   }
-//  this.background.setStyle('display', 'none'); // fix for IE
 }
 
 UI.Notification.prototype.destroy = function()
 {
   this.container.parentNode.removeChild(this.container);
   delete this.container;
-//  delete this.background;
-//  delete this.content;
 }
 
 UI.Notification.prototype.setMessage = function(msg)
 {
-//  this.content.innerHTML = msg;
   this.container.innerHTML = msg;
   this.display();
 }
