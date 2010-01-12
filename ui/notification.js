@@ -15,7 +15,7 @@ UI.Notification = function(options, mesg)
   
   this.container = document.createElement('div');
   this.container.className = 'notification ' + this.options.className;
-  
+  /*
   this.background = document.createElement('div');
   this.background.className = 'background';
   this.container.appendChild(this.background);
@@ -23,7 +23,7 @@ UI.Notification = function(options, mesg)
   this.content = document.createElement('div');
   this.content.className = 'content';
   this.container.appendChild(this.content);
-  
+  */
   if (mesg) {
     this.setMessage(mesg);
   }
@@ -31,16 +31,15 @@ UI.Notification = function(options, mesg)
 
 UI.Notification.prototype.setPosition = function()
 {
-  /*
   if (kokone.browser.ie6)
   {
     this.container.setStyle({
       position: 'absolute',
-      top:  this.container.getStyle('top')  + document.body.scrollTop  + 'px',
-      left: this.container.getStyle('left') + document.body.scrollLeft + 'px'
+      top:  this.container.getStyle('top')  + document.documentElement.scrollTop  + 'px',
+      left: this.container.getStyle('left') + document.documentElement.scrollLeft + 'px'
     });
   }
-  */
+  /*
   this.background.setStyle({
     position: 'absolute',
     top:  0,
@@ -48,6 +47,7 @@ UI.Notification.prototype.setPosition = function()
     width:  this.container.offsetWidth + 'px',
     height: this.container.offsetHeight + 'px'
   });
+  */
 }
 
 UI.Notification.prototype.display = function()
@@ -56,7 +56,7 @@ UI.Notification.prototype.display = function()
     document.body.appendChild(this.container);
   }
   
-  this.setPosition.call(this);
+  this.setPosition();
   this.container.setStyle('display', 'block');
   
   if (this.options.autoHide > 0) {
@@ -66,7 +66,7 @@ UI.Notification.prototype.display = function()
 
 UI.Notification.prototype.hide = function()
 {
-  if (this.container.fx)
+  if (this.container.fx && !kokone.browser.ie)
   {
     var onComplete = function() {
       this.container.setStyle('display', 'none');
@@ -83,13 +83,14 @@ UI.Notification.prototype.destroy = function()
 {
   this.container.parentNode.removeChild(this.container);
   delete this.container;
-  delete this.background;
-  delete this.content;
+//  delete this.background;
+//  delete this.content;
 }
 
 UI.Notification.prototype.setMessage = function(msg)
 {
-  this.content.innerHTML = msg;
+//  this.content.innerHTML = msg;
+  this.container.innerHTML = msg;
   this.display();
 }
 
