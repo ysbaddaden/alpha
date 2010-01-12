@@ -13,9 +13,6 @@ UI.Window.prototype.createContainer = function()
   if (this.options.closeOnEscape)
   {
     this.bounds.closeOnEscape = this.onClose.bind(this);
-    
-//    var elm = (document.documentElement) ? document.documentElement : window;
-//    elm.addEventListener('keyup', this.bounds.closeOnEscape, false);
     window.addEventListener('keyup', this.bounds.closeOnEscape, false);
   }
 }
@@ -25,16 +22,27 @@ UI.Window.prototype.createContent = function()
   this.content = document.createElement('div');
   this.content.className = 'content';
   this.container.appendChild(this.content);
+  /*
+  if (kokone.browser.ie6)
+  {
+    // iframe tricks IE6, which places select inputs over positionned divs :/
+    var iframe = document.createElement('iframe');
+    iframe.src = "javascript:'<html></html>';";
+    iframe.style.cssText += ';position:absolute;border:0;' +
+      'top:0;left:0;width:100%;height:100%;overflow:hidden;';
+    
+    this.container.firstChild ?
+      this.container.insertBefore(iframe, this.container.firstChild) :
+      this.container.appendChild(iframe);
+  }
+  */
 }
 
 UI.Window.prototype.destroy = function()
 {
   this.container.parentNode.removeChild(this.container);
   
-  if (this.bounds.closeOnEscape)
-  {
-//    var elm = (document.documentElement) ? document.documentElement : window;
-//    elm.removeEventListener('keyup', this.bounds.closeOnEscape, false);
+  if (this.bounds.closeOnEscape) {
     window.removeEventListener('keyup', this.bounds.closeOnEscape, false);
   }
   delete this.content;
@@ -90,5 +98,9 @@ UI.Window.prototype.hide = function()
   if (this.options.modal) {
     this.overlay.hide();
   }
+}
+
+UI.Window.prototype.setPosition = function(position) {
+  this.container.setStyle(position);
 }
 

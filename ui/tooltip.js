@@ -73,7 +73,7 @@ UI.Tooltip.prototype.setContainerPosition = function(pos)
   }
   this.container.setStyle(style);
 }
-  
+
 UI.Tooltip.prototype.setArrowPosition = function(pos)
 {
   var style = {};

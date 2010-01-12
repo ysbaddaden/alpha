@@ -13,7 +13,7 @@ UI.Dialog = function(options)
     position:      'center',
     onClose:       'destroy',
     modal:         false,
-    closeOnEscape: true,
+    closeOnEscape: true
   };
   Object.merge(this.options, options || {});
   
@@ -68,9 +68,7 @@ UI.Dialog.prototype.setPosition = function()
     position[this.options.position] = true;
   }
   
-  this.container.setStyle({
-    position: 'absolute'
-  });
+  this.container.setStyle({position: 'absolute'});
   var style = {};
   
   if (position.top) {
@@ -82,7 +80,7 @@ UI.Dialog.prototype.setPosition = function()
   else
   {
     style.top = Math.max(0, (window.innerHeight || document.documentElement.clientHeight) - this.container.offsetHeight) / 2
-      + (window.pageYOffset || document.documentElement.scrollTop) + 'px';
+      + (document.documentElement ? document.documentElement.scrollTop : window.pageYOffset) + 'px';
   }
   
   if (position.left) {
@@ -93,11 +91,11 @@ UI.Dialog.prototype.setPosition = function()
   }
   else
   {
-    style.left = Math.max(0, (window.innerWidth  || document.documentElement.clientWidth) - this.container.offsetWidth)  / 2
-      + (window.pageXOffset || document.documentElement.scrollLeft) + 'px';
+    style.left = Math.max(0, (window.innerWidth || document.documentElement.clientWidth) - this.container.offsetWidth) / 2
+      + (document.documentElement ? document.documentElement.scrollLeft : window.pageXOffset) + 'px';
   }
   
-  this.container.setStyle(style);
+  UI.Window.prototype.setPosition.call(this, style);
 }
 
 UI.Dialog.prototype.display = function()
