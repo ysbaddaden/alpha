@@ -3,6 +3,8 @@
    
    var n = new UI.Notification({autoHide: 2500});
    n.setMessage(document.getElementById('notification-message').innerHTML);
+   
+   Check http://leaverou.me/2009/02/bulletproof-cross-browser-rgba-backgrounds/
  */
 UI.Notification = function(options, mesg)
 {

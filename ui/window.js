@@ -1,7 +1,6 @@
 
-UI.Window = function() {
-  throw new Error("UI.Window can't be instanciated.");  
-}
+UI.Window = function() {}
+UI.Window.prototype.bounds = {};
 
 UI.Window.prototype.createContainer = function()
 {
@@ -12,7 +11,10 @@ UI.Window.prototype.createContainer = function()
   
   if (this.options.closeOnEscape)
   {
-    this.bounds.closeOnEscape = this.onClose.bind(this);
+    this.bounds.closeOnEscape = function() {
+      this.onClose();
+    }.bind(this);
+    
     window.addEventListener('keyup', this.bounds.closeOnEscape, false);
   }
 }
