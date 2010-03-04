@@ -1,3 +1,6 @@
+
+// TODO: check if browser doesn't already support mouseenter/mouseleave.
+
 (function()
 {
   function __kokone_mouseenter_check(evt)
