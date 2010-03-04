@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<style type="text/css">
+	
+	#a { position: relative; width: 400px; height: 200px; background: #F80; }
+	#b { position: absolute; top: 20px; left: 50px; width: 200px; height: 100px; background: #08F; }
+	.transparent { opacity: .75; }
+	
+	</style>
+</head>
+<body>
+
+<div id="a">
+  <div id="b">
+  </div>
+</div>
+
+
+<script type="text/javascript" src="../loader.js"></script>
+<script type="text/javascript">
+load_compat('../..');
+
+var a = document.getElementById('a');
+var b = document.getElementById('b');
+
+a.addEventListener('mouseenter',function(evt) {
+  this.className = 'transparent';
+}, false);
+
+a.addEventListener('mouseleave',function(evt) {
+  this.className = '';
+}, false);
+
+b.addEventListener('mouseenter',function(evt) {
+  this.className = 'transparent';
+}, false);
+
+b.addEventListener('mouseleave',function(evt) {
+  this.className = '';
+}, false);
+
+</script>
+
+</body>
+</html>

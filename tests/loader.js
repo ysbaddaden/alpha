@@ -6,6 +6,7 @@ function load_compat(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/dom.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/event.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/element.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/compat/events/mouseenter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/selectors/classname.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/selectors/sly.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/json2.js"></script>');
