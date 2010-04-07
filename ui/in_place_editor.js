@@ -1,6 +1,4 @@
 
-// TODO: InPlaceEditor textarea should resize itself automagically.
-
 UI.InPlaceEditor = function(element, callback)
 {
   this.element      = element;

@@ -1,4 +1,6 @@
 
+// IMPROVE: Cap textarea's height using minHeight and maxHeight styles.
+
 UI.Autoresize = function(textarea, callback)
 {
   this.textarea = textarea;

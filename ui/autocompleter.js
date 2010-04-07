@@ -1,6 +1,4 @@
 
-// TODO: UI.Autocompleter: Inherit font properties from input (family, size).
-
 UI.Autocompleter = function(input, url, options) {
   this.initialize(input, url, options);
 }
