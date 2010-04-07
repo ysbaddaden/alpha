@@ -6,6 +6,7 @@ function load_compat(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/dom.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/event.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/element/element.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/compat/events/mouseenter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/selectors/classname.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/selectors/sly.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/compat/json2.js"></script>');
@@ -39,6 +40,8 @@ function load_ui(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/ui/autocompleter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/ui/date_picker.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/ui/color_picker.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/ui/autoresize.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/ui/in_place_editor.js"></script>');
 }
 
 function load_html5(base_url)
