@@ -5,16 +5,22 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	
   <style type="text/css">
-  body, textarea { font: normal 12px/1.5 lucida grande, verdana, sans-serif; }
+  body, textarea { font: normal 12px/1.5 "lucida grande", verdana, sans-serif; color: #000; }
   body { padding: 3em; background: #FFF; }
-  textarea { border: 1px solid #000; padding: 5px; width: 100px; }
+  
+  textarea.first  { border: 1px solid #000; padding: 5px; width: 100px; }
+  textarea.second { border: 0; padding: 0; width: 100px; }
   </style>
 </head>
 <body>
 
-  <form action="#" method="post">
-    <textarea class="autoresize" rows="1" cols="10">this textarea shall resize itself automagically</textarea>
-  </form>
+<form action="#" method="post">
+  <textarea class="autoresize first" rows="1" cols="10">this textarea shall resize itself automagically</textarea>
+</form>
+
+<form action="#" method="post">
+  <textarea class="autoresize second" rows="1" cols="10">this textarea shall resize itself automagically</textarea>
+</form>
 
 <script type="text/javascript" src="../loader.js"></script>
 <script type="text/javascript">
@@ -26,8 +32,10 @@ load_ui('../..');
 <!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
 var elements = document.getElementsByClassName('autoresize');
-Array.prototype.forEach.call(elements, function(element) {
-  new UI.Autoresize(element);
+Array.prototype.forEach.call(elements, function(element)
+{
+  var o = new UI.Autoresize(element);
+  o.resize();
 });
 </script>
 

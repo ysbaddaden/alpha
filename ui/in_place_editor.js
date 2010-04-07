@@ -1,6 +1,4 @@
 
-// TODO: InPlaceEditor textarea should resize itself automagically.
-
 UI.InPlaceEditor = function(element, callback)
 {
   this.element      = element;
@@ -18,6 +16,7 @@ UI.InPlaceEditor.prototype.start = function(evt)
   {
     this.textarea = document.createElement('textarea');
     this.textarea.addEventListener('blur', this.stop.bind(this), false);
+    new UI.Autoresize(this.textarea);
   }
   
   this.originaltext = this.textarea.value = this.text_wrapper.innerHTML;
