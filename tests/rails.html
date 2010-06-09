@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="csrf-token" content="1234567890">
+	<meta name="csrf-param" content="token">
+</head>
+<body>
+
+  <p>
+    <a href="/products/1" data-confirm="Are you sure?" data-method="delete"
+      data-remote="true" rel="nofollow">delete product</a>
+  </p>
+
+  <form method="post" action="#" data-remote="true" class="button_to">
+    <div>
+      <input name="_method" type="hidden" value="put"/>
+      <input data-confirm="You confirm validation of this product?"
+        type="submit" value="validate product"/>
+      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+    </div>
+  </form>
+
+  <form action="/products/2" data-remote="true" method="post">
+    <div style="margin:0;padding:0;display:inline">
+      <input name="_method" type="hidden" value="put"/>
+      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+    </div>
+    <input data-confirm="Are you sure?" data-disable-with="Please Wait..."
+      name="commit" type="submit" value="Save"/>
+  </form>
+
+  <form action="/products/2" method="post">
+    <div style="margin:0;padding:0;display:inline">
+      <input name="_method" type="hidden" value="put"/>
+      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+    </div>
+    <input data-confirm="Are you sure?" data-disable-with="Saving..."
+      name="commit" type="submit" value="Save" />
+  </form>
+
+  <script type="text/javascript" src="jsunit.js"></script>
+  <script type="text/javascript" src="loader.js"></script>
+  <script type="text/javascript">
+  load_compat('..');
+  </script>
+  <script type="text/javascript" src="../lib/rails.js"></script>
+
+<script type="text/javascript">
+function ajax_callback(event) { console.log(event, event.memo); }
+document.body.addEventListener('ajax:before', ajax_callback, false);
+document.body.addEventListener('ajax:loading', ajax_callback, false);
+document.body.addEventListener('ajax:loaded', ajax_callback, false);
+document.body.addEventListener('ajax:interactive', ajax_callback, false);
+document.body.addEventListener('ajax:complete', ajax_callback, false);
+document.body.addEventListener('ajax:success', ajax_callback, false);
+document.body.addEventListener('ajax:failure', ajax_callback, false);
+document.body.addEventListener('ajax:after', ajax_callback, false);
+</script>
+
+</body>
+</html>
