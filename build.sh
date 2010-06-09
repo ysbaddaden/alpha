@@ -7,41 +7,44 @@ fi
 JSSTRIP="python build/jsstrip.py -fwq"
 YUICOMP="java -jar build/yuicompressor-2.4.2.jar"
 
-cat compat/array.js \
-    compat/core.js \
-    compat/element/dom.js \
-    compat/element/event.js \
-    compat/element/element.js \
-    compat/selectors/classname.js \
-    compat/selectors/sly.js \
-    compat/xmlhttprequest.js \
-    compat/json2.js \
+cat lib/compat/array.js \
+    lib/compat/core.js \
+    lib/compat/element/dom.js \
+    lib/compat/element/event.js \
+    lib/compat/element/element.js \
+    lib/compat/selectors/classname.js \
+    lib/compat/selectors/sly.js \
+    lib/compat/xmlhttprequest.js \
+    lib/compat/json2.js \
     > build/compat.tmp.js
 
-cat addons/object.js \
-    addons/array.js \
-    addons/function.js \
-    addons/string.js \
-    addons/element.js \
-    addons/classname.js \
-    addons/color.js \
-    addons/style.js \
-    addons/ajax.js \
+cat lib/addons/object.js \
+    lib/addons/array.js \
+    lib/addons/function.js \
+    lib/addons/string.js \
+    lib/addons/element.js \
+    lib/addons/classname.js \
+    lib/addons/color.js \
+    lib/addons/style.js \
+    lib/addons/ajax.js \
     > build/addons.tmp.js
 
-cat ui/ui.js \
-    ui/overlay.js \
-    ui/window.js \
-    ui/dialog.js \
-    ui/picker.js \
-    ui/tooltip.js \
-    ui/notification.js \
-    ui/autocompleter.js \
-    ui/date_picker.js \
+cat lib/ui/ui.js \
+    lib/ui/overlay.js \
+    lib/ui/window.js \
+    lib/ui/dialog.js \
+    lib/ui/picker.js \
+    lib/ui/tooltip.js \
+    lib/ui/notification.js \
+    lib/ui/autocompleter.js \
+    lib/ui/date_picker.js \
+    lib/ui/autoresize.js \
+    lib/ui/in_place_editor.js \
     > build/ui.tmp.js
 
-cat html5/html5.js \
-    html5/placeholder.js \
+cat lib/html5/html5.js \
+    lib/html5/placeholder.js \
+    lib/html5/details.js \
     > build/html5.tmp.js
 
 echo "Minifying..."
