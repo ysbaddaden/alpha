@@ -1,23 +1,16 @@
 
 TODO:
 
-  * I'm not that satisfied with the Ajax object. It's just an interface to
-    XMLHttpRequest. Maybe if it transparently supported XML and JSON I'd like it
-    better :)
-  
-  * A translation library. I'm not sure how to handle this: a per language
-    JSON file; have multiple compiled files per language?
-  
-  * A Drag And Drop library (is it possible to follow the standards, thus have
-    it in Compat?). Implement UI.Sortable as an example.
-  
-  * An animation library (Fx) to enable some DHTML.
+  * A Drag And Drop library.
+  * UI.Sortable as an example of DND.
   
   * Implement custom events (as defined by the DOM).
-    See http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/ for a solution.
+    See http://deanedwards.me.uk/weblog/2009/03/callbacks-vs-events/ for a 
+    solution.
+  
+  * A transparent SVG rendered/manipulator which uses VML.
 
 COULD DO:
 
-  * A charting library to draw charts --something that uses SVG and Canvas.
-  * A game library, with sprite animations, collisions, etc.
+  * A charting library to draw charts --something that uses SVG.
 

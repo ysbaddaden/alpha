@@ -5,8 +5,9 @@ function load_alpha(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/string.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/core.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/dom.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/event.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/element.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/events.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/elements.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/window.js"></script>');
 //  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/events/mouseenter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/selectors/classname.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/selectors/sly.js"></script>');
