@@ -1,37 +1,31 @@
 
-= Kokone
-
-Kokone is yet another JavaScript library, but an obstrusive one.
+= Alpha
 
 The initial idea was to create a compatibility library, permitting developers
 to write JavaScript and DOM as they are defined by the ECMAScript and the W3C.
 This means an obstrusive framework, that would transparently add support for
-missing (or broken) standard methods, like addEventListener() or
-querySelectorAll().
+missing (or broken) standard methods, like <tt>addEventListener()</tt> or
+<tt>querySelectorAll()</tt>.
 
 Of course, behing obstrusive, it certainly collapses with frameworks. But
 frameworks should be built around standards anyway (if so, they should be
 compatible).
 
-I'm sure there are (tons of) memory leakages too. Patches are welcomed!
-
-
 == Why?
 
 Why do we use JavaScript librairies at all? Because Internet Explorer's
-JScript sucks.
+JScript sucks. It lacks complete support for the DOM Event or even the DOM
+Element object. We thus rely on JavaScript librairies to ease our pain.
 
-IE lacks complete support for the DOM Event or even the DOM Element object.
-We thus rely on JavaScript librairies to ease our pain. IE8 eventually
-introduced support for the DOM Element, meaning we could use Element.prototype
-to implement missing DOM Event methods for instance. The problem is IE6 and IE7
-do not support this. I thus started hacking and found a way to emulate an
-Element prototype and have standard methods like getElementById to always return
-extended elements.
+IE8 eventually introduced support for the DOM Element, meaning we could use
+Element.prototype to implement missing DOM Event methods for instance. The
+problem was IE6 and IE7 do not support this. I thus started hacking and found
+a way to emulate an Element prototype and have standard methods like
+<tt>getElementById()</tt> to always return extended elements.
 
-Since it just worked I continued and implemented the DOM Event, querySelectorAll,
-and more, in order to have all the latest features to work on older browsers,
-that are still used.
+Since it just worked I continued and implemented DOM Events, querySelectorAll,
+and more; so that I would have all the latest features to work on older
+browsers, that are still used.
 
 It works in all browsers I've tested so far (it might also work with older
 releases):
@@ -42,20 +36,19 @@ releases):
 * Safari 3+
 * Google Chome
 
-
 == Organisation
 
-Kokone is currently separated in 4 parts :
+Alpha is currently separated in different parts:
 
-* Compat: tries to fix, emulate and implement broken or missing features.
-* Addons: adds a few methods that I thought were missing (I must be wrong).
-* UI: proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (lives in it's own namespace).
-* HTML5: proposes an actual implementation of HTML5 features that can be emulated.
+* lib/alpha: tries to fix, emulate and implement broken or missing features.
+* lib/addons: adds a few methods that I thought were missing (I must be wrong).
+* lib/html5: proposes an actual implementation of HTML5 features that can be emulated.
+* lib/ui: proposes some user interface widgets, like dialogs, tooltips, autocompleters, date pickers, etc (lives in it's own namespace).
+* lib/ujs: backend for the Unobstrusive JavaScript (UJS) of Ruby on Rails 3.
 
 I feel bad about the Addons part since it goes back to having a library,
 but writing UI I felt the necessity to abstract some code out of it. So
-I did it. I must be wrong, and eventually it might be merged with UI.
+I did it.
 
-You may use Compat or Compat + Addons, or Compat + Addons + UI, or simply
-parts of these --just be sure not to miss any requirements.
+You may use a mixin of any parts, as long as you have satisfy depencies.
 

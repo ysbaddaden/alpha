@@ -39,12 +39,13 @@
       name="commit" type="submit" value="Save" />
   </form>
 
-  <script type="text/javascript" src="jsunit.js"></script>
-  <script type="text/javascript" src="loader.js"></script>
+  <script type="text/javascript" src="../jsunit.js"></script>
+  <script type="text/javascript" src="../loader.js"></script>
   <script type="text/javascript">
-  load_compat('..');
+  load_alpha('../..');
+  load_addons('../..');
   </script>
-  <script type="text/javascript" src="../lib/rails.js"></script>
+  <script type="text/javascript" src="../../lib/ujs/rails.js"></script>
 
 <script type="text/javascript">
 function ajax_callback(event) { console.log(event, /*event.target,*/ event.memo ? event.memo : ''); }

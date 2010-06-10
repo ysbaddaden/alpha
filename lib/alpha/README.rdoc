@@ -1,0 +1,79 @@
+
+= Alpha
+
+Alpha is an obstrusive javascript library that aims at fixing, implementing and emulating standard JavaScript and DOM in older browsers.
+
+
+== DOM prototypes in IE < 8
+
+The prefered way to extend objects in JavaScript is throught objects' prototype. JavaScript is all about prototypes. Problem is IE doesn't implement the DOM prototypes, like Element and Event, before IE8. Alpha thus emulates Element and Event when they're undefined.
+
+For instance, if you wish to create a hide() method available for all elements, just do:
+
+ Element.prototype.hide = function() {
+   // ...
+ }
+
+The following problem is elements and events won't be extended automatically, and you thus have to extend them manually. We don't want to have to think about that, so Alpha interfaces the basic methods, like document.getElementById or elm.getElementsByTagName, to always return already extended elements.
+
+So you can do:
+
+ document.getElementById('elm').hide();
+
+
+== DOM events in IE
+
+Internet Explorer (even IE8) lacks support for DOM Events, and still relies on attachEvent, detachEvent, etc. Alpha thus implements them. Support is limited to bubbling mode only. The capture mode seems harder to emulate and isn't available yet (but might be doable). It's also not possible to manually create and fire events (patches are welcome).
+
+Alpha also fixes the Event object passed to the callback --in fact IE doesn't even pass any Event object. All the elements related to the event are fixed: target, relatedTarget, currentTarget; 'this' is fixed also; as well as some values, like pageX and pageY.
+
+For instance:
+
+ document.getElementById('elm').addEventListener('click', function(evt) {
+   alert(evt.relatedTarget);
+ }, false);
+
+
+== Limitations and concerns
+
+Even thought IE8 has support for getters and setters, older releases do not, and I don't think it's possible to emulate it without relying on ugly hacks (see http://alex.dojotoolkit.org/08/jscript/lettable.html ). This fact leads to some difficulties.
+
+For instance: how to return extended elements in IE6/7 for related attributes, like firstChild, nextSibling or parentNode? Available solutions are:
+
+* manually extend them (eg: Alpha.$(elm.parentNode));
+* implement a get(attribute) method that will always return extended elements.
+
+The same question arises for the emulation of Firefox 3.5's children, countElementChild, lastElementChild, etc. attributes. Those can be emulated throught getters in most browsers, but not in IE6 and IE7. Sadly :(
+
+So use whatever method you prefer:
+
+* you don't care about IE 6/7? just use attributes like the DOM says so;
+* you care about IE 6/7? use <tt>elm.get(attribute)</tt>;
+* you care about IE 6/7 but don't want to load Alpha on mobiles? use <tt>elm.get ? elm.get(attribute) : elm.attribute</tt>.
+
+
+== Backward compatibility
+
+New browsers come with nice new features, that are obviously lacking in older releases that we still have to support. One goal of Alpha is to implement (or emulate) these when they're missing. Of course it's slower, but speed issues can be a good reason to encourage users to upgrade.
+
+Here are a few examples: the JSON object, getElementsByClassName and querySelectorAll methods, etc.
+
+
+== About Explorer Canvas (by Google)
+
+From what I tested, excanvas.js must be loaded in the document's HEAD, and any script that needs to access canvas elements must be defered, or started on load. For instance:
+
+  <script type="text/javascript" defer="defer">
+  var ctx = document.getElementById('my-canvas').getContext('2d');
+  </script>
+
+  <script type="text/javascript">
+  window.addEventListener('load', function()
+  {
+    var canvas = document.createElement('canvas');
+    var ctx    = canvas.getContext('2d');
+  }, false);
+  </script>
+
+If excanvas.js is loaded before Alpha is, created <tt>canvas</tt> elements will be automatically extended!
+

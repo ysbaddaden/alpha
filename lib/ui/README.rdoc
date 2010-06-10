@@ -1,6 +1,6 @@
-== Kokone::UI
+== Alpha:UI
 
-Kokone::UI is a collection of widgets to enhance web pages with dialogs,
+Alpha:UI is a collection of widgets to enhance web pages with dialogs,
 date pickers, tooltips, etc. It's unobstrusive, but requires some obstrusive
-methods from Kokone::Addons.
+methods from Alpha:Addons.
 

@@ -1,22 +1,22 @@
 
-function load_compat(base_url)
+function load_alpha(base_url)
 {
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/array.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/core.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/element/dom.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/element/event.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/element/element.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/events/mouseenter.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/selectors/classname.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/selectors/sly.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/json2.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/compat/xmlhttprequest.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/array.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/string.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/core.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/dom.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/event.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/dom/element.js"></script>');
+//  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/events/mouseenter.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/selectors/classname.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/selectors/sly.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/json2.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/alpha/xmlhttprequest.js"></script>');
 }
 
 function load_addons(base_url)
 {
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/object.js"></script>');
-  document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/array.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/merge.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/function.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/string.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/element.js"></script>');
@@ -26,6 +26,7 @@ function load_addons(base_url)
   
   document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/ajax.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/fx.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/addons/serializer.js"></script>');
 }
 
 function load_ui(base_url)
