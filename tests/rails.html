@@ -8,7 +8,7 @@
 <body>
 
   <p>
-    <a href="/products/1" data-confirm="Are you sure?" data-method="delete"
+    <a href="#" data-confirm="Are you sure?" data-method="delete"
       data-remote="true" rel="nofollow">delete product</a>
   </p>
 
@@ -30,7 +30,7 @@
       name="commit" type="submit" value="Save"/>
   </form>
 
-  <form action="/products/2" method="post">
+  <form action="#" method="post">
     <div style="margin:0;padding:0;display:inline">
       <input name="_method" type="hidden" value="put"/>
       <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
@@ -47,7 +47,7 @@
   <script type="text/javascript" src="../lib/rails.js"></script>
 
 <script type="text/javascript">
-function ajax_callback(event) { console.log(event, event.memo); }
+function ajax_callback(event) { console.log(event, /*event.target,*/ event.memo ? event.memo : ''); }
 document.body.addEventListener('ajax:before', ajax_callback, false);
 document.body.addEventListener('ajax:loading', ajax_callback, false);
 document.body.addEventListener('ajax:loaded', ajax_callback, false);
