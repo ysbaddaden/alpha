@@ -4,37 +4,42 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<script type="text/javascript">document.createElement('datalist');</script>
   <style type="text/css">
-  
   body, input { font: normal 14px/1.5 helvetica, arial, sans-serif; }
-  
+  input { border: 1px solid #888; padding: 2px; }
+
   .placeholder { color: #666; font-style: italic; }
   
-  datalist { display: none; visibility: hidden; position: absolute;
-    border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
-    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
-  datalist option, datalist span { padding: 2px; background: #FFF; }
-  datalist option.selected, datalist span.selected { background: #07A; color: #FFF; }
-  datalist span { display: block; }
+  .datalist { border: 1px solid #888;
+    -moz-box-shadow: 1px 1px 2px #888; -webkit-box-shadow: 1px 1px 2px #888; box-shadow: 1px 1px 2px #888;
+    list-style: none; padding: 0; margin: -1px 0 0; }
+  .datalist li { padding: 1px 2px; background: #FFF; }
+  .datalist li:hover { background: #E4E4E4; }
+  .datalist li.selected { background: #CCC; }
   
+  .datalist { font-size: 12px; }
   </style>
 </head>
 <body>
+  <h1>HTML5: datalist</h1>
 
-  <form method="get" action="#">
-    <p>Datalist tests:</p>
-    <p>
-      <input type="text" name="town" list="towns" placeholder="Select a town" autocomplete="off"/>
-      <datalist id="towns">
-        <option value="1"><span class="1">London</span></option>
-        <option value="2"><span class="2">New-York</span></option>
-        <option value="3"><span class="3">Paris</span></option>
-      </datalist>
-    </p>
-    <p>
-      <input type="submit"/>
-    </p>
+  <form action="#" method="get">
+    <label for="capital">Select a capital:</label>
+    <input type="text" name="capital" id="capital"
+      list="capitals" placeholder="Type in a capital name"/>
+    
+    <datalist id="capitals">
+      <label for="capitals-select">or choose from one of these:</label>
+      <select name="capitals-select">
+        <option>Brussels</option>
+        <option>London</option>
+        <option>New-York</option>
+        <option>Paris</option>
+        <option>Tokyo</option>
+        <option>Naypyidaw or Nay Pyi Taw</option>
+      </select>
+    </datalist>
   </form>
-  
+
   <script type="text/javascript" src="../jsunit.js"></script>
   <script type="text/javascript" src="../loader.js"></script>
   <script type="text/javascript">
