@@ -1,40 +1,49 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <style type="text/css">
-  body, input { font: normal 14px/1.5 helvetica, arial, sans-serif; }
-  input { border: 1px solid #888; padding: 2px; }
-  
-  .placeholder { color: #666; font-style: italic; }
-  
-  .datalist { border: 1px solid #888; list-style: none; padding: 0; margin: -1px 0 0;
-    -moz-box-shadow: 2px 2px 8px #888; -webkit-box-shadow: 2px 2px 8px #888; box-shadow: 2px 2px 8px #888; }
-  .datalist li { padding: 1px 2px; background: #FFF; }
-  .datalist li:hover { background: #E4E4E4; }
-  .datalist li.selected { background: #CCC; }
-  </style>
+	<!--[if IE]>
+	  <script type="text/javascript">document.createElement('datalist')</script>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="stylesheet" type="text/css" href="../base.css"/>
 </head>
 <body>
-  <h1>HTML5: datalist</h1>
+  <h1>HTML5: <code>&lt;datalist&gt;</code></h1>
 
-  <form action="#" method="get">
-    <label for="capital">Select a capital:</label>
-    <input type="text" name="capital" id="capital"
-      list="capitals" placeholder="Type in a capital name"/>
+  <section class="demo">
+    <p class="info">
+      This example uses the official compatibility fallback, which is
+      the inclusion of a <code>select</code> element between the
+      <code>datalist</code> and it's <code>option</code> elements.
+    </p>
     
-    <datalist id="capitals">
-      <label for="capitals-select">or choose from one of these:</label>
-      <select name="capitals-select">
-        <option>Brussels</option>
-        <option>London</option>
-        <option>New-York</option>
-        <option>Paris</option>
-        <option>Tokyo</option>
-        <option>Naypyidaw or Nay Pyi Taw</option>
-      </select>
-    </datalist>
-  </form>
+    <form action="#" method="get">
+      <label for="capital">Select a capital:</label>
+      <input type="text" name="capital" id="capital" list="capitals"
+        placeholder="Type in a capital name"/>
+      
+      <datalist id="capitals">
+        <label for="capitals-select">or choose from one of these:</label>
+        <select name="capital-select" id="capitals-select">
+          <option>Brussels</option>
+          <option>London</option>
+          <option>New-York</option>
+          <option>Paris</option>
+          <option>Tokyo</option>
+          <option>Naypyidaw or Nay Pyi Taw</option>
+        </select>
+      </datalist>
+    </form>
+  </section>
+  
+  <p class="info">
+    Please note that a <code>datalist</code> element is quite stupid:
+    it does no filtering, nor any autocompletions: it limits itself
+    to display the list of options, allowing the user to select an entry.
+    But if options are changed the list will dynamically change, allowing
+    to build <a href="../ui/autocompleter.html">autocompleters</a> on top of it!
+  </p>
 
   <script type="text/javascript" src="../jsunit.js"></script>
   <script type="text/javascript" src="../loader.js"></script>
