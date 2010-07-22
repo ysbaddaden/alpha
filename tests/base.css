@@ -1,0 +1,22 @@
+body, input { font: normal 14px/1.5 helvetica, arial, sans-serif; }
+h1, h2 { font-family: georgia, sans-serif; margin-top: 0; }
+h1 { font-size: 3em; }
+h2 { font-weight: normal; }
+
+code { font-family: monospace; }
+input { border: 1px solid #888; padding: 2px; }
+
+header, footer, section, article, aside { display: block; }
+
+.info { color: #888; }
+.demo { border: 1px solid #CCC; padding: 1em; margin-bottom: 1em; }
+.demo > *:first-child { margin-top: 0; }
+
+.placeholder { color: #666; font-style: italic; }
+
+.datalist { border: 1px solid #888; list-style: none; padding: 0; margin: -1px 0 0;
+  -moz-box-shadow: 2px 2px 8px #888; -webkit-box-shadow: 2px 2px 8px #888; box-shadow: 2px 2px 8px #888; }
+.datalist li { padding: 1px 2px; background: #FFF; }
+.datalist li:hover { background: #E4E4E4; }
+.datalist li.selected { background: #CCC; }
+
