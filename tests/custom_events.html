@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <!--script src="jsunit.js"></script-->
+  <script src="loader.js"></script>
+  <script>
+  load_alpha('..');
+  </script>
+  <script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+</head>
+<body>
+
+<script>
+
+document.addEventListener('custom', function(event) {
+  console.log('CUSTOM!', event);
+}, false);
+
+var event = document.createEvent('Event');
+event.initEvent('custom', true, true);
+document.dispatchEvent(event);
+
+</script>
+
+</body>
+</html>
