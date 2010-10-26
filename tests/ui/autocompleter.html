@@ -25,12 +25,12 @@
     
     <form action="#" method="get">
       <label for="capital">Select a capital:</label>
-      <input type="text" name="capital" id="capital"
-        list="capitals" placeholder="Type in a capital name"/>
+      <input type="text" name="capital" id="capital" list="capitals"
+        placeholder="Type in a capital name"/>
       
       <datalist id="capitals">
         <label for="capitals-select">or choose from one of these:</label>
-        <select name="capitals-select">
+        <select name="capitals-select" id="capitals-select">
           <option>Brussels</option>
           <option>London</option>
           <option>New-York</option>
@@ -48,7 +48,17 @@
     <p class="info">This autocompleter requests
       the datalist options from a remote server.</p>
     
-    <p>[TODO]</p>
+    <form action="#" method="get">
+      <label for="user">Select a user:</label>
+      <input type="text" name="user" id="user" list="users"
+        placeholder="Type in a user name"/>
+      
+      <datalist id="users">
+        <label for="users-select">or choose from one of these:</label-->
+        <select name="users-select" id="users-select">
+        </select>
+      </datalist>
+    </form>
   </section>
 
 <script type="text/javascript" src="../loader.js"></script>
@@ -61,6 +71,8 @@ load_ui('../..');
 
 <script type="text/javascript">
 new Alpha.UI.LocalAutocompleter(document.getElementById('capital'));
+new Alpha.UI.RemoteAutocompleter(document.getElementById('user'), {
+  url: "../ajax/datalist.html", param: "user_name"});
 </script>
 
 </body>
