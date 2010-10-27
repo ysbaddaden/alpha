@@ -14,8 +14,12 @@ header, footer, section, article, aside { display: block; }
 
 .placeholder { color: #666; font-style: italic; }
 
-.datalist { border: 1px solid #888; list-style: none; padding: 0; margin: -1px 0 0;
-  -moz-box-shadow: 2px 2px 8px #888; -webkit-box-shadow: 2px 2px 8px #888; box-shadow: 2px 2px 8px #888; }
+.picker { border: 1px solid #888; -moz-box-shadow: 2px 2px 8px #888;
+  -webkit-box-shadow: 2px 2px 8px #888; box-shadow: 2px 2px 8px #888;
+  margin-top: -1px;
+}
+
+.datalist ul { list-style: none; padding: 0; margin: 0; }
 .datalist li { padding: 1px 2px; background: #FFF; }
 .datalist li:hover { background: #E4E4E4; }
 .datalist li.selected { background: #CCC; }

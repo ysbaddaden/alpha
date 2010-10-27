@@ -10,7 +10,7 @@
 </head>
 <body>
   <h1>HTML5: <code>&lt;datalist&gt;</code></h1>
-
+  
   <section class="demo">
     <p class="info">
       This example uses the official compatibility fallback, which is
@@ -38,18 +38,19 @@
   </section>
   
   <p class="info">
-    Please note that a <code>datalist</code> element is quite stupid:
-    it does no filtering, nor any autocompletions: it limits itself
-    to display the list of options, allowing the user to select an entry.
-    But if options are changed the list will dynamically change, allowing
-    to build <a href="../ui/autocompleter.html">autocompleters</a> on top of it!
+    Please note that a <code>datalist</code> element is quite stupid: it does
+    no filtering, nor any autocompletions: it limits itself to display the list
+    of options, allowing the user to select an entry. But if options are
+    changed the list will dynamically change, allowing to build
+    <a href="../ui/autocompleter.html">autocompleters</a> right on top.
   </p>
-
+  
   <script type="text/javascript" src="../jsunit.js"></script>
   <script type="text/javascript" src="../loader.js"></script>
   <script type="text/javascript">
   load_alpha('../..');
   load_addons('../..');
+  load_ui('../..');
   load_html5('../..');
   </script>
 </body>
