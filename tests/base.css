@@ -19,8 +19,8 @@ header, footer, section, article, aside { display: block; }
   margin-top: -1px;
 }
 
-.datalist ul { list-style: none; padding: 0; margin: 0; }
-.datalist li { padding: 1px 2px; background: #FFF; }
-.datalist li:hover { background: #E4E4E4; }
-.datalist li.selected { background: #CCC; }
+.list-picker ul { list-style: none; padding: 0; margin: 0; }
+.list-picker li { padding: 1px 2px; background: #FFF; }
+.list-picker li:hover { background: #E4E4E4; }
+.list-picker li.selected { background: #CCC; }
 

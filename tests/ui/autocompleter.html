@@ -1,41 +1,20 @@
-<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
   <title>UI.Autocompleter</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <style type="text/css">
-  
-  body { font: normal 12px/1.5 lucida grande, verdana, sans-serif; }
-  
-  .picker { border: 1px solid; border-top-color: #BBB; border-left-color: #BBB;
-    border-right-color: #888; border-bottom-color: #888; background: #DDD; }
-  .picker .content { padding: 4px; background: #F4F4F4; }
-  
-  .autocompleter .content { padding: 2px; }
-  .autocompleter ul { list-style: none; margin: 0; padding: 0; background: #F4F4F4; }
-  .autocompleter li { padding: 2px; }
-  .autocompleter li.selected { background: #07A; color: #FFF; }
-  
-  </style>
+  <link rel="stylesheet" type="text/css" href="../base.css"/>
 </head>
 <body>
 
 <form method="get" action="#">
   <p>
     Single token:
-    <input type="text" name="autocomplete" id="autocomplete" autocomplete="off"/>
-    (1 character minimum)
+    <input type="text" name="user_name" id="user_name" autocomplete="off"/>
+    <br/>
+    (hidden: <input type="text" name="user_id" id="user_id"/>)
   </p>
 </form>
-
-<form method="get" action="#">
-  <p>
-    Multiple tokens:
-    <input type="text" name="autocomplete" id="autocomplete-many" autocomplete="off"/>
-    (2 characters minimum, using ',' as token separator)
-  </p>
-</form>
-
 
 <script type="text/javascript" src="../loader.js"></script>
 <script type="text/javascript">
@@ -44,11 +23,17 @@ load_addons('../..');
 load_ui('../..');
 </script>
 
-<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
-var autocompleter = new UI.Autocompleter('autocomplete',      '../ajax/autocompleter.html');
-var autocompleter = new UI.Autocompleter('autocomplete-many', '../ajax/autocompleter.html', {minChars: 2, multipleTokens: true});
+var autocompleter = new Alpha.UI.Autocompleter(document.getElementById('user_name'), {
+  url: '../ajax/autocompleter.html',
+  minChars: 1
+});
+
+autocompleter.onselect = function(item) {
+  document.getElementById('user_id').value = item.getAttribute('data-value');
+}
 </script>
 
 </body>
-</html-->
+</html>
