@@ -40,7 +40,9 @@ function load_ui(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/tooltip.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/notification.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/autocompleter.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/datalist_autocompleter.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/date_picker.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/list_picker.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/color_picker.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/autoresize.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/in_place_editor.js"></script>');
