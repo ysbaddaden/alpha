@@ -7,12 +7,11 @@
 </head>
 <body>
 
+<h1>UI.Autocompleter</h1>
+
 <form method="get" action="#">
   <p>
-    Single token:
     <input type="text" name="user_name" id="user_name" autocomplete="off"/>
-    <br/>
-    (hidden: <input type="text" name="user_id" id="user_id"/>)
   </p>
 </form>
 
@@ -30,7 +29,9 @@ var autocompleter = new UI.Autocompleter(document.getElementById('user_name'), {
   minChars: 1
 });
 
-autocompleter.onselect = function(item) {
+autocompleter.onselect = function(item)
+{
+  document.getElementById('user_name').value = item.innerText.trim();
   document.getElementById('user_id').value = item.getAttribute('data-value');
 }
 </script>
