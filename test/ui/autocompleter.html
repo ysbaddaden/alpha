@@ -11,8 +11,9 @@
 
 <form method="get" action="#">
   <p>
-    <input type="text" name="user_name" id="user_name" autocomplete="off"/>
-  </p>
+    user_name: <input type="text" name="user_name" id="user_name" autocomplete="off"/>
+    <br/>
+    (hidden user_id: <input type="text" name="user_id" id="user_id"/>)  </p>
 </form>
 
 <script type="text/javascript" src="../loader.js"></script>
@@ -26,7 +27,8 @@ load_ui('../..');
 <script type="text/javascript">
 var autocompleter = new UI.Autocompleter(document.getElementById('user_name'), {
   url: '../ajax/autocompleter.html',
-  minChars: 1
+  minChars: 1,
+  autoMarkFirst: true
 });
 
 autocompleter.onselect = function(item)
