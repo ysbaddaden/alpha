@@ -16,9 +16,10 @@ CORE_FILES=lib/alpha/array.js \
 ADDONS_FILES=lib/addons/merge.js \
 	lib/addons/function.js \
 	lib/addons/string.js \
+	lib/addons/element.js \
 	lib/addons/classname.js \
-	lib/addons/color.js \
 	lib/addons/style.js \
+	lib/addons/color.js \
 	lib/addons/serializer.js
 
 UI_FILES=lib/ui/ui.js \
@@ -28,9 +29,11 @@ UI_FILES=lib/ui/ui.js \
 		lib/ui/picker.js \
 		lib/ui/tooltip.js \
 		lib/ui/notification.js \
+		lib/ui/list_picker.js \
+		lib/ui/date_picker.js \
+		lib/ui/color_picker.js \
 		lib/ui/autocompleter.js \
 		lib/ui/datalist_autocompleter.js \
-		lib/ui/date_picker.js \
 		lib/ui/autoresize.js \
 		lib/ui/in_place_editor.js
 
