@@ -2,25 +2,25 @@
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <!--script src="jsunit.js"></script-->
-  <script src="loader.js"></script>
-  <script>
-  load_alpha('..');
-  </script>
-  <script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
 </head>
 <body>
 
+<!--script src="jsunit.js"></script-->
+<script src="loader.js"></script>
 <script>
+load_alpha('..');
+</script>
 
-document.addEventListener('custom', function(event) {
+<script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+
+<script>
+document.body.addEventListener('custom', function(event) {
   console.log('CUSTOM!', event);
 }, false);
 
-var event = document.createEvent('Event');
-event.initEvent('custom', true, true);
-document.dispatchEvent(event);
-
+var e = document.createEvent('Event');
+e.initEvent('custom', true, true);
+console.log(document.body.dispatchEvent(e));
 </script>
 
 </body>
