@@ -24,3 +24,18 @@ header, footer, section, article, aside { display: block; }
 .list-picker li:hover { background: #E4E4E4; }
 .list-picker li.selected { background: #CCC; }
 
+/* unit.js */
+table { border-collapse: collapse; border: 1px solid #888; }
+tr { border-bottom: 1px solid #888; }
+td { padding: 4px 10px; }
+
+tr.failure { background: #FDD; border-bottom: 0; }
+tr.error   { background: #FFD; border-bottom: 0; }
+tr.message { white-space: pre; font-family: monospace; border-bottom: 1px solid #888; }
+
+span.success, tr.success td:nth-child(3) { color: #0A0; }
+span.failure, tr.failure td:nth-child(3) { color: #A00; }
+span.error,   tr.error   td:nth-child(3) { color: #AA0; }
+
+span.result { font-weight: bold; }
+

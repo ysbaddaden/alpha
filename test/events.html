@@ -2,162 +2,181 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="stylesheet" type="text/css" href="base.css"/>
 </head>
 <body>
 
-<script type="text/javascript" src="jsunit.js"></script>
+<h1>DOM Events</h1>
+
+<script type="text/javascript" src="unit.js"></script>
 <script type="text/javascript" src="loader.js"></script>
 <script type="text/javascript">
 load_alpha('..');
 </script>
 
+<script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+
 <script type="text/javascript">
 
-function new_input()
+new Unit.TestCase('events',
 {
-  var input = document.createElement('input');
-  document.body.appendChild(input);
-
-  input.destroy = function() {
-    this.parentNode.removeChild(this);
-  }
-
-  return input;
-}
-
-
-jsUnit.add("Event must be prototyped", function() {
-  jsUnit.assertObject(Event.prototype);
-});
-
-jsUnit.add("window.addEventListener must be defined", function() {
-  jsUnit.assertFunction(window.addEventListener);
-});
-jsUnit.add("document.body.addEventListener must be defined", function() {
-  jsUnit.assertFunction(document.body.addEventListener);
-});
-jsUnit.add("document.documentElement.addEventListener must be defined", function() {
-  jsUnit.assertFunction(document.documentElement.addEventListener);
-});
-
-jsUnit.add("Element.addEventListener() with one listener", function()
-{
-  var elm = new_input(), test;
-  elm.addEventListener('click', function(evt) { test = true; }, false);
-  elm.click();
-  jsUnit.assertTrue(test);
-  elm.parentNode.removeChild(elm);
-});
-
-jsUnit.add("Element.addEventListener() with many listeners", function()
-{
-  var elm = new_input(), test = null;
-  elm.addEventListener('click', function(evt) { test = true;  }, false);
-  elm.addEventListener('click', function(evt) { test = false; }, false);
-  elm.click();
-  jsUnit.assertFalse(test);
-  elm.parentNode.removeChild(elm);
-});
-
-jsUnit.add("Element.removeEventListener()", function()
-{
-  var elm  = new_input();
-  var test = null;
-
-  var fn = function() {
-    test = true;
-  }
-
-  elm.addEventListener('click', fn, false);
-  elm.removeEventListener('click', fn, false);
-
-  elm.click();
-  jsUnit.assertNull(test);
-
-  elm.parentNode.removeChild(elm);
-});
-
-jsUnit.add("Event.type", function()
-{
-  var elm = new_input(), type;
-  elm.addEventListener('click', function(evt) { type = evt.type; }, false);
-  elm.click();
-  jsUnit.assertEquals(type, 'click');
-  elm.parentNode.removeChild(elm);
-});
-
-jsUnit.add("Event bubbling", function()
-{
-  var elm = new_input(), test;
-  function fn(evt) { test = false; }
-  
-  elm.addEventListener('click', function(evt) { test = true; }, false);
-  document.body.addEventListener('click', fn, false);
-  
-  elm.click();
-  jsUnit.assertFalse(test);
-  
-  elm.parentNode.removeChild(elm);
-  document.body.removeEventListener('click', fn, false);
-});
-
-jsUnit.add("Event.stopPropagation()", function()
-{
-  var elm  = new_input();
-  var test = null;
-  
-  function fn(evt) { test = 1; }
-  
-  elm.addEventListener('click', function(evt) { test = true; evt.stopPropagation(); }, false);
-  elm.addEventListener('click', function(evt) { test = false; }, false);
-  document.body.addEventListener('click', fn, false);
-
-  elm.click();
-  jsUnit.assertFalse(test);
-
-  elm.parentNode.removeChild(elm);
-  document.body.removeEventListener('click', fn, false);
-});
-
-if (Element.prototype.clearEvents)
-{
-  jsUnit.add("Element.clearEvents()", function()
+  setup: function()
   {
-    var elm  = new_input();
-    var test = null;
+    this.input = document.createElement('input');
+    this.input.style.visibility = 'hidden';
+    document.body.appendChild(this.input);
+  },
 
-    elm.addEventListener('click', function(evt) { test = true;  }, false);
-    elm.addEventListener('click', function(evt) { test = false; }, false);
-    elm.clearEvents();
+  teardown: function() {
+    document.body.removeChild(this.input);
+  },
 
-    elm.click();
-    jsUnit.assertNull(test);
+  test_event_must_be_prototyped: function() {
+    this.assertEqual('object', typeof Event.prototype);
+  },
 
-    elm.parentNode.removeChild(elm);
-  });
-  
-  /*
-  jsUnit.add("throwing an error musn't stop further listeners to be called", function()
+  test_window_addEventListener: function() {
+    this.assertTypeOf('function', window.addEventListener);
+  },
+
+  test_document_body_addEventListener: function() {
+    this.assertTypeOf('function', document.body.addEventListener);
+  },
+
+  test_document_documentElement_addEventListener: function() {
+    this.assertTypeOf('function', document.documentElement.addEventListener);
+  },
+
+  test_addEventListener_with_one_listener: function()
   {
-    var elm  = new_input();
+    var test;
+    this.input.addEventListener('click', function() { test = true }, false);
+    this.input.click();
+    this.assertTrue(test);
+  },
+
+  test_addEventListener_with_many_listeners: function()
+  {
+    var test = 0;
+    this.input.addEventListener('click', function() { test += 1 }, false);
+    this.input.addEventListener('click', function() { test += 2 }, false);
+    this.input.click();
+    this.assertEqual(3, test);
+  },
+
+  test_removeEventListener: function()
+  {
+    var test = null, fn = function() { test = true }
+    this.input.addEventListener('click', fn, false);
+    this.input.removeEventListener('click', fn, false);
+    this.input.click();
+    this.assertNull(test);
+  },
+
+  test_event_type: function()
+  {
+    var type;
+    this.input.addEventListener('click', function(evt) { type = evt.type }, false);
+    this.input.click();
+    this.assertEqual(type, 'click');
+  },
+
+  test_event_bubbling: function()
+  {
+    var test, fn = function(evt) { test = false }
+    
+    this.input.addEventListener('click', function(evt) { test = true }, false);
+    document.body.addEventListener('click', fn, false);
+    this.input.click();
+    this.assertFalse(test);
+    
+    document.body.removeEventListener('click', fn, false);
+  },
+
+  test_stopPropagation: function()
+  {
     var test = null;
     
-    elm.addEventListener('click', function()
+    function fn(evt) { test = 1 }
+    
+    this.input.addEventListener('click', function(evt) { test = true; evt.stopPropagation(); }, false);
+    this.input.addEventListener('click', function(evt) { test = false; }, false);
+    document.body.addEventListener('click', fn, false);
+    
+    this.input.click();
+    this.assertFalse(test);
+    
+    document.body.removeEventListener('click', fn, false);
+  },
+
+  test_clearEvents: function()
+  {
+    if (Element.prototype.clearEvents)
+    {
+      var test = null;
+      this.input.addEventListener('click', function(evt) { test = true  }, false);
+      this.input.addEventListener('click', function(evt) { test = false }, false);
+      this.input.clearEvents();
+      this.input.click();
+      this.assertNull(test);
+    }
+  },
+
+  test_throwing_an_error_musnt_stop_further_listeners: function()
+  {
+    var test = null;
+    
+    this.input.addEventListener('click', function()
     {
       test = true;
-      throw new Error("This ERROR IS EXPECTED and shouldn't stop calling any further listener.");
+      throw new Error("This ERROR IS EXPECTED, please discard.");
     }, false);
-    elm.addEventListener('click', function() { test = false; }, false);
     
-    elm.click();
-    jsUnit.assertFalse(test);
-    
-    elm.parentNode.removeChild(elm);
-  });
-  */
-}
+    this.input.addEventListener('click', function() { test = false }, false);
+    this.input.click();
+    this.assertFalse(test);
+  },
 
-jsUnit.run();
+  test_addEventListener_with_custom_event: function()
+  {
+    this.async();
+    
+    var self = this;
+    this.input.addEventListener('custom', function(event)
+    {
+      self.sync(function() {
+        this.assertEqual('custom', event.type);
+      });
+    }, false);
+    
+    var e = document.createEvent('Event');
+    e.initEvent('custom', true, true);
+    this.assertTrue(this.input.dispatchEvent(e));
+  },
+  
+  test_removeEventListener_with_custom_event: function()
+  {
+    this.async();
+    
+    var self = this, test = null;
+    var fn = function(event) { test = true }
+    
+    this.input.addEventListener('custom', fn, false);
+    this.input.addEventListener('custom', function(event)
+    {
+      self.sync(function() {
+        this.assertNull(test);
+      });
+    }, false);
+    this.input.removeEventListener('custom', fn, false);
+    
+    var e = document.createEvent('HTMLEvents');
+    e.initEvent('custom', true, true);
+    this.assertTrue(this.input.dispatchEvent(e));
+  }
+});
+
+Unit.HtmlRunner.run();
 
 </script>
 

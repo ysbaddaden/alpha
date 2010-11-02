@@ -35,11 +35,8 @@ on +attachEvent+, +detachEvent+, etc. Alpha thus implements them. Support is
 limited to bubbling mode only. The capture mode seems harder to emulate and
 isn't available (but might be doable).
 
-It's also not possible to manually create and dispatch events for now, but
-this is work in progress (mostly because of Rails' UJS).
-
-Alpha also fixes the Event object passed to the callback --in fact IE doesn't
-even pass any Event object. All the elements related to the event are fixed:
+Alpha fixes the Event object passed to the callback --in fact IE doesn't even
+pass any Event object. All the elements related to the event are fixed:
 +target+, +relatedTarget+, +currentTarget+; +this+ is fixed also; as well as
 some values, like +pageX+ and +pageY+.
 
@@ -48,6 +45,11 @@ For instance:
  document.getElementById('elm').addEventListener('click', function(evt) {
    alert(evt.relatedTarget);
  }, false);
+
+You may also listen and dispatch custom events. This is especially useful for
+Ruby on Rails UJS (Unobstrusive JavaScript) where form submitted throught
+XMLHttpRequest are supposed to dispatch custom events like `ajax:before`,
+`ajax:after`, etc.
 
 
 == Limitations and concerns
