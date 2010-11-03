@@ -6,15 +6,16 @@
 	
   <script type="text/javascript" src="unit.js"></script>
   <script type="text/javascript" src="loader.js"></script>
-  <script type="text/javascript">
-  load_alpha('..');
-  </script>
 </head>
 <body>
 
+<script type="text/javascript">
+load_alpha('..');
+</script>
+
 <h1>DOM Events</h1>
 
-<!--script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<!--script src="http://getfirebug.com/firebug-lite.js"></script-->
 <script type="text/javascript">
 
 new Unit.TestCase('events',
@@ -22,12 +23,13 @@ new Unit.TestCase('events',
   setup: function()
   {
     this.input = document.createElement('input');
-    this.input.style.visibility = 'hidden';
-    document.body.appendChild(this.input);
+    this.div = document.createElement('div');
+    this.div.appendChild(this.input);
+    document.body.appendChild(this.div);
   },
 
   teardown: function() {
-    document.body.removeChild(this.input);
+    document.body.removeChild(this.div);
   },
 
   test_event_must_be_prototyped: function() {
@@ -85,11 +87,11 @@ new Unit.TestCase('events',
     var test, fn = function(evt) { test = false }
     
     this.input.addEventListener('click', function(evt) { test = true }, false);
-    document.body.addEventListener('click', fn, false);
+    this.div.addEventListener('click', fn, false);
     this.input.click();
     this.assertFalse(test);
     
-    document.body.removeEventListener('click', fn, false);
+    this.div.removeEventListener('click', fn, false);
   },
 
   test_stopPropagation: function()
@@ -100,12 +102,12 @@ new Unit.TestCase('events',
     
     this.input.addEventListener('click', function(evt) { test = true; evt.stopPropagation(); }, false);
     this.input.addEventListener('click', function(evt) { test = false; }, false);
-    document.body.addEventListener('click', fn, false);
+    this.div.addEventListener('click', fn, false);
     
     this.input.click();
     this.assertFalse(test);
     
-    document.body.removeEventListener('click', fn, false);
+    this.div.removeEventListener('click', fn, false);
   },
 
   test_clearEvents: function()
@@ -152,7 +154,7 @@ new Unit.TestCase('events',
     e.initEvent('custom', true, true);
     this.assertTrue(this.input.dispatchEvent(e));
   },
-  
+
   test_removeEventListener_with_custom_event: function()
   {
     this.async();

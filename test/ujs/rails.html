@@ -2,61 +2,143 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="csrf-token" content="1234567890">
-	<meta name="csrf-param" content="token">
+	<meta name="csrf-token" content="1234567890"/>
+	<meta name="csrf-param" content="token"/>
+	
+	<style type="text/css">
+  .demo { border: 1px solid #CCC; padding: 10px; margin: 0 10px 10px 0;
+    display: inline-block; _display: inline; zoom: 1; vertical-align: top; }
+  p, form { margin: 0; }
+	</style>
 </head>
 <body>
+  <h1>Rails UJS</h1>
 
-  <p>
-    <a href="#" data-confirm="Are you sure?" data-method="delete"
-      data-remote="true" rel="nofollow">delete product</a>
-  </p>
-
-  <form method="post" action="#" data-remote="true" class="button_to">
-    <div>
-      <input name="_method" type="hidden" value="put"/>
-      <input data-confirm="You confirm validation of this product?"
-        type="submit" value="validate product"/>
-      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+  <div>
+    <h2>Links</h2>
+    
+    <div class="demo">
+      <p>confirm</p>
+      <p>
+        <a href="#see-product" data-confirm="Confirm see product?">see product</a>
+      </p>
     </div>
-  </form>
 
-  <form action="/products/2" data-remote="true" method="post">
-    <div style="margin:0;padding:0;display:inline">
-      <input name="_method" type="hidden" value="put"/>
-      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+    <div class="demo">
+      <p>method</p>
+      <p>
+        <a href="#put-product" data-method="put" rel="nofollow">put product</a>
+      </p>
     </div>
-    <input data-confirm="Are you sure?" data-disable-with="Please Wait..."
-      name="commit" type="submit" value="Save"/>
-  </form>
 
-  <form action="#" method="post">
-    <div style="margin:0;padding:0;display:inline">
-      <input name="_method" type="hidden" value="put"/>
-      <input name="authenticity_token" type="hidden" value="59RNymlZzHeJq0g9XgkFdLcizGazZCzwSlq0uvFAZdA="/>
+    <div class="demo">
+      <p>confirm + method</p>
+      <p>
+        <a href="#delete-product" data-confirm="Are you sure?"
+          data-method="delete" rel="nofollow">destroy product</a>
+      </p>
     </div>
-    <input data-confirm="Are you sure?" data-disable-with="Saving..."
-      name="commit" type="submit" value="Save" />
-  </form>
 
-  <script type="text/javascript" src="../jsunit.js"></script>
-  <script type="text/javascript" src="../loader.js"></script>
-  <script type="text/javascript">
-  load_alpha('../..');
-  load_addons('../..');
-  </script>
-  <script type="text/javascript" src="../../lib/ujs/rails.js"></script>
+    <div class="demo">
+      <p>remote</p>
+      <p>
+        <a href="#remote-product" data-remote="true" rel="nofollow">see product (remote)</a>
+      </p>
+    </div>
 
+    <div class="demo">
+      <p>confirm + remote</p>
+      <p>
+        <a href="#post-product" data-confirm="Confirm post product?"
+          data-remote="true" rel="nofollow">post product</a>
+      </p>
+    </div>
+
+    <div class="demo">
+      <p>method + remote</p>
+      <p>
+        <a href="#post-product" data-method="delete"
+          data-remote="true" rel="nofollow">destroy product</a>
+      </p>
+    </div>
+
+    <div class="demo">
+      <p>confirm + method + remote (delete)</p>
+      <p>
+        <a href="#" data-confirm="Are you sure?" data-remote="true"
+          data-method="delete" rel="nofollow">delete product</a>
+      </p>
+    </div>
+  </div>
+  
+  <div>
+    <h2>Forms</h2>
+
+    <div class="demo">
+      <p>confirm + disable-with</p>
+
+      <form action="#post" method="post">
+        <div style="margin:0;padding:0;display:inline">
+          <input name="_method" type="hidden" value="put"/>
+        </div>
+        <input data-confirm="Are you sure?" data-disable-with="Saving..."
+          name="commit" type="submit" value="Save" />
+      </form>
+    </div>
+
+    <div class="demo">
+      <p>remote (get)</p>
+      
+      <form action="#get" method="get" data-remote="true">
+        <input name="q" type="hidden" value="something"/>
+        <input name="commit" type="submit" value="search" />
+      </form>
+    </div>
+
+    <div class="demo">
+      <p>confirm + remote</p>
+
+      <form method="post" action="#put" data-remote="true" class="button_to">
+        <div>
+          <input name="_method" type="hidden" value="put"/>
+          <input data-confirm="You confirm validation of this product?"
+            type="submit" value="validate product"/>
+        </div>
+      </form>
+    </div>
+
+    <div class="demo">
+      <p>confirm + disable-with + remote</p>
+
+      <form action="#delete" data-remote="true" method="post">
+        <div style="margin:0;padding:0;display:inline">
+          <input name="_method" type="hidden" value="delete"/>
+        </div>
+        <input data-confirm="Are you sure?" data-disable-with="Destroying..."
+          name="commit" type="submit" value="Destroy"/>
+      </form>
+    </div>
+  </div>
+
+<script type="text/javascript" src="../loader.js"></script>
 <script type="text/javascript">
-function ajax_callback(event) { console.log(event, /*event.target,*/ event.memo ? event.memo : ''); }
-document.body.addEventListener('ajax:before', ajax_callback, false);
-document.body.addEventListener('ajax:loading', ajax_callback, false);
-document.body.addEventListener('ajax:loaded', ajax_callback, false);
-document.body.addEventListener('ajax:interactive', ajax_callback, false);
+load_alpha('../..');
+load_addons('../..');
+</script>
+<script type="text/javascript" src="../../lib/ujs/rails.js"></script>
+
+<!--script src="https://getfirebug.com/firebug-lite.js"></script-->
+<script type="text/javascript">
+function ajax_callback(event)
+{
+  alert(event.type);
+  //console.log(event, /*event.target,*/ event.memo ? event.memo : '');
+}
+document.body.addEventListener('ajax:before',   ajax_callback, false);
 document.body.addEventListener('ajax:complete', ajax_callback, false);
-document.body.addEventListener('ajax:success', ajax_callback, false);
-document.body.addEventListener('ajax:failure', ajax_callback, false);
-document.body.addEventListener('ajax:after', ajax_callback, false);
+document.body.addEventListener('ajax:success',  ajax_callback, false);
+document.body.addEventListener('ajax:failure',  ajax_callback, false);
+document.body.addEventListener('ajax:after',    ajax_callback, false);
 </script>
 
 </body>
