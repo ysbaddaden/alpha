@@ -1,0 +1,51 @@
+<DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>
+  <title>UI.Sortable</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="stylesheet" type="text/css" href="../base.css"/>
+</head>
+<body>
+
+<h1>UI.Sortable</h1>
+
+<ul id="my-list" class="sortable">
+  <li>item 1</li>
+  <li>item 2</li>
+  <li>item 3</li>
+  <li>item 4</li>
+</ul>
+
+<ul id="my-list-2" class="sortable">
+  <li><span>item</span> 1</li>
+  <li><span>item</span> 2</li>
+  <li><span>item</span> 3</li>
+  <li><span>item</span> 4</li>
+</ul>
+
+<table id="my-list-3" class="sortable">
+  <tr><td>item 1</td><td><a href="#item1">item 1</a></td></tr>
+  <tr><td>item 2</td><td><a href="#item2">item 2</a></td></tr>
+  <tr><td>item 3</td><td><a href="#item3">item 3</a></td></tr>
+  <tr><td>item 4</td><td><a href="#item4">item 4</a></td></tr>
+</ul>
+
+<script type="text/javascript" src="../loader.js"></script>
+<script type="text/javascript">
+load_alpha('../..');
+load_addons('../..');
+load_ui('../..');
+</script>
+
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
+<script type="text/javascript">
+new UI.Sortable($('my-list'));
+new UI.Sortable($('my-list-2'));
+
+var tableSort = new UI.Sortable($('my-list-3'), { items: 'tr' });
+tableSort.ondragstart = function(item) { console.log('dragstart', item); }
+tableSort.ondragend = function(item) { console.log('dragend', item); }
+</script>
+
+</body>
+</html>

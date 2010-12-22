@@ -46,6 +46,7 @@ function load_ui(base_url)
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/color_picker.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/autoresize.js"></script>');
   document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/in_place_editor.js"></script>');
+  document.write('<script type="text/javascript" src="' + base_url + '/lib/ui/sortable.js"></script>');
 }
 
 function load_html5(base_url)
