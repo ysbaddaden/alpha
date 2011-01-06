@@ -37,13 +37,13 @@ load_addons('../..');
 load_ui('../..');
 </script>
 
-<script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+<!--script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script-->
 <script type="text/javascript">
 new UI.Sortable($('my-list'));
 new UI.Sortable($('my-list-2'));
 
 var tableSort = new UI.Sortable($('my-list-3'), { items: 'tr' });
-tableSort.ondragstart = function(item) { console.log('dragstart', item); }
+tableSort.ondragstart = function(item) { console.log('dragstart', item); return item; }
 tableSort.ondragend = function(item) { console.log('dragend', item); }
 </script>
 
