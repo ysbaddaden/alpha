@@ -35,7 +35,8 @@ UI_FILES=lib/ui/ui.js \
 		lib/ui/autocompleter.js \
 		lib/ui/datalist_autocompleter.js \
 		lib/ui/autoresize.js \
-		lib/ui/in_place_editor.js
+		lib/ui/in_place_editor.js \
+		lib/ui/sortable.js
 
 HTML5_FILES=lib/html5/html5.js \
 	lib/html5/placeholder.js \
